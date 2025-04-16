@@ -4,15 +4,15 @@ build-backend = "setuptools.build_meta"
 requires = [ "setuptools>=77.0.1", "wheel" ]
 
 [project]
-name = "<project name>"
-version = "<initial version>"
+name = "pkg-15903"
+version = "0.0.3"
 
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [
   { name = "developers", email = "developers@tagdots.com" },
 ]
-requires-python = ">=3.12.1"
+requires-python = ">=3.12.10"
 
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
@@ -21,13 +21,20 @@ classifiers = [
 ]
 
 dependencies = [
+  "click==8.1.8",
+  "click-option-group==0.5.6",
   "pre-commit==4.2",
+  "requests==2.32.3",
   "setuptools==77.0.1",
   "virtualenv==20.29.3",
 ]
 optional-dependencies.test = [ "build", "commitizen", "coverage", "flake8", "isort", "pyscan-rs", "twine" ]
-urls.Homepage = "<repo URL>"
-scripts.<script name> = "<package name>.<filename>:main"
+
+urls.Changelog = "https://www.notavailable.com/changelog"
+urls.Documentation = "https://www.notavailable.com/doc"
+urls.Homepage = "https://www.notavailable.com"
+
+scripts.pkg-15903 = "pkg_15903.run:main"
 
 [dependency-groups]
 test = [
@@ -35,10 +42,10 @@ test = [
 ]
 
 [tool.setuptools.packages.find]
-where = [ "." ]
+where = [ "src" ]
 
 [tool.setuptools.dynamic]
-version = { attr = "<package name>.__init__" }
+version = { attr = "pkg_15903.__init__" }
 
 [tool.coverage]
 source = [ "." ]
@@ -46,13 +53,13 @@ source = [ "." ]
 [tool.coverage.run]
 branch = true
 command_line = "-m unittest discover -s tests/"
-include = [ "<package name>/*" ]
+include = [ "pkg_15903/*" ]
 omit = [ "tests/*" ]
 
 [tool.coverage.report]
 fail_under = 80
 show_missing = false
-include = [ "<package name>/*" ]
+include = [ "pkg_15903/*" ]
 
 [tool.commitizen]
 name = "cz_conventional_commits"
@@ -60,7 +67,7 @@ major_version_zero = false
 tag_format = "$version"
 update_changelog_on_bump = true
 version_files = [
-  "<package name>/__init__.py:__version__",
+  "pkg_15903/__init__.py:__version__",
 ]
 version_provider = "pep621"
 version_scheme = "pep440"
