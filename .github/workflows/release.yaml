@@ -4,7 +4,6 @@
 name: release
 
 on:
-
   pull_request:
     types:
       - closed
@@ -12,14 +11,26 @@ on:
     branches:
       - main
 
+  workflow_dispatch:
+
 env:
   PYTHON_VERSION: '3.12.10'
 
 jobs:
   release:
-    runs-on: ubuntu-latest
 
+    if: startsWith(github.ref_name, 'release/v')
+
+    runs-on: ubuntu-latest
     steps:
+
+    - name: Get release version
+      run: |
+        # get release version
+        GITREF_NAME="${{ github.ref_name }}"
+        echo "VERSION=${GITREF_NAME}"
+        echo "VERSION=${GITREF_NAME#release/v}"
+        exit 1
 
     - name: Checkout source code
       uses: actions/checkout@v4
