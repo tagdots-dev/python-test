@@ -39,8 +39,7 @@ jobs:
 
     - name: Get GIT Commit HASH
       id: git_commit_hash
-      run: echo 'sha_short=$(git rev-parse --short HEAD)'
-      # used later >> $+{{ steps.vars.outputs.sha_short }}
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
     - name: Upload distributions
       id: artifact-upload
