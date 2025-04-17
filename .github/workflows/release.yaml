@@ -26,8 +26,9 @@ jobs:
     - name: Get release version
       run: |
         # get release version
-        echo "${{ toJson(github)}}"
-        echo ""
+        GIT_HEADREF="${{ github.head_ref }}"
+        echo "SRC_BRANCH_ORIGINAL=${GIT_HEADREF}"
+        echo "SRC_BRANCH_STRIPPED=${GIT_HEADREF#release/v}"
         GITREF_NAME="${{ github.ref_name }}"
         echo "VERSION=${GITREF_NAME}"
         echo "VERSION=${GITREF_NAME#release/v}"
