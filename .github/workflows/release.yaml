@@ -37,6 +37,9 @@ jobs:
         # build package
         python -m build
 
+        # List dist
+        tree dist
+
     - name: Get GIT Commit HASH
       id: git_commit_hash
       run: echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
@@ -51,7 +54,8 @@ jobs:
         retention-days: 3
         overwrite: true
 
-    - name: Outputs
+    - name: Get Outputs
       run: |
+        # get commit hash and artifact id
         echo 'Short Git Commit Hash: ${{ steps.git_commit_hash.outputs.sha_short }}'
         echo 'Upload Artifact ID   : ${{ steps.artifact-upload.outputs.artifact-id }}'
