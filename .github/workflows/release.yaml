@@ -19,20 +19,18 @@ env:
 
 jobs:
   release:
+    if: startsWith(github.head_ref, 'release/v')
 
     runs-on: ubuntu-latest
     steps:
 
-    - name: Get release version
+    - name: Get release branch
+      id: get_release_branch
       run: |
-        # get release version
-        GIT_HEADREF="${{ github.head_ref }}"
-        echo "SRC_BRANCH_ORIGINAL=${GIT_HEADREF}"
-        echo "SRC_BRANCH_STRIPPED=${GIT_HEADREF#release/v}"
-        GITREF_NAME="${{ github.ref_name }}"
-        echo "VERSION=${GITREF_NAME}"
-        echo "VERSION=${GITREF_NAME#release/v}"
-        exit 1
+        # get release branch and version
+        GIT_HEAD_REF="${{ github.head_ref }}"
+        GIT_BRANCH=${GIT_HEAD_REF}"
+        GIT_BRANCH_VERSION=${GIT_HEAD_REF#release/v}"
 
     - name: Checkout source code
       uses: actions/checkout@v4
@@ -50,12 +48,10 @@ jobs:
         # build package
         python -m build
 
-        # List dist
-        tree dist
-
-    - name: Get GIT Commit HASH
-      id: git_commit_hash
-      run: echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+    - name: Get Build Version
+      id: get_build_version
+      run: |
+        BUILD_VERSION="$(python src/pkg_15903/run.py --version | awk '{print $3}')"
 
     - name: Upload distributions
       id: artifact-upload
@@ -69,6 +65,14 @@ jobs:
 
     - name: Get Outputs
       run: |
-        # get commit hash and artifact id
-        echo 'Short Git Commit Hash: ${{ steps.git_commit_hash.outputs.sha_short }}'
-        echo 'Upload Artifact ID   : ${{ steps.artifact-upload.outputs.artifact-id }}'
+        # get various outputs
+        echo 'Git branch name   : ${{ steps.get_release_branch.outputs.GIT_BRANCH }}'
+        echo 'Git branch version: ${{ steps.get_release_branch.outputs.GIT_BRANCH_VERSION }}'
+        echo 'Build version     : ${{ steps.get_build_version.outputs.BUILD_VERSION }}'
+        echo 'Artifact ID       : ${{ steps.artifact-upload.outputs.artifact-id }}'
+
+        if: ${{ steps.get_release_branch.outputs.GIT_BRANCH_VERSION == steps.get_build_version.outputs.BUILD_VERSION }}
+        run: echo "git branch version is equal to bulid version"
+
+        if: ${{ steps.get_release_branch.outputs.GIT_BRANCH_VERSION != steps.get_build_version.outputs.BUILD_VERSION }}
+        run: echo "git branch version is NOT equal to bulid version"
