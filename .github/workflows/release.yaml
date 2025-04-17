@@ -19,8 +19,6 @@ env:
 jobs:
   release:
 
-    if: startsWith(github.ref_name, 'release/v')
-
     runs-on: ubuntu-latest
     steps:
 
