@@ -29,8 +29,8 @@ jobs:
       run: |
         # get release branch and version
         GIT_HEAD_REF="${{ github.head_ref }}"
-        GIT_BRANCH=${GIT_HEAD_REF}" >> "$GITHUB_OUTPUT"
-        GIT_BRANCH_VERSION=${GIT_HEAD_REF#release/v}" >> "$GITHUB_OUTPUT"
+        echo "GIT_BRANCH=${GIT_HEAD_REF}" >> "$GITHUB_OUTPUT"
+        echo "GIT_BRANCH_VERSION=${GIT_HEAD_REF#release/v}" >> "$GITHUB_OUTPUT"
 
     - name: Checkout source code
       uses: actions/checkout@v4
@@ -48,10 +48,13 @@ jobs:
         # build package
         python -m build
 
+        # install software into the current path
+        python -m pip install -e .
+
     - name: Get Build Version
       id: get-build-version
       run: |
-        BUILD_VERSION="$(python src/pkg_15903/run.py --version | awk '{print $3}')"  >> "$GITHUB_OUTPUT"
+        echo "BUILD_VERSION=$(python src/pkg_15903/run.py --version | awk '{print $3}')"  >> "$GITHUB_OUTPUT"
 
     - name: Upload distributions
       id: artifact-upload
