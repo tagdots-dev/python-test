@@ -74,8 +74,10 @@ jobs:
         echo 'Build version     : ${{ steps.get-build-version.outputs.BUILD_VERSION }}'
         echo 'Artifact ID       : ${{ steps.artifact-upload.outputs.artifact-id }}'
 
-        if: ${{ steps.get-release-branch.outputs.GIT_BRANCH_VERSION == steps.get-build-version.outputs.BUILD_VERSION }}
-        run: echo "git branch version is equal to bulid version"
+    - name: Compare Branch Version and Build Version 1
+      if: ${{ steps.get-release-branch.outputs.GIT_BRANCH_VERSION == steps.get-build-version.outputs.BUILD_VERSION }}
+      run: echo "git branch version is equal to bulid version"
 
-        if: ${{ steps.get-release-branch.outputs.GIT_BRANCH_VERSION != steps.get-build-version.outputs.BUILD_VERSION }}
-        run: echo "git branch version is NOT equal to bulid version"
+    - name: Compare Branch Version and Build Version 2
+      if: ${{ steps.get-release-branch.outputs.GIT_BRANCH_VERSION != steps.get-build-version.outputs.BUILD_VERSION }}
+      run: echo "git branch version is NOT equal to bulid version"
