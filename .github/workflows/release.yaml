@@ -1,0 +1,58 @@
+---
+# on push to main > build package > upload artifacts
+
+name: release
+
+on:
+
+  pull_request:
+    types:
+      - closed
+
+    branches:
+      - main
+
+env:
+  PYTHON_VERSION: '3.12.10'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Build and Package Application
+      run: |
+        # get latest build
+        python -m pip install -U build
+
+        # build package
+        python -m build
+
+    - name: Get GIT Commit HASH
+      id: git_commit_hash
+      run: echo 'sha_short=$(git rev-parse --short HEAD)'
+      # used later >> $+{{ steps.vars.outputs.sha_short }}
+
+    - name: Upload distributions
+      id: artifact-upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-dists
+        path: dist/
+        if-no-files-found: error
+        retention-days: 3
+        overwrite: true
+
+    - name: Outputs
+      run: |
+        echo 'Short Git Commit Hash: ${{ steps.git_commit_hash.outputs.sha_short }}'
+        echo 'Upload Artifact ID   : ${{ steps.artifact-upload.outputs.artifact-id }}'
