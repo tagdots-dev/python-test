@@ -4,6 +4,9 @@
 name: release
 
 on:
+  push:
+    branches:
+      - test-*
 
   pull_request:
     types:
@@ -17,9 +20,17 @@ env:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
 
+    runs-on: ubuntu-latest
     steps:
+
+    - name: Get release version
+      run: |
+        echo 'RELEASE_VER=${{ github.ref }}'
+        echo "RELEASE VERSION    : $RELEASE_VER"
+        echo 'GITREF_NAME=${{ github.ref_name }}'
+        echo "Version without 'v': $GITREF_NAME"
+        exit 1
 
     - name: Checkout source code
       uses: actions/checkout@v4
