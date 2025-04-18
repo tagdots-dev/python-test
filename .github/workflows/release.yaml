@@ -33,7 +33,7 @@ jobs:
         GIT_HEAD_REF="${{ github.head_ref }}"
         #checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
         echo "GIT_BRANCH=${GIT_HEAD_REF}" >> "$GITHUB_OUTPUT"
-        echo "GIT_BRANCH_VERSION=${GIT_HEAD_REF#release/v}" >> "$GITHUB_OUTPUT"
+        echo "GIT_BRANCH_VERSION=${GIT_HEAD_REF#release/}" >> "$GITHUB_OUTPUT"
 
     - name: Checkout source code
       uses: actions/checkout@v4
