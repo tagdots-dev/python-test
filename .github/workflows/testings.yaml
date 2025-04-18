@@ -1,0 +1,35 @@
+---
+# NOTE: this file is managed by terraform
+
+name: testings
+
+on:  # yamllint disable-line rule:truthy
+  push:
+    branches:
+      - test-*
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+env:
+  PYTHON_VERSION: '3.12.10'
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
