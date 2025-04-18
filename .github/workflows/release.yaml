@@ -5,7 +5,6 @@ name: release
 
 on:
   pull_request:
-
     types:
       - closed
 
@@ -17,9 +16,12 @@ on:
 env:
   PYTHON_VERSION: '3.12.10'
 
+permissions:
+  contents: write
+
 jobs:
   release:
-    if: startsWith(github.head_ref, 'release/v')
+    if: startsWith(github.head_ref, 'release/')
 
     runs-on: ubuntu-latest
     steps:
@@ -29,8 +31,9 @@ jobs:
       run: |
         # get release branch and version
         GIT_HEAD_REF="${{ github.head_ref }}"
+        #checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
         echo "GIT_BRANCH=${GIT_HEAD_REF}" >> "$GITHUB_OUTPUT"
-        echo "GIT_BRANCH_VERSION=${GIT_HEAD_REF#release/v}" >> "$GITHUB_OUTPUT"
+        echo "GIT_BRANCH_VERSION=${GIT_HEAD_REF#release/}" >> "$GITHUB_OUTPUT"
 
     - name: Checkout source code
       uses: actions/checkout@v4
@@ -52,32 +55,41 @@ jobs:
         python -m pip install -e .
 
     - name: Get Build Version
-      id: get-build-version
+      id: get-software-build
       run: |
         echo "BUILD_VERSION=$(python src/pkg_15903/run.py --version | awk '{print $3}')"  >> "$GITHUB_OUTPUT"
 
-    - name: Upload distributions
-      id: artifact-upload
+    - name: Upload distributions wheel
+      id: artifact-upload-wheel
       uses: actions/upload-artifact@v4
       with:
-        name: release-dists
-        path: dist/
+        path: dist/*.whl
         if-no-files-found: error
         retention-days: 3
         overwrite: true
+        compression-level: 0
+
+    - name: Upload distributions tar.gz
+      id: artifact-upload-targz
+      uses: actions/upload-artifact@v4
+      with:
+        path: dist/*.tar.gz
+        if-no-files-found: error
+        retention-days: 3
+        overwrite: true
+        compression-level: 0
 
     - name: Get Outputs
       run: |
         # get various outputs
-        echo 'Git branch name   : ${{ steps.get-release-branch.outputs.GIT_BRANCH }}'
-        echo 'Git branch version: ${{ steps.get-release-branch.outputs.GIT_BRANCH_VERSION }}'
-        echo 'Build version     : ${{ steps.get-build-version.outputs.BUILD_VERSION }}'
-        echo 'Artifact ID       : ${{ steps.artifact-upload.outputs.artifact-id }}'
+        echo 'Branch Release name    : ${{ steps.get-release-branch.outputs.GIT_BRANCH }}'
+        echo 'Branch Release version.: ${{ steps.get-release-branch.outputs.GIT_BRANCH_VERSION }}'
+        echo 'Software Build version.: ${{ steps.get-software-build.outputs.BUILD_VERSION }}'
 
     - name: Compare Branch Version and Build Version 1
-      if: ${{ steps.get-release-branch.outputs.GIT_BRANCH_VERSION == steps.get-build-version.outputs.BUILD_VERSION }}
+      if: ${{ steps.get-release-branch.outputs.GIT_BRANCH_VERSION == steps.get-software-build.outputs.BUILD_VERSION }}
       run: echo "git branch version is equal to bulid version"
 
     - name: Compare Branch Version and Build Version 2
-      if: ${{ steps.get-release-branch.outputs.GIT_BRANCH_VERSION != steps.get-build-version.outputs.BUILD_VERSION }}
+      if: ${{ steps.get-release-branch.outputs.GIT_BRANCH_VERSION != steps.get-software-build.outputs.BUILD_VERSION }}
       run: echo "git branch version is NOT equal to bulid version"
