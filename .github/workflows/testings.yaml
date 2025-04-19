@@ -21,7 +21,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python: [3.12]
+        python-version: [3.12]
 
     runs-on: ubuntu-latest
 
@@ -33,7 +33,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.python }}
+        python-version: ${{ matrix.python-version }}
 
     - name: make build
       run: make build
@@ -43,7 +43,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python: [3.12]
+        python-version: [3.12]
 
     runs-on: ubuntu-latest
 
@@ -55,10 +55,32 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.python }}
+        python-version: ${{ matrix.python-version }}
 
     - name: Install test dependencies
       run: python -m pip install -e .[test]
 
     - name: make test
       run: make test
+
+  validate-version:
+    needs: test
+    #: if startsWith(github.head_ref, 'release/')
+
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Get release branch
+      id: get-release-branch
+      run: |
+        # get release branch and version
+        GIT_HEAD_REF="${{ github.head_ref }}"
+        #checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
+        echo "GIT_BRANCH=${GIT_HEAD_REF}" >> "$GITHUB_OUTPUT"
+        echo "GIT_BRANCH_VERSION=${GIT_HEAD_REF#release/}" >> "$GITHUB_OUTPUT"
+
+    - name: Get Outputs
+      run: |
+        # get various outputs
+        echo 'Branch Release name    : ${{ steps.get-release-branch.outputs.GIT_BRANCH }}'
+        echo 'Branch Release version.: ${{ steps.get-release-branch.outputs.GIT_BRANCH_VERSION }}'
