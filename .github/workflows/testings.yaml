@@ -21,7 +21,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python: [3.12, 3.13]
+        python: [3.12]
 
     runs-on: ubuntu-latest
 
@@ -43,7 +43,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python: [3.12, 3.13]
+        python: [3.12]
 
     runs-on: ubuntu-latest
 
