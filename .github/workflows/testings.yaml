@@ -35,5 +35,26 @@ jobs:
       with:
         python-version: ${{ matrix.python }}
 
-    - name: Get Python Version
-      run: python --version
+    - name: make build
+      run: make build
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python: [3.12, 3.13]
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python }}
+        run: python --version
+
+    # - name: make build
+    #   run: make build
