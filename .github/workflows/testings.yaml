@@ -76,6 +76,11 @@ jobs:
   validate-version:
     needs: [build, test]
     #: if startsWith(github.head_ref, 'release/')
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.12]
+
     runs-on: ubuntu-latest
     steps:
 
