@@ -86,9 +86,8 @@ jobs:
     - name: Get Outputs
       run: |
         # get outputs
-        GIT_HEAD_REF="${{ github.ref_name }}"
+        GIT_REF_NAME="${{ github.ref_name }}"
         echo 'Branch Release name   : ${{ github.ref_name }}'
-        echo 'Branch named version. : $GIT_HEAD'
-        echo 'Branch named version. : ${ GIT_HEAD }'
-        echo 'Branch named version. : ${{ GIT_HEAD }}'
+        echo 'Branch named version. : $GIT_REF_NAME'
+        echo 'Branch named version. : ${ GIT_REF_NAME }'
         echo 'Software Build version: ${{ needs.build.outputs.BUILD_VERSION }}'
