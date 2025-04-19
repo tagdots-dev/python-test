@@ -35,7 +35,13 @@ test:
 	@echo "***************************************************************************"
 	@echo
 	coverage run -m unittest -v
+
+	@echo
+	@echo "Create an HTML report of the coverage of the files"
 	coverage html
+
+	@echo
+	@echo "Report coverage statistics on modules"
 	coverage report -m
 
 .PHONY: help build test
