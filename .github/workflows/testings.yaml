@@ -88,9 +88,9 @@ jobs:
         # get outputs
         GIT_REF_NAME="${{ github.ref_name }}"
         echo 'Branch Release name   : ${{ github.ref_name }}'
-        echo 'Branch Release version: ${GIT_HEAD_REF#release/}'
+        echo 'Branch Release version: ${GIT_REF_NAME#release/}'
         echo 'Software Build version: ${{ needs.build.outputs.BUILD_VERSION }}'
         GIT_REF_NAME="release/1.0.1"
         echo 'Branch Release name   : ${{ github.ref_name }}'
-        echo 'Branch Release version: ${GIT_HEAD_REF#release/}'
+        echo 'Branch Release version: ${GIT_REF_NAME#release/}'
         echo 'Software Build version: ${{ needs.build.outputs.BUILD_VERSION }}'
