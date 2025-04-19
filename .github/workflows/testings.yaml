@@ -90,4 +90,5 @@ jobs:
         echo 'Branch Release name   : ${{ github.ref_name }}'
         echo 'Branch named version. : $GIT_HEAD'
         echo 'Branch named version. : ${ GIT_HEAD }'
+        echo 'Branch named version. : ${{} GIT_HEAD }}'
         echo 'Software Build version: ${{ needs.build.outputs.BUILD_VERSION }}'
