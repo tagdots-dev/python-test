@@ -110,6 +110,10 @@ jobs:
 
     - name: Evaluate
       run: |
+        echo "\n"
+        echo "${RE_GIT_REF_NAME}"
+        echo "${GIT_REF_NAME}"
+        echo "\n"
         if [[ "${RE_GIT_REF_NAME}" == "${GIT_REF_NAME}" ]]; then
           echo "both of the variables are the same"
         else
