@@ -86,6 +86,6 @@ jobs:
     - name: Get Outputs
       run: |
         # get various outputs
-        echo 'Branch Release name   : ${{ github.head_ref }}'
+        echo 'Branch Release name   : ${{ toJson(github) }}'
         echo 'Branch named version. : hello'
         echo 'Software Build version: ${{ needs.build.outputs.BUILD_VERSION }}'
