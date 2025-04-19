@@ -82,5 +82,5 @@ jobs:
     - name: Get Outputs
       run: |
         # get various outputs
-        echo 'Branch Build version.: ${{ needs.build.outputs.build_version }}
+        echo 'Branch Build version.: ${{ needs.build.outputs.build_version }}'
         echo 'Branch Release name  : hello'
