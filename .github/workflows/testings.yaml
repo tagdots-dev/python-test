@@ -37,7 +37,9 @@ jobs:
 
     - name: make build
       run: make build
+
   test:
+    needs: build
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -55,5 +57,5 @@ jobs:
       with:
         python-version: ${{ matrix.python }}
 
-    - name: make build
-      run: make build
+    - name: make test
+      run: make test
