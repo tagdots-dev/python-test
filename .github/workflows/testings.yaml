@@ -114,3 +114,4 @@ jobs:
           echo "both of the variables are the same"
         else
           echo "both of the variables are different"
+        fi
