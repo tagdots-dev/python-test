@@ -16,6 +16,9 @@ on:  # yamllint disable-line rule:truthy
 permissions:
   contents: read
 
+env:
+  RE_GIT_REF_NAME: 'hello'
+
 jobs:
   build:
     strategy:
@@ -110,10 +113,8 @@ jobs:
 
     - name: Evaluate
       run: |
-        echo "\n"
-        echo "${RE_GIT_REF_NAME}"
-        echo "${GIT_REF_NAME}"
-        echo "\n"
+        echo "RE_GIT_REF_NAME: ${RE_GIT_REF_NAME}"
+        echo "GIT_REF_NAME   : ${GIT_REF_NAME}"
         if [[ "${RE_GIT_REF_NAME}" == "${GIT_REF_NAME}" ]]; then
           echo "both of the variables are the same"
         else
