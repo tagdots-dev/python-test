@@ -17,7 +17,8 @@ permissions:
   contents: read
 
 env:
-  RE_GIT_REF_NAME: 'hello'
+  GIT_REF_NAME: 'default'
+  RE_GIT_REF_NAME: 'default'
 
 jobs:
   build:
