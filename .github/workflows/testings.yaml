@@ -43,10 +43,9 @@ jobs:
       run: |
         # get build version
         echo "BUILD_VERSION=$(pkg-15903 --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
-        echo $BUILD_VERSION
 
     outputs:
-      build_version: ${{ steps.get-build-version.outputs.BUILD_VERSION }}
+      BUILD_VERSION: ${{ steps.get-build-version.outputs.BUILD_VERSION }}
 
   test:
     needs: build
@@ -75,7 +74,7 @@ jobs:
 
   validate-version:
     needs: [build, test]
-    #: if startsWith(github.head_ref, 'release/')
+    # : if startsWith(github.head_ref, 'release/')
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -87,5 +86,6 @@ jobs:
     - name: Get Outputs
       run: |
         # get various outputs
-        echo 'Branch Build version.: ${{ needs.build.outputs.build_version }}'
-        echo 'Branch Release name  : hello'
+        echo 'Branch Release name   : ${{ github.head_ref }}'
+        echo 'Branch named version. : hello'
+        echo 'Software Build version: ${{ needs.build.outputs.BUILD_VERSION }}'
