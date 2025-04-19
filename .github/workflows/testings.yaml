@@ -1,5 +1,4 @@
 ---
-# NOTE: this file is managed by terraform
 
 name: testings
 
@@ -14,14 +13,16 @@ on:  # yamllint disable-line rule:truthy
 
   workflow_dispatch:
 
-env:
-  PYTHON_VERSION: '3.12.10'
-
 permissions:
   contents: read
 
 jobs:
-  tests:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python: [3.12, 3.13]
+
     runs-on: ubuntu-latest
 
     steps:
@@ -32,4 +33,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ env.PYTHON_VERSION }}
+        python-version: ${{ matrix.python }}
+
+    - name: Get Python Version
+      run: python --version

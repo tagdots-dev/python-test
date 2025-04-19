@@ -8,7 +8,7 @@ name = "pkg-15903"
 version = "0.1.5"
 
 readme = "README.md"
-license = { file = "LICENSE" }
+license-files = [ "LICENSE" ]
 authors = [
   { name = "developers", email = "developers@tagdots.com" },
 ]
@@ -34,7 +34,7 @@ urls.Changelog = "https://www.notavailable.com/changelog"
 urls.Documentation = "https://www.notavailable.com/doc"
 urls.Homepage = "https://www.notavailable.com"
 
-scripts.pkg-15903 = "src.pkg_15903.run:main"
+scripts.pkg-15903 = "pkg_15903.run:main"
 
 [dependency-groups]
 test = [

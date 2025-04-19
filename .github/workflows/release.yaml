@@ -20,7 +20,7 @@ permissions:
   contents: write
 
 jobs:
-  release:
+  validate-version-match:
     if: startsWith(github.head_ref, 'release/')
 
     runs-on: ubuntu-latest
@@ -54,26 +54,16 @@ jobs:
         # install software into the current path
         python -m pip install -e .
 
-    - name: Get Build Version
+    - name: Get software build version
       id: get-software-build
       run: |
         echo "BUILD_VERSION=$(python src/pkg_15903/run.py --version | awk '{print $3}')"  >> "$GITHUB_OUTPUT"
 
-    - name: Upload distributions wheel
-      id: artifact-upload-wheel
+    - name: Upload distributions
+      id: artifact-upload
       uses: actions/upload-artifact@v4
       with:
-        path: dist/*.whl
-        if-no-files-found: error
-        retention-days: 3
-        overwrite: true
-        compression-level: 0
-
-    - name: Upload distributions tar.gz
-      id: artifact-upload-targz
-      uses: actions/upload-artifact@v4
-      with:
-        path: dist/*.tar.gz
+        path: dist/
         if-no-files-found: error
         retention-days: 3
         overwrite: true
