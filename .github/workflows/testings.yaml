@@ -38,6 +38,16 @@ jobs:
     - name: make build
       run: make build
 
+    - name: get build version
+      id: get-build-version
+      run: |
+        # get build version
+        echo "BUILD_VERSION=$(pkg-15903 --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
+        echo $BUILD_VERSION
+
+    outputs:
+      build_version: ${{ steps.get-build-version.outputs.BUILD_VERSION }}
+
   test:
     needs: build
     strategy:
@@ -64,23 +74,13 @@ jobs:
       run: make test
 
   validate-version:
-    needs: test
+    needs: [build, test]
     #: if startsWith(github.head_ref, 'release/')
-
     runs-on: ubuntu-latest
     steps:
-
-    - name: Get release branch
-      id: get-release-branch
-      run: |
-        # get release branch and version
-        GIT_HEAD_REF="${{ github.head_ref }}"
-        #checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-        echo "GIT_BRANCH=${GIT_HEAD_REF}" >> "$GITHUB_OUTPUT"
-        echo "GIT_BRANCH_VERSION=${GIT_HEAD_REF#release/}" >> "$GITHUB_OUTPUT"
 
     - name: Get Outputs
       run: |
         # get various outputs
-        echo 'Branch Release name    : ${{ steps.get-release-branch.outputs.GIT_BRANCH }}'
-        echo 'Branch Release version.: ${{ steps.get-release-branch.outputs.GIT_BRANCH_VERSION }}'
+        echo 'Branch Build version.: ${{ needs.build.outputs.build_version }}
+        echo 'Branch Release name  : hello'
