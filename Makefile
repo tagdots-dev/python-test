@@ -29,18 +29,18 @@ build:
 	python -m pip install -e .
 
 test:
-	@echo
+	@echo ""
 	@echo "***************************************************************************"
 	@echo "************************* Running coverage tests **************************"
 	@echo "***************************************************************************"
-	@echo
+	@echo ""
 	coverage run -m unittest -v
 
-	@echo
+	@echo ""
 	@echo "Create an HTML report of the coverage of the files"
 	coverage html
 
-	@echo
+	@echo ""
 	@echo "Report coverage statistics on modules"
 	coverage report -m
 
