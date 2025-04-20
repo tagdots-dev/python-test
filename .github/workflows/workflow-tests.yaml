@@ -109,6 +109,7 @@ jobs:
         echo "WF_ENV_VAR_02='LondonBridge'" >> "$GITHUB_ENV"
 
   job-data-03:
+    needs: [job-data-02]
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -120,4 +121,4 @@ jobs:
       # Test 7 - get data from a new environment at workflow scope
       - name: Step 4 - Get value from Workflow environment variable - SUCCESS
         run: |
-          echo "WF_ENV_VAR_02: $WF_ENV_VAR"
+          echo "WF_ENV_VAR_02: $WF_ENV_VAR_02"
