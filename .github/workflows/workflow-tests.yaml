@@ -135,4 +135,4 @@ jobs:
       # Test 8 - get data from job-data-02 step 3 assigned new variable
       - name: Step 2 - Get value from job-data-02 step 3 environment variable - FAILURE
         run: |
-          echo "WF_ENV_VAR_02: ${{ toJson(needs.job-data-02.result) }}"
+          echo "WF_ENV_VAR_02: ${{ toJson(needs.job-data-02) }}"
