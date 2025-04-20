@@ -62,12 +62,15 @@ jobs:
         STEP_4_GH_REF_NAME="${{ steps.assgin_value_to_step_3.outputs.STEP_3_GH_REF_NAME }}"
         echo "STEP_4_GH_REF_NAME: ${STEP_4_GH_REF_NAME}"
 
-    # Test 3 - pass data from job to steps - SUCCESS
-    - name: Step 5 - Get value from Job step-data
+    # Test 3 - pass data from job to steps
+    - name: Step 5 - Get value from Job step-data - FAILURE
       id: get_value_from_job_step_data
       run: |
         # assign value to step 5
         echo "JOB_STEP_DATA_ENV : ${JOB_STEP_DATA_ENV}"
         #
-        echo "STEP_5_JOB_DATA=${JOB_STEP_DATA_ENV}" >> "$GITHUB_OUTPUT"
         echo "STEP_5_JOB_DATA   : ${STEP_5_JOB_DATA}"
+        echo "STEP_5_JOB_DATA=${JOB_STEP_DATA_ENV}" >> "$GITHUB_OUTPUT"
+    - name: Step 6 - Get value from Job step-data - SUCCESS
+      run: |
+          echo "STEP_5_JOB_DATA   : ${{ steps.get_value_from_job_step_data.outputs.STEP_5_JOB_DATA }}"
