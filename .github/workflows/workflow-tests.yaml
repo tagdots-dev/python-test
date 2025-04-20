@@ -39,7 +39,7 @@ jobs:
         # assign value to step 1
         STEP_1_GH_REF_NAME="${{ github.ref_name }}"
         echo "STEP_1_GH_REF_NAME: ${STEP_1_GH_REF_NAME}"
-    - name: Step 2 - Get value from Step 1
+    - name: Step 2 - Get value from Step 1 - FAILURE
       id: get_value_from_step_1
       run: |
         # get value from step 1
@@ -55,7 +55,7 @@ jobs:
       run: |
         # assign value to step 3
         echo "STEP_3_GH_REF_NAME=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
-    - name: Step 4 - Get value from Step 3
+    - name: Step 4 - Get value from Step 3 - SUCCESS
       id: get_value_from_step_3
       run: |
         # get value from step 3
