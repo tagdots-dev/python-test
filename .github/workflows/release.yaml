@@ -13,73 +13,33 @@ on:
 
   workflow_dispatch:
 
-env:
-  PYTHON_VERSION: '3.12.10'
+  # workflow_run used for test purpose only
+  workflow_run:
+    workflows: ["pre-commit", "testings"]
+    types:
+      - completed
 
 permissions:
   contents: write
 
 jobs:
-  validate-version-match:
-    if: startsWith(github.head_ref, 'release/')
+  release:
+    # if startsWith(github.head_ref, 'release/')
 
     runs-on: ubuntu-latest
     steps:
 
-    - name: Get release branch
-      id: get-release-branch
-      run: |
-        # get release branch and version
-        GIT_HEAD_REF="${{ github.head_ref }}"
-        #checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-        echo "GIT_BRANCH=${GIT_HEAD_REF}" >> "$GITHUB_OUTPUT"
-        echo "GIT_BRANCH_VERSION=${GIT_HEAD_REF#release/}" >> "$GITHUB_OUTPUT"
+    - name: hello
+      run: echo "hello world !!"
 
-    - name: Checkout source code
-      uses: actions/checkout@v4
+    - name: get github events (JSON)
+      run: echo "GH_EVENT_OBJ=${{ toJson(github.event) }}"
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ env.PYTHON_VERSION }}
+    - name: get github workflow (JSON)
+      run: echo "GH_WORKFLOW_OBJ=${{ toJson(github.workflow) }}"
 
-    - name: Build and Package Application
-      run: |
-        # get latest build
-        python -m pip install -U build
+    - name: get github event workflow_run result - pre-commit
+      run: echo "GH_WORKFLOW__RUN_OBJ=${{ toJson(github.event.workflow_run) }}"
 
-        # build package
-        python -m build
-
-        # install software into the current path
-        python -m pip install -e .
-
-    - name: Get software build version
-      id: get-software-build
-      run: |
-        echo "BUILD_VERSION=$(python src/pkg_15903/run.py --version | awk '{print $3}')"  >> "$GITHUB_OUTPUT"
-
-    - name: Upload distributions
-      id: artifact-upload
-      uses: actions/upload-artifact@v4
-      with:
-        path: dist/
-        if-no-files-found: error
-        retention-days: 3
-        overwrite: true
-        compression-level: 0
-
-    - name: Get Outputs
-      run: |
-        # get various outputs
-        echo 'Branch Release name    : ${{ steps.get-release-branch.outputs.GIT_BRANCH }}'
-        echo 'Branch Release version.: ${{ steps.get-release-branch.outputs.GIT_BRANCH_VERSION }}'
-        echo 'Software Build version.: ${{ steps.get-software-build.outputs.BUILD_VERSION }}'
-
-    - name: Compare Branch Version and Build Version 1
-      if: ${{ steps.get-release-branch.outputs.GIT_BRANCH_VERSION == steps.get-software-build.outputs.BUILD_VERSION }}
-      run: echo "git branch version is equal to bulid version"
-
-    - name: Compare Branch Version and Build Version 2
-      if: ${{ steps.get-release-branch.outputs.GIT_BRANCH_VERSION != steps.get-software-build.outputs.BUILD_VERSION }}
-      run: echo "git branch version is NOT equal to bulid version"
+    - name: get workflow result - testings
+      run: echo ""

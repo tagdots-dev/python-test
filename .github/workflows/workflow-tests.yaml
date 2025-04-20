@@ -3,7 +3,7 @@
 name: workflow-tests
 
 on:  # yamllint disable-line rule:truthy
-  push:
+  # push:
   workflow_dispatch:
 
 permissions:
@@ -127,7 +127,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Test 7 - get data from job-data-02 step 3 assigned new variable
+      # Test 7 - get data from job-data-02 step 3 env var
       - name: Step 1 - Get value from job-data-02 step 3 environment variable - FAILURE
         run: |
           echo "WF_ENV_VAR_02: $WF_ENV_VAR_02"
