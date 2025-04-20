@@ -13,7 +13,7 @@ env:
   WF_ENV_VAR: 'default'
 
 jobs:
-  step-data:
+  job-data-01:
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      JOB_STEP_DATA_ENV: 'hello'
+      JOB_DATA_ENV: 'hello'
 
     steps:
     - name: Get Outputs from github cotext
@@ -62,15 +62,34 @@ jobs:
         STEP_4_GH_REF_NAME="${{ steps.assgin_value_to_step_3.outputs.STEP_3_GH_REF_NAME }}"
         echo "STEP_4_GH_REF_NAME: ${STEP_4_GH_REF_NAME}"
 
-    # Test 3 - pass data from job to steps
-    - name: Step 5 - Get value from Job step-data - FAILURE
-      id: get_value_from_job_step_data
+    # Test 3 - pass data from job scope to steps
+    - name: Step 5 - Get value from Job job-data-01 environment variable - FAILURE
+      id: get_value_from_job_data
       run: |
         # assign value to step 5
-        echo "JOB_STEP_DATA_ENV : ${JOB_STEP_DATA_ENV}"
+        echo "JOB_DATA_ENV : ${JOB_DATA_ENV}"
         #
         echo "STEP_5_JOB_DATA   : ${STEP_5_JOB_DATA}"
-        echo "STEP_5_JOB_DATA=${JOB_STEP_DATA_ENV}" >> "$GITHUB_OUTPUT"
-    - name: Step 6 - Get value from Job step-data - SUCCESS
+        echo "STEP_5_JOB_DATA=${JOB_DATA_ENV}" >> "$GITHUB_OUTPUT"
+    - name: Step 6 - Get value from Job job-data-01 environment variable - SUCCESS
       run: |
-          echo "STEP_5_JOB_DATA   : ${{ steps.get_value_from_job_step_data.outputs.STEP_5_JOB_DATA }}"
+          echo "STEP_5_JOB_DATA   : ${{ steps.get_value_from_job_data.outputs.STEP_5_JOB_DATA }}"
+
+  # step-data-02:
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest]
+  #       python-version: [3.12]
+
+  #   runs-on: ubuntu-latest
+
+  #   env:
+  #     JOB_02_STEP_DATA_ENV: 'world'
+
+  #   steps:
+  #   - name: Get Outputs from github cotext
+  #     id: get_github_object
+  #     run: |
+  #       # get outputs
+  #       # parse github object into Json
+  #       echo "GH_OBJ=${{ toJson(github) }}"
