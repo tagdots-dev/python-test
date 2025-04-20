@@ -21,6 +21,44 @@ env:
   RE_GIT_REF_NAME: 'default'
 
 jobs:
+  validate:
+
+    if: startsWith(github.head_ref, 'release/')
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.12]
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      branch_head_ref: ${{ steps.get_branch_data.outputs.GITHUB_HEAD_REF }}
+      branch_spec_ver: ${{ steps.get_branch_data.outputs.GITHUB_SPEC_VER }}
+
+    steps:
+
+    - name: Get Branch Name and Named-Version
+      id: get_branch_data
+      run: |
+        # get branch data
+        echo "GITHUB_HEAD_REF=${{ github.head_ref }}"      >> "$GITHUB_OUTPUT"
+        echo "GITHUB_SPEC_VER=${GITHUB_HEAD_REF#release/}" >> "$GITHUB_OUTPUT"
+        #
+        echo "Branch Release name         : ${GITHUB_HEAD_REF}"
+        echo "Branch Release spec-version : ${GITHUB_SPEC_VER}"
+
+    # - name: Evaluate
+    #   run: |
+    #     # evaluate
+    #     echo "RE_GIT_REF_NAME: ${RE_GIT_REF_NAME}"
+    #     echo "GIT_REF_NAME   : ${GIT_REF_NAME}"
+    #     if [[ "${RE_GIT_REF_NAME}" == "${GIT_REF_NAME}" ]]; then
+    #       echo "both of the variables are the same"
+    #     else
+    #       echo "both of the variables are different"
+    #     fi
+
   build:
     strategy:
       matrix:
@@ -75,49 +113,3 @@ jobs:
 
     - name: make test
       run: make test
-
-  validate:
-    needs: [build, test]
-    # : if startsWith(github.head_ref, 'release/')
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.12]
-
-    runs-on: ubuntu-latest
-    steps:
-
-    - name: Get Outputs from github cotext and across jobs
-      run: |
-        # get outputs
-        # parse github object into Json
-        # echo "GH_OBJ= $ {{ toJson(github) }}"
-
-        ##################################
-        GIT_REF_NAME="${{ github.ref_name }}"
-        # about getting the github.ref_name and how to manipulate it
-        # $GIT_REF_NAME would be the same as ${GIT_REF_NAME}
-
-        ##################################
-        echo "Branch Release name                 : ${{ github.ref_name }}"
-        echo "Branch Release name (assigned var)  : ${GIT_REF_NAME}"
-        echo "Software Build ver  (from build job): ${{ needs.build.outputs.BUILD_VERSION }}"
-
-        ##################################
-        # assign a value to RE_GIT_REF_NAME variable and how to manipulate it
-        RE_GIT_REF_NAME="release/1.0.1"
-        echo "Branch Release ver (take away 'release/'): ${RE_GIT_REF_NAME#release/}"
-        echo "Software Build ver                       : ${{ needs.build.outputs.BUILD_VERSION }}"
-
-        ##################################
-        # compare two variable
-
-    - name: Evaluate
-      run: |
-        echo "RE_GIT_REF_NAME: ${RE_GIT_REF_NAME}"
-        echo "GIT_REF_NAME   : ${GIT_REF_NAME}"
-        if [[ "${RE_GIT_REF_NAME}" == "${GIT_REF_NAME}" ]]; then
-          echo "both of the variables are the same"
-        else
-          echo "both of the variables are different"
-        fi
