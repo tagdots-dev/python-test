@@ -26,7 +26,7 @@ jobs:
         os: [ubuntu-latest]
         # python-version: [3.12]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     outputs:
       BRANCH_HEAD_REF: ${{ steps.get_release_branch_info.outputs.GITHUB_HEAD_REF }}
@@ -51,7 +51,7 @@ jobs:
         os: [ubuntu-latest]
         python-version: [3.12, 3.13]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     outputs:
       BUILD_VERSION: ${{ steps.get-build-version.outputs.BUILD_VERSION }}
@@ -90,7 +90,7 @@ jobs:
         os: [ubuntu-latest]
         python-version: [3.12, 3.13]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
 
@@ -118,7 +118,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
 
