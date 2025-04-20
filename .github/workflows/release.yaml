@@ -42,4 +42,4 @@ jobs:
       run: echo "GH_WORKFLOW__RUN_OBJ=${{ toJson(github.event.workflow_run) }}"
 
     - name: get workflow result - testings
-      run: echo ""
+      run: echo "workflow result"
