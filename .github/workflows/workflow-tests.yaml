@@ -69,27 +69,29 @@ jobs:
         # assign value to step 5
         echo "JOB_DATA_ENV : ${JOB_DATA_ENV}"
         #
-        echo "STEP_5_JOB_DATA   : ${STEP_5_JOB_DATA}"
+        echo "STEP_5_JOB_DATA: ${STEP_5_JOB_DATA}"
         echo "STEP_5_JOB_DATA=${JOB_DATA_ENV}" >> "$GITHUB_OUTPUT"
     - name: Step 6 - Get value from Job job-data-01 environment variable - SUCCESS
       run: |
-          echo "STEP_5_JOB_DATA   : ${{ steps.get_value_from_job_data.outputs.STEP_5_JOB_DATA }}"
+        echo "STEP_5_JOB_DATA: ${{ steps.get_value_from_job_data.outputs.STEP_5_JOB_DATA }}"
 
-  # step-data-02:
-  #   strategy:
-  #     matrix:
-  #       os: [ubuntu-latest]
-  #       python-version: [3.12]
+    outputs:
+      JOB_DATA: ${{ steps.get_value_from_job_data.outputs.STEP_5_JOB_DATA }}
 
-  #   runs-on: ubuntu-latest
+  job-data-02:
+    needs: [job-data-01]
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.12]
 
-  #   env:
-  #     JOB_02_STEP_DATA_ENV: 'world'
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #   - name: Get Outputs from github cotext
-  #     id: get_github_object
-  #     run: |
-  #       # get outputs
-  #       # parse github object into Json
-  #       echo "GH_OBJ=${{ toJson(github) }}"
+    env:
+      JOB_DATA_02_ENV: 'world'
+
+    steps:
+    - name: Step 1 - Get value from Job job-data-01 step 5 output - FAILURE
+      id: get_value_from_job_data_01_step_5
+      run: |
+        echo "Job_Data_02 from STEP_5_JOB_DATA: ${{ needs.job-data-01.outputs.JOB_DATA }}"
