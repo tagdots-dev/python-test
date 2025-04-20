@@ -16,29 +16,25 @@ on:  # yamllint disable-line rule:truthy
 permissions:
   contents: read
 
-env:
-  GIT_REF_NAME: 'default'
-  RE_GIT_REF_NAME: 'default'
-
 jobs:
-  validate:
+  get-release-branch:
 
     if: startsWith(github.head_ref, 'release/')
 
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.12]
+        # python-version: [3.12]
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     outputs:
-      branch_head_ref: ${{ steps.get_branch_data.outputs.GITHUB_HEAD_REF }}
-      branch_spec_ver: ${{ steps.get_branch_data.outputs.GITHUB_SPEC_VER }}
+      BRANCH_HEAD_REF: ${{ steps.get_branch_data.outputs.GITHUB_HEAD_REF }}
+      BRANCH_SPEC_VER: ${{ steps.get_branch_data.outputs.GITHUB_SPEC_VER }}
 
     steps:
 
-    - name: Get Branch Name and Named-Version
+    - name: Get Source Branch Name and Spec-Version of the Pull Request
       id: get_branch_data
       run: |
         # get branch data
@@ -48,24 +44,16 @@ jobs:
         echo "Branch Release name         : ${GITHUB_HEAD_REF}"
         echo "Branch Release spec-version : ${GITHUB_SPEC_VER}"
 
-    # - name: Evaluate
-    #   run: |
-    #     # evaluate
-    #     echo "RE_GIT_REF_NAME: ${RE_GIT_REF_NAME}"
-    #     echo "GIT_REF_NAME   : ${GIT_REF_NAME}"
-    #     if [[ "${RE_GIT_REF_NAME}" == "${GIT_REF_NAME}" ]]; then
-    #       echo "both of the variables are the same"
-    #     else
-    #       echo "both of the variables are different"
-    #     fi
-
   build:
     strategy:
       matrix:
         os: [ubuntu-latest]
         python-version: [3.12]
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    outputs:
+      BUILD_VERSION: ${{ steps.get-build-version.outputs.BUILD_VERSION }}
 
     steps:
 
@@ -77,17 +65,22 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: make build
+    - name: Make build
       run: make build
 
-    - name: get build version
+    - name: Get Build Version
       id: get-build-version
-      run: |
-        # get build version
-        echo "BUILD_VERSION=$(pkg-15903 --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
+      run: echo "BUILD_VERSION=$(pkg-15903 --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
 
-    outputs:
-      BUILD_VERSION: ${{ steps.get-build-version.outputs.BUILD_VERSION }}
+    - name: Upload distributions
+      id: artifact-upload
+      uses: actions/upload-artifact@v4
+      with:
+        path: dist/
+        if-no-files-found: error
+        retention-days: 3
+        overwrite: true
+        compression-level: 6
 
   test:
     needs: build
@@ -96,7 +89,7 @@ jobs:
         os: [ubuntu-latest]
         python-version: [3.12]
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     steps:
 
@@ -113,3 +106,20 @@ jobs:
 
     - name: make test
       run: make test
+
+  prep-for-release:
+
+    needs: [build, test, get-release-branch]
+
+    if: startsWith(github.head_ref, 'release/')
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+
+    - name: hello
+      run: echo "hello"
