@@ -37,25 +37,25 @@ jobs:
         STEP_1_GH_REF_NAME="${{ github.ref_name }}"
         echo "STEP_1_GH_REF_NAME: ${STEP_1_GH_REF_NAME}"
 
-    - name: Step 1 - Get value from Step 1
+    - name: Step 2 - Get value from Step 1
       id: get_value_from_step_1
       run: |
         # get value from step 1
         # ${STEP_1_GH_REF_NAME} is NOT passed to STEP_2_GH_REF_NAME
         # because STEP_1_GH_REF_NAME is not visible outside of Step 1
         STEP_2_GH_REF_NAME=${STEP_1_GH_REF_NAME}
-        echo "${STEP_2_GH_REF_NAME}"
+        echo "STEP_2_GH_REF_NAME: ${STEP_2_GH_REF_NAME}"
 
     # Test 2 - across steps success
     - name: Step 3 - Assign value to a new step variable
       id: assgin_value_to_step_3
       run: |
         # assign value to step 3
-        echo "${STEP_3_GH_REF_NAME}=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
+        echo "STEP_3_GH_REF_NAME=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
 
     - name: Step 4 - Get value from Step 3
       id: get_value_from_step_3
       run: |
         # get value from step 3
-        STEP_4_GH_REF_NAME=${{ steps.assgin_value_to_step_3.outputs.STEP_3_GH_REF_NAME }}
-        echo "${STEP_4_GH_REF_NAME}"
+        STEP_4_GH_REF_NAME="${{ steps.assgin_value_to_step_3.outputs.STEP_3_GH_REF_NAME }}"
+        echo "STEP_4_GH_REF_NAME: ${STEP_4_GH_REF_NAME}"
