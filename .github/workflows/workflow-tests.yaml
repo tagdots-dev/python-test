@@ -103,11 +103,16 @@ jobs:
         echo "Workflow Env Var: ${{ env.WF_ENV_VAR }}"
 
     # Test 6 - assign data to a workflow scope
-    - name: Step 3 - Assign value to a new Workflow Scope environment variable
+    - name: Step 3 - Assign value to a new environment variable
       id: assign_value_to_wf_env_var
       run: |
         echo "WF_ENV_VAR_02='LondonBridge'" >> "$GITHUB_ENV"
         echo "action_state=yellow" >> "$GITHUB_ENV"
+    - name: Step 4 - Show value of a new environment variable
+      id: show_value_to_new_env_var
+      run: |
+          echo "WF_ENV_VAR_02: $WF_ENV_VAR_02"
+          echo "action_state : $action_state"
 
   job-data-03:
     needs: [job-data-02]
@@ -120,7 +125,7 @@ jobs:
 
     steps:
       # Test 7 - get data from a new environment at workflow scope
-      - name: Step 4 - Get value from Workflow environment variable - SUCCESS
+      - name: Step 1 - Get value from Workflow environment variable - SUCCESS
         run: |
           echo "WF_ENV_VAR_02: $WF_ENV_VAR_02"
           echo "action_state : $action_state"
