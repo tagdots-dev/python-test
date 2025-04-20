@@ -91,7 +91,13 @@ jobs:
       JOB_DATA_02_ENV: 'world'
 
     steps:
-    - name: Step 1 - Get value from Job job-data-01 step 5 output - FAILURE
+    # Test 4 - pass data from job scope to another job step
+    - name: Step 1 - Get value from Job job-data-01 step 5 output - SUCCESS
       id: get_value_from_job_data_01_step_5
       run: |
         echo "Job_Data_02 from STEP_5_JOB_DATA: ${{ needs.job-data-01.outputs.JOB_DATA }}"
+
+    # Test 5 - pass data from workflow scope to job step
+    - name: Step 2 - Get value from Workflow environment variable - SUCCESS
+      run: |
+        echo "Workflow Env Var: ${{ env.WF_ENV_VAR }}"
