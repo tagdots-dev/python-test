@@ -141,3 +141,4 @@ jobs:
       if: ${{ needs.build.outputs.BUILD_VERSION == steps.get-release-branch.outputs.GITHUB_SPEC_VER }}
       run: |
         echo "Something is wrong: Build Version is different from Branch Specified Version"
+        exit 1
