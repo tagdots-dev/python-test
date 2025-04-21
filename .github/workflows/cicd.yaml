@@ -43,24 +43,24 @@ jobs:
 
     - name: get Github Object
       run: |
-        echo "${{ toJson(github) }}"
+        echo ${{ toJson(github) }}
 
     - name: get job result - pre-commit
       run: |
-        echo "${{ needs.pre-commit.result }}"
+        echo ${{ needs.pre-commit.result }}
 
     - name: get job result - build-and-tests
       run: |
-        echo "${{ needs.build-and-tests.result }}"
+        echo ${{ needs.build-and-tests.result }}
 
     - name: get job result and process 1
       if: ${{ needs.pre-commit.result }} == 'success' && ${{ needs.build-and-tests.result }} == 'success'
       run: |
-        echo "${{ toJson(needs.build-and-tests.outputs) }}"
+        echo ${{ toJson(needs.build-and-tests.outputs) }}
         echo "testing 123"
 
     - name: get job result and process 2
       if: ${{ needs.pre-commit.result }} == 'failure' && ${{ needs.build-and-tests.result }} == 'success'
       run: |
-        echo "${{ toJson(needs.build-and-tests.outputs) }}"
+        echo ${{ toJson(needs.build-and-tests.outputs) }}
         echo "testing 456"
