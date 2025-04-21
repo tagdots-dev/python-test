@@ -12,6 +12,16 @@ on:  # yamllint disable-line rule:truthy
   #     - main
 
   workflow_call:
+    outputs:
+
+      BRANCH_HEAD_REF:
+        value: ${{ jobs.get-release.outputs.BRANCH_HEAD_REF }}
+
+      BRANCH_SPEC_VER:
+        value: ${{ jobs.get-release.outputs.BRANCH_SPEC_VER }}
+
+      BUILD_VERSION:
+        value: ${{ jobs.build.outputs.BUILD_VERSION }}
 
   workflow_dispatch:
 
