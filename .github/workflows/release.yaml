@@ -36,7 +36,7 @@ jobs:
     steps:
 
     - name: hello
-      run: echo "hello world !!"
+      run: echo "hello world!!"
 
     - name: get github events (JSON)
       run: echo "GH_EVENT_OBJ=${{ toJson(github.event) }}"
