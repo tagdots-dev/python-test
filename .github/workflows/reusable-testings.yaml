@@ -28,7 +28,7 @@ permissions:
 jobs:
   get-release:
 
-    if: startsWith(github.head_ref, 'release/')
+    if: startsWith(github.ref_name, 'test')
 
     strategy:
       matrix:
@@ -124,7 +124,7 @@ jobs:
 
     needs: [build, test, get-release]
 
-    if: startsWith(github.head_ref, 'release/')
+    if: startsWith(github.ref_name, 'test')
 
     strategy:
       matrix:
