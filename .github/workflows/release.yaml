@@ -49,13 +49,13 @@ jobs:
     - name: get github vars (JSON)
       run: echo "GH_WORKFLOW_OBJ=${{ toJson(vars) }}"
 
-    - name: get github.head_ref - expect 'release/x.x.x'
+    - name: get github.head_ref - expect release/x.x.x
       run: echo "GH_HEAD_REF=${{ github.head_ref }}"
 
-    - name: get github.head_ref - expect 'success'
+    - name: get github.head_ref - expect success
       run: echo "GH_WORKFLOW_CONCLUSION=${{ github.event.workflow.conclusion }}"
 
-    - name: get github event_name - expect 'pull_request'
+    - name: get github event_name - expect pull_request
       run: echo "GH_EVENT_NAME=${{ github.event_name }}"
 
     - name: get others
