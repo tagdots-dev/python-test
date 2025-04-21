@@ -29,7 +29,6 @@ permissions:
 
 jobs:
   release:
-    if: startsWith(github.head_ref, 'release/') && ${{ github.event.workflow.name == 'testings' }} && ${{ github.event.workflow.conclusion == 'success' }}
 
     runs-on: ubuntu-latest
 
@@ -38,14 +37,26 @@ jobs:
     - name: hello
       run: echo "hello world!!"
 
-    - name: get github events (JSON)
+    - name: get github.event (JSON)
       run: echo "GH_EVENT_OBJ=${{ toJson(github.event) }}"
 
-    - name: get github workflow name result
+    - name: get github workflow (some JSON)
       run: echo "GH_WORKFLOW=${{ toJson(github.workflow) }}"
 
-    - name: get github workflow_run result
+    - name: get github.event.workflow (JSON)
       run: echo "GH_WORKFLOW_OBJ=${{ toJson(github.event.workflow) }}"
+
+    - name: get github vars (JSON)
+      run: echo "GH_WORKFLOW_OBJ=${{ toJson(vars) }}"
+
+    - name: get github.head_ref - expect 'release/x.x.x'
+      run: echo "GH_HEAD_REF=${{ github.head_ref }}"
+
+    - name: get noooooooooooooooooooo
+      run: echo "---------"
+
+    - name: get github.head_ref - expect 'success'
+      run: echo "GH_HEAD_REF=${{ github.event.workflow.conclusion }}"
 
     - name: get github event_name
       run: echo "GH_EVENT_NAME=${{ github.event_name }}"

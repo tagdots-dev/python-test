@@ -135,8 +135,8 @@ jobs:
     - name: hello
       run: echo "hello"
 
-    - name: outputs from job - get outputs from various jobs
+    - name: get output variables from various jobs
       run: |
-        echo "${{ needs.get-release.outputs.BRANCH_HEAD_REF }}"
-        echo "${{ needs.get-release.outputs.BRANCH_SPEC_VER }}"
-        echo "${{ needs.build.outputs.BUILD_VERSION }}"
+        echo "Release Branch Name : ${{ needs.get-release.outputs.BRANCH_HEAD_REF }}"
+        echo "Release Spec Version: ${{ needs.get-release.outputs.BRANCH_SPEC_VER }}"
+        echo "Build Version       :${{ needs.build.outputs.BUILD_VERSION }}"
