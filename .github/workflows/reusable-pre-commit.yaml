@@ -4,13 +4,16 @@
 name: pre-commit
 
 on:  # yamllint disable-line rule:truthy
-  push:
-    branches:
-      - test-*
 
-  pull_request:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - test-*
+
+  # pull_request:
+  #   branches:
+  #     - main
+
+  workflow_call:
 
   workflow_dispatch:
 

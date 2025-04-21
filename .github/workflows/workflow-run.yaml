@@ -1,0 +1,44 @@
+---
+# NOTE: this file is managed by terraform
+
+name: pre-commit
+
+on:  # yamllint disable-line rule:truthy
+
+  push:
+    branches:
+      - test-*
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+env:
+  HADOLINT_VERSION: 'v2.12.0'
+  PRE_COMMMIT_VERSION: '4.2.0'
+  PYSCAN_RS_VERSION: '0.1.7'
+  PYTHON_VERSION: '3.12.10'
+  TERRAFORM_VERSION: '1.11.3'
+  TFLINT_VERSION: 'v0.55.1'
+
+permissions:
+  contents: read
+
+jobs:
+  pre-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: run pre-commit
+      uses: reusable-pre-commit.yaml
+
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: run testings
+      uses: reusable-testings.yaml
