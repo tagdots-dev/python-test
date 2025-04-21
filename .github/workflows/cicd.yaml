@@ -43,7 +43,7 @@ jobs:
 
     - name: get Github Object
       run: |
-        echo ${{ toJson(github) }}
+        echo "${{ toJson(github) }}"
 
     - name: get job result - pre-commit
       run: |
