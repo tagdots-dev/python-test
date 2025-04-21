@@ -49,7 +49,7 @@ jobs:
     - name: get github vars (JSON)
       run: echo "GH_WORKFLOW_OBJ=${{ toJson(vars) }}"
 
-    - name: get github.head_ref - expect release/x.x.x
+    - name: get github.head_ref - expect release-slash-x.x.x
       run: echo "GH_HEAD_REF=${{ github.head_ref }}"
 
     - name: get github.head_ref - expect success
