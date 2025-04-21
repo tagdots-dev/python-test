@@ -29,7 +29,7 @@ permissions:
 
 jobs:
   release:
-    if: startsWith(github.head_ref, 'release/')
+    if: startsWith(github.head_ref, 'release/') && ${{ github.event.workflow.name == 'testings' }} && ${{ github.event.workflow.conclusion == 'success' }}
 
     runs-on: ubuntu-latest
 
