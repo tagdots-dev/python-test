@@ -24,7 +24,7 @@ permissions:
   contents: read
 
 jobs:
-  get-release-branch:
+  get-release:
 
     if: startsWith(github.head_ref, 'release/')
 
@@ -35,14 +35,14 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      BRANCH_HEAD_REF: ${{ steps.get_release_branch.outputs.GITHUB_HEAD_REF }}
-      BRANCH_SPEC_VER: ${{ steps.get_release_branch.outputs.GITHUB_SPEC_VER }}
+      BRANCH_HEAD_REF: ${{ steps.get-release-branch.outputs.GITHUB_HEAD_REF }}
+      BRANCH_SPEC_VER: ${{ steps.get-release-branch.outputs.GITHUB_SPEC_VER }}
 
     steps:
 
     - name: Get Source Branch Name and Spec-Version of the Pull Request
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-      id: get_release_branch
+      id: get-release-branch
       run: |
         GITHUB_HEAD_REF=${{ github.head_ref }}
         GITHUB_SPEC_VER=${GITHUB_HEAD_REF#release/}
@@ -120,7 +120,7 @@ jobs:
 
   prep-for-release:
 
-    needs: [build, test, get-release-branch]
+    needs: [build, test, get-release]
 
     if: startsWith(github.head_ref, 'release/')
 
@@ -135,7 +135,8 @@ jobs:
     - name: hello
       run: echo "hello"
 
-    - name: outputs from job - get-release-branch
+    - name: outputs from job - get outputs from various jobs
       run: |
-        echo "${{ needs.get-release-branch.outputs.BRANCH_HEAD_REF }}"
-        echo "${{ needs.get-release-branch.outputs.BRANCH_SPEC_VER }}"
+        echo "${{ needs.get-release.outputs.BRANCH_HEAD_REF }}"
+        echo "${{ needs.get-release.outputs.BRANCH_SPEC_VER }}"
+        echo "${{ needs.build.outputs.BUILD_VERSION }}"
