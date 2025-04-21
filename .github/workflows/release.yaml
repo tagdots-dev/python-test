@@ -27,7 +27,7 @@ permissions:
   contents: write
 
 jobs:
-  release:
+  release-checks:
 
     runs-on: ubuntu-latest
 
@@ -36,25 +36,22 @@ jobs:
     - name: hello
       run: echo "hello world!!"
 
+    - name: get github object (JSON)
+      run: echo "GH_OBJ=${{ toJson(github) }}"
+
     - name: get github.event (JSON)
       run: echo "GH_EVENT_OBJ=${{ toJson(github.event) }}"
 
-    - name: get github workflow (some JSON)
-      run: echo "GH_WORKFLOW=${{ toJson(github.workflow) }}"
+    - name: get github workflow - expect release - SUCCESS
+      run: echo "GH_WORKFLOW=${{ github.workflow }}"
 
-    - name: get github.event.workflow (JSON)
-      run: echo "GH_WORKFLOW_OBJ=${{ toJson(github.event.workflow) }}"
+    - name: get github.head_ref - expect success - TBD
+      run: echo "GH_WORKFLOW_CONCLUSION=${{ github.workflow.conclusion }}"
 
-    - name: get github vars (JSON)
-      run: echo "GH_WORKFLOW_OBJ=${{ toJson(vars) }}"
-
-    - name: get github.head_ref - expect success
-      run: echo "GH_WORKFLOW_CONCLUSION=${{ github.event.workflow.conclusion }}"
-
-    - name: get github event_name - expect pull_request
+    - name: get github event_name - expect pull_request - SUCCESS
       run: echo "GH_EVENT_NAME=${{ github.event_name }}"
 
-    - name: get github.head_ref - expect release/m.n.p.[+]
+    - name: get github.head_ref - expect release/m.n.p.[+] - SUCCESS
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: echo "GH_HEAD_REF=${{ github.head_ref }}"
 
