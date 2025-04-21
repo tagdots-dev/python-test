@@ -24,7 +24,7 @@ permissions:
   contents: read
 
 jobs:
-  get-release-branch:
+  get-release:
 
     if: startsWith(github.head_ref, 'release/')
 
@@ -35,21 +35,23 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      BRANCH_HEAD_REF: ${{ steps.get_release_branch.outputs.GITHUB_HEAD_REF }}
-      BRANCH_SPEC_VER: ${{ steps.get_release_branch.outputs.GITHUB_SPEC_VER }}
+      BRANCH_HEAD_REF: ${{ steps.get-release-branch.outputs.GITHUB_HEAD_REF }}
+      BRANCH_SPEC_VER: ${{ steps.get-release-branch.outputs.GITHUB_SPEC_VER }}
 
     steps:
 
     - name: Get Source Branch Name and Spec-Version of the Pull Request
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-      id: get_release_branch
+      id: get-release-branch
       run: |
+        GITHUB_HEAD_REF=${{ github.head_ref }}
+        GITHUB_SPEC_VER=${GITHUB_HEAD_REF#release/}
         # get release branch info
         echo "GITHUB_HEAD_REF=${{ github.head_ref }}"      >> "$GITHUB_OUTPUT"
         echo "GITHUB_SPEC_VER=${GITHUB_HEAD_REF#release/}" >> "$GITHUB_OUTPUT"
         #
-        echo "Branch Release name         : ${GITHUB_HEAD_REF}"
-        echo "Branch Release spec-version : ${GITHUB_SPEC_VER}"
+        echo "Release Branch Name         : ${GITHUB_HEAD_REF}"
+        echo "Release Branch Spec-Version : ${GITHUB_SPEC_VER}"
 
   build:
     strategy:
@@ -77,7 +79,9 @@ jobs:
 
     - name: Get Build Version
       id: get-build-version
-      run: echo "BUILD_VERSION=$(pkg-15903 --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
+      run: |
+        echo "BUILD_VERSION=$(pkg-15903 --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
+        echo "Build Version: ${BUILD_VERSION}"
 
     - name: Upload distributions
       id: artifact-upload
@@ -111,12 +115,12 @@ jobs:
     - name: Install test dependencies
       run: python -m pip install -e .[test]
 
-    - name: make test
+    - name: Make Test
       run: make test
 
   prep-for-release:
 
-    needs: [build, test, get-release-branch]
+    needs: [build, test, get-release]
 
     if: startsWith(github.head_ref, 'release/')
 
@@ -130,3 +134,9 @@ jobs:
 
     - name: hello
       run: echo "hello"
+
+    - name: get output variables from various jobs
+      run: |
+        echo "Release Branch Name        : ${{ needs.get-release.outputs.BRANCH_HEAD_REF }}"
+        echo "Release Branch Spec Version: ${{ needs.get-release.outputs.BRANCH_SPEC_VER }}"
+        echo "Build Version              : ${{ needs.build.outputs.BUILD_VERSION }}"
