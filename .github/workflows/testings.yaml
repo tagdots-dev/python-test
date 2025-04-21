@@ -45,6 +45,7 @@ jobs:
       id: get_release_branch
       run: |
         GITHUB_HEAD_REF=${{ github.head_ref }}
+        GITHUB_SPEC_VER=${GITHUB_HEAD_REF#release/}
         # get release branch info
         echo "GITHUB_HEAD_REF=${{ github.head_ref }}"      >> "$GITHUB_OUTPUT"
         echo "GITHUB_SPEC_VER=${GITHUB_HEAD_REF#release/}" >> "$GITHUB_OUTPUT"
@@ -133,3 +134,8 @@ jobs:
 
     - name: hello
       run: echo "hello"
+
+    - name: outputs from job - get-release-branch
+      run: |
+        echo "${{ needs.get-release-branch.outputs.BRANCH_HEAD_REF }}"
+        echo "${{ needs.get-release-branch.outputs.BRANCH_SPEC_VER }}"
