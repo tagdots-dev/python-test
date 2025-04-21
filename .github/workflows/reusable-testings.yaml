@@ -79,6 +79,7 @@ jobs:
 
   test:
     needs: build
+
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -106,6 +107,11 @@ jobs:
     if: startsWith(github.head_ref, 'release/')
 
     needs: [build, test]
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.12]
 
     runs-on: ubuntu-latest
 
