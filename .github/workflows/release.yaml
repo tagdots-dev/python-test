@@ -1,5 +1,4 @@
 ---
-# on push to main > build package > upload artifacts
 
 name: release
 
@@ -55,7 +54,8 @@ jobs:
     - name: get github event_name - expect pull_request
       run: echo "GH_EVENT_NAME=${{ github.event_name }}"
 
-    - name: get github.head_ref
+    - name: get github.head_ref - expect release/m.n.p.[+]
+      # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: echo "GH_HEAD_REF=${{ github.head_ref }}"
 
     - name: get others
