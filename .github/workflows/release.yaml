@@ -3,25 +3,25 @@
 name: release
 
 on:
-  pull_request:
-
-    branches:
-      - main
-
-    types:
-      - closed
-
-  workflow_dispatch:
-
-  # workflow_run:
-  #   workflows:
-  #     - testings
+  # pull_request:
 
   #   branches:
-  #     - release/*
+  #     - main
 
   #   types:
-  #     - completed
+  #     - closed
+
+  # workflow_dispatch:
+
+  workflow_run:
+    workflows:
+      - testings
+
+    branches:
+      - release/*
+
+    types:
+      - completed
 
 permissions:
   contents: write
@@ -42,13 +42,13 @@ jobs:
     - name: get github.event (JSON)
       run: echo "GH_EVENT_OBJ=${{ toJson(github.event) }}"
 
-    - name: get github workflow - expect release - SUCCESS
+    - name: get github.workflow - expect release - SUCCESS
       run: echo "GH_WORKFLOW=${{ github.workflow }}"
 
-    - name: get github.head_ref - expect success - TBD
+    - name: get github.workflow.conclusion - expect success - TBD
       run: echo "GH_WORKFLOW_CONCLUSION=${{ github.workflow.conclusion }}"
 
-    - name: get github event_name - expect pull_request - SUCCESS
+    - name: get github.event_name - expect pull_request - SUCCESS
       run: echo "GH_EVENT_NAME=${{ github.event_name }}"
 
     - name: get github.head_ref - expect release/m.n.p.[+] - SUCCESS
