@@ -46,11 +46,11 @@ jobs:
       run: |
         GITHUB_HEAD_REF=${{ github.head_ref }}
         # get release branch info
-        echo "GITHUB_HEAD_REF_VAR=${{ github.head_ref }}"      >> "$GITHUB_OUTPUT"
-        echo "GITHUB_SPEC_VER_VAR=${GITHUB_HEAD_REF#release/}" >> "$GITHUB_OUTPUT"
+        echo "GITHUB_HEAD_REF=${{ github.head_ref }}"      >> "$GITHUB_OUTPUT"
+        echo "GITHUB_SPEC_VER=${GITHUB_HEAD_REF#release/}" >> "$GITHUB_OUTPUT"
         #
-        echo "Branch Release name         : ${GITHUB_HEAD_REF_VAR}"
-        echo "Branch Release spec-version : ${GITHUB_SPEC_VER_VAR}"
+        echo "Branch Release name         : ${GITHUB_HEAD_REF}"
+        echo "Branch Release spec-version : ${GITHUB_SPEC_VER}"
 
   build:
     strategy:
