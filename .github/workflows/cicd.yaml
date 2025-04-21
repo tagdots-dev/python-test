@@ -54,13 +54,13 @@ jobs:
         echo ${{ needs.build-and-tests.result }}
 
     - name: get job result and process 1
-      if: ${{ needs.pre-commit.result == 'success' }}
+      if: ${{ needs.pre-commit.result == 'success'  && needs.build-and-tests.result == 'success' }}
       run: |
         echo "${{ toJson(needs.build-and-tests.outputs) }}"
         echo "testing 123"
 
     - name: get job result and process 2
-      if: ${{ needs.pre-commit.result == 'failure' }}
+      if: ${{ needs.pre-commit.result == 'failure' && needs.build-and-tests.result == 'success' }}
       run: |
         echo "${{ toJson(needs.build-and-tests.outputs) }}"
         echo "testing 456"
