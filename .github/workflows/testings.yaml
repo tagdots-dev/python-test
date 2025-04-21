@@ -3,15 +3,22 @@
 name: testings
 
 on:  # yamllint disable-line rule:truthy
-  push:
-    branches:
-      - test-*
+  # push:
+  #   branches:
+  #     - test-*
 
-  pull_request:
-    branches:
-      - main
+  # pull_request:
+  #   branches:
+  #     - main
 
   workflow_dispatch:
+
+  workflow_run:
+    workflows:
+      - pre-commit
+
+    types:
+      - completed
 
 permissions:
   contents: read

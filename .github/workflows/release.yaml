@@ -4,18 +4,23 @@
 name: release
 
 on:
-  pull_request:
-    types:
-      - closed
+  # pull_request:
 
-    branches:
-      - main
+  #   branches:
+  #     - main
+
+  #   types:
+  #     - closed
 
   workflow_dispatch:
 
-  # workflow_run used for test purpose only
   workflow_run:
-    workflows: ["pre-commit", "testings"]
+    workflows:
+      - testings
+
+    branches:
+      - release/*
+
     types:
       - completed
 
@@ -27,6 +32,7 @@ jobs:
     # if startsWith(github.head_ref, 'release/')
 
     runs-on: ubuntu-latest
+
     steps:
 
     - name: hello
@@ -34,12 +40,6 @@ jobs:
 
     - name: get github events (JSON)
       run: echo "GH_EVENT_OBJ=${{ toJson(github.event) }}"
-
-    - name: get github workflow (JSON)
-      run: echo "GH_WORKFLOW_OBJ=${{ toJson(github.workflow) }}"
-
-    - name: get github event workflow_run result - pre-commit
-      run: echo "GH_WORKFLOW_RUN_OBJ=${{ toJson(github.event.workflow_run) }}"
 
     - name: get github event workflow_run result - testings
       run: echo "GH_WORKFLOW_RUN_OBJ=${{ toJson(github.event.workflow_run) }}"
