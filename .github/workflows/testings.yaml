@@ -44,6 +44,7 @@ jobs:
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       id: get_release_branch
       run: |
+        GITHUB_HEAD_REF=${{ github.head_ref }}"
         # get release branch info
         echo "GITHUB_HEAD_REF=${{ github.head_ref }}"      >> "$GITHUB_OUTPUT"
         echo "GITHUB_SPEC_VER=${GITHUB_HEAD_REF#release/}" >> "$GITHUB_OUTPUT"
