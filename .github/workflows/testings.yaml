@@ -13,6 +13,13 @@ on:  # yamllint disable-line rule:truthy
 
   workflow_dispatch:
 
+  # workflow_run:
+  #   workflows:
+  #     - pre-commit
+
+  #   types:
+  #     - completed
+
 permissions:
   contents: read
 
