@@ -19,8 +19,10 @@ permissions:
   contents: read
 
 jobs:
+
   pre-ci:
     uses: ./.github/workflows/reusable-pre-commit.yaml
+
   tests:
     uses: ./.github/workflows/reusable-testings.yaml
 
@@ -32,6 +34,14 @@ jobs:
     - name: say hello
       run: echo "hello"
 
-    - name: get job object
+    - name: get job - ends with status being success
       run: |
         echo "${{ toJson(job) }}"
+
+    - name: get job - pre-ci
+      run: |
+        echo "${{ needs.pre-ci.result }}"
+
+    - name: get job - tests
+      run: |
+        echo "${{ needs.tests.result }}"
