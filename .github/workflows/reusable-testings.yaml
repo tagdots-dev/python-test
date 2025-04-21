@@ -3,7 +3,7 @@
 name: testings
 
 on:  # yamllint disable-line rule:truthy
-  push:
+  # push:
   #   branches:
   #     - test-*
 
