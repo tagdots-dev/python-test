@@ -28,17 +28,14 @@ permissions:
 
 jobs:
   pre-ci:
-    runs-on: ubuntu-latest
-
-    steps:
-
-    - name: run pre-commit
-      uses: reusable-pre-commit.yaml
+    uses: ./.github/workflows/reusable-pre-commit.yaml
 
   tests:
+    uses: ./.github/workflows/reusable-testings.yaml
+
+  release:
     runs-on: ubuntu-latest
-
+    needs: [pre-ci, tests]
     steps:
-
-    - name: run testings
-      uses: reusable-testings.yaml
+    - name: test
+      run: echo "hello"
