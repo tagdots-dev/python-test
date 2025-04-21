@@ -39,7 +39,7 @@ jobs:
     steps:
 
     - name: say hello
-      run: echo "hello"
+      run: echo "hello world"
 
     - name: get Github Object
       run: |
