@@ -46,11 +46,11 @@ jobs:
       run: |
         GITHUB_HEAD_REF=${{ github.head_ref }}
         # get release branch info
-        echo "GITHUB_HEAD_REF=${{ github.head_ref }}"      >> "$GITHUB_OUTPUT"
-        echo "GITHUB_SPEC_VER=${GITHUB_HEAD_REF#release/}" >> "$GITHUB_OUTPUT"
+        echo "GITHUB_HEAD_REF_VAR=${{ github.head_ref }}"      >> "$GITHUB_OUTPUT"
+        echo "GITHUB_SPEC_VER_VAR=${GITHUB_HEAD_REF#release/}" >> "$GITHUB_OUTPUT"
         #
-        echo "Branch Release name         : ${GITHUB_HEAD_REF}"
-        echo "Branch Release spec-version : ${GITHUB_SPEC_VER}"
+        echo "Branch Release name         : ${GITHUB_HEAD_REF_VAR}"
+        echo "Branch Release spec-version : ${GITHUB_SPEC_VER_VAR}"
 
   build:
     strategy:
@@ -78,7 +78,9 @@ jobs:
 
     - name: Get Build Version
       id: get-build-version
-      run: echo "BUILD_VERSION=$(pkg-15903 --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
+      run: |
+        echo "BUILD_VERSION=$(pkg-15903 --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
+        echo "Build Version: ${BUILD_VERSION}"
 
     - name: Upload distributions
       id: artifact-upload
@@ -112,7 +114,7 @@ jobs:
     - name: Install test dependencies
       run: python -m pip install -e .[test]
 
-    - name: make test
+    - name: Make Test
       run: make test
 
   prep-for-release:
