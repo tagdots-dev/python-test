@@ -50,8 +50,8 @@ jobs:
         echo "GITHUB_HEAD_REF=${{ github.head_ref }}"      >> "$GITHUB_OUTPUT"
         echo "GITHUB_SPEC_VER=${GITHUB_HEAD_REF#release/}" >> "$GITHUB_OUTPUT"
         #
-        echo "Branch Release name         : ${GITHUB_HEAD_REF}"
-        echo "Branch Release spec-version : ${GITHUB_SPEC_VER}"
+        echo "Release Branch Name         : ${GITHUB_HEAD_REF}"
+        echo "Release Branch Spec-Version : ${GITHUB_SPEC_VER}"
 
   build:
     strategy:
@@ -137,6 +137,6 @@ jobs:
 
     - name: get output variables from various jobs
       run: |
-        echo "Release Branch Name : ${{ needs.get-release.outputs.BRANCH_HEAD_REF }}"
-        echo "Release Spec Version: ${{ needs.get-release.outputs.BRANCH_SPEC_VER }}"
-        echo "Build Version       :${{ needs.build.outputs.BUILD_VERSION }}"
+        echo "Release Branch Name        : ${{ needs.get-release.outputs.BRANCH_HEAD_REF }}"
+        echo "Release Branch Spec Version: ${{ needs.get-release.outputs.BRANCH_SPEC_VER }}"
+        echo "Build Version              : ${{ needs.build.outputs.BUILD_VERSION }}"
