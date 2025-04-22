@@ -54,13 +54,9 @@ jobs:
       shell: bash
       run: |
         # create and push a lightweight tag
-        if [[ -n $(git ls-remote --tags origin | grep "^${{ needs.build-test.outputs.BUILD_VERSION }}$") ]]; then
-          echo "{{ needs.build-test.outputs.BUILD_VERSION }} already exists !!"
-          exit 1
-        else
-          git tag ${{ needs.build-test.outputs.BUILD_VERSION }}
-          git push origin ${{ needs.build-test.outputs.BUILD_VERSION }}
-        fi
+        # OR git ls-remote --tags origin | awk '{print $2}' | sed 's/refs\/tags\///g'
+        git tag ${{ needs.build-test.outputs.BUILD_VERSION }}
+        git push origin ${{ needs.build-test.outputs.BUILD_VERSION }}
 
   publish-pypi-test:
     # condition: pull request is merged and closed
@@ -85,11 +81,13 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install dependencies
-      run: make test-install
+    - run: |
+        # install dependencies
+        python -m pip install --upgrade pip
+        python -m pip install build twine
 
-    - name: Get build-test build version
-      run: echo "${{ needs.build-test.outputs.BUILD_VERSION }}"
+    # - name: Get software build version from build-test
+    #   run: echo "${{ needs.build-test.outputs.BUILD_VERSION }}"
 
     - name: Download distributions
       id: artifact-download
@@ -97,5 +95,12 @@ jobs:
       with:
         path: dist/
 
-    - name: Twine upload to PyPI-Test
-      run: echo "hello"
+    - name: Publish to test.pypi.org
+      env:
+          PYPI_USERNAME: __token__
+          PYPI_TEST_PASSWORD: ${{ secrets.PYPI_TEST_PASSWORD }}
+      run: |
+        # publish to test.pypi.org
+        tree dist/
+        python -m twine check dist/*
+        # python -m twine upload --repository testpypi dist/*
