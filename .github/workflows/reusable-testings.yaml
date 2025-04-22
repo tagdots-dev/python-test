@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      BUILD_VERSION: ${{ steps.get-build-version.outputs.BUILD_VERSION }}
+      BUILD_VERSION: ${{ steps.set-build-version.outputs.BUILD_VERSION }}
 
     steps:
 
