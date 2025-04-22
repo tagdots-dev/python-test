@@ -50,17 +50,13 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v4
 
-    - name: Create and push a lightweight tag
-      shell: bash
+    - shell: bash
       run: |
         # create and push a lightweight tag
-        # OR git ls-remote --tags origin | awk '{print $2}' | sed 's/refs\/tags\///g'
         git tag ${{ needs.build-test.outputs.BUILD_VERSION }}
         git push origin ${{ needs.build-test.outputs.BUILD_VERSION }}
 
   publish-pypi-test:
-    # condition: pull request is merged and closed
-    if: ${{ startsWith(github.head_ref, 'release/') && github.event.pull_request.state == 'closed' }}
 
     needs: [push-tag]
 
@@ -102,5 +98,32 @@ jobs:
       run: |
         # publish to test.pypi.org
         tree dist/
-        python -m twine check dist/*
-        # python -m twine upload --repository testpypi dist/*
+        python -m twine check dist/artifact/*
+        python -m twine upload --repository testpypi dist/artifact/*
+
+  validate-pypi-test:
+
+    needs: [publish-pypi-test]
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.12]
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - name: Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - run: |
+        # download from test.pypi.org
+        # python -m pip install pkg-15903
+        # python -m twine upload --repository testpypi dist/artifact/*
+        echo "hello"
