@@ -128,6 +128,7 @@ jobs:
         echo "Software Build Version     : ${{ needs.build.outputs.BUILD_VERSION }}"
 
     - name: Compare between release branch specified version and software build version
+      shell: bash
       if: ${{ needs.build.outputs.BUILD_VERSION != steps.set-release-branch.outputs.GITHUB_SPEC_VER }}
       run: |
         # compare release branch and software build version
@@ -137,8 +138,9 @@ jobs:
     - name: Check duplicate tag
       shell: bash
       run: |
+        # check duplicate tag
         TAG_EXIST="$(git ls-remote origin refs/tags/${{ needs.build.outputs.BUILD_VERSION }} | awk '{print $2}' | sed 's/refs\/tags\///g')"
-        echo "$TAG_EXIST"
         if [ -n "$TAG_EXIST" ]; then
+          echo "remote origin tag - $TAG_EXIST - exists already"
           exit 1
         fi
