@@ -99,7 +99,6 @@ jobs:
       env:
           PYPI_USERNAME: __token__
           PYPI_TEST_PASSWORD: ${{ secrets.PYPI_TEST_PASSWORD }}
-          PYPI_REPOSITORY_URL: ${{ }}
       run: |
         # publish to test.pypi.org
         tree dist/
