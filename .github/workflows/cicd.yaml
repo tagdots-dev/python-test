@@ -30,11 +30,11 @@ jobs:
     uses: ./.github/workflows/reusable-pre-commit.yaml
 
   build-and-tests:
-    uses: ./.github/workflows/reusable-build-and-tests.yaml
+    uses: ./.github/workflows/reusable-testings.yaml
 
   release:
     # condition: pull request is closed
-    if: startsWith(github.ref_name, 'release/') && ${{ github.event.pull_request.state == 'closed' }}
+    if: ${{ startsWith(github.head_ref, 'release/') && github.event.pull_request.state == 'closed' }}
 
     needs: [pre-commit, build-and-tests]
 
@@ -68,9 +68,13 @@ jobs:
         path: dist/
 
     - name: Get dist directory
-      run: ls -l dist/
-
-    - name: git commands
       run: |
+        ls -l dist/
+        tree dist/
+
+    - name: Git commands
+      run: |
+        # get git command results
         git remote -v
         git ls-remote --tags origin
+        git status
