@@ -104,14 +104,14 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      RELEASE_BRANCH_HEAD_REF: ${{ steps.get-release-branch.outputs.GITHUB_HEAD_REF }}
-      RELEASE_BRANCH_SPEC_VER: ${{ steps.get-release-branch.outputs.GITHUB_SPEC_VER }}
+      RELEASE_BRANCH_HEAD_REF: ${{ steps.set-release-branch.outputs.GITHUB_HEAD_REF }}
+      RELEASE_BRANCH_SPEC_VER: ${{ steps.set-release-branch.outputs.GITHUB_SPEC_VER }}
 
     steps:
 
     - name: Get Release Branch Name and Spec-Version
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-      id: get-release-branch
+      id: set-release-branch
       run: |
         # set release branch info
         GITHUB_HEAD_REF=${{ github.head_ref }}
@@ -123,12 +123,12 @@ jobs:
     - name: Get output variables from various jobs
       run: |
         # get output variables
-        echo "Release Branch Name        : ${{ steps.get-release-branch.outputs.GITHUB_HEAD_REF }}"
-        echo "Release Branch Spec Version: ${{ steps.get-release-branch.outputs.GITHUB_SPEC_VER }}"
+        echo "Release Branch Name        : ${{ steps.set-release-branch.outputs.GITHUB_HEAD_REF }}"
+        echo "Release Branch Spec Version: ${{ steps.set-release-branch.outputs.GITHUB_SPEC_VER }}"
         echo "Software Build Version     : ${{ needs.build.outputs.BUILD_VERSION }}"
 
     - name: Compare between release branch specified version and software build version
-      if: ${{ needs.build.outputs.BUILD_VERSION != steps.get-release-branch.outputs.GITHUB_SPEC_VER }}
+      if: ${{ needs.build.outputs.BUILD_VERSION != steps.set-release-branch.outputs.GITHUB_SPEC_VER }}
       run: |
         # compare release branch and software build version
         echo "Issues: Release Branch Specified Version is different from Build Version."
