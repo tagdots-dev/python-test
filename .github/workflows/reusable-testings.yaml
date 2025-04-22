@@ -15,10 +15,10 @@ on:  # yamllint disable-line rule:truthy
     outputs:
 
       RELEASE_BRANCH_HEAD_REF:
-        value: ${{ jobs.validate.outputs.RELEASE_BRANCH_HEAD_REF }}
+        value: ${{ jobs.validate-release-version.outputs.RELEASE_BRANCH_HEAD_REF }}
 
       RELEASE_BRANCH_SPEC_VER:
-        value: ${{ jobs.validate.outputs.RELEASE_BRANCH_SPEC_VER }}
+        value: ${{ jobs.validate-release-version.outputs.RELEASE_BRANCH_SPEC_VER }}
 
       BUILD_VERSION:
         value: ${{ jobs.build.outputs.BUILD_VERSION }}
@@ -65,6 +65,7 @@ jobs:
       id: get-build-version
       run: |
         echo "BUILD_VERSION=$(pkg-15903 --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
+        echo "Build Version: $BUILD_VERSION"
         echo "Build Version: ${BUILD_VERSION}"
 
     - name: Upload distributions
