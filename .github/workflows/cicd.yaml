@@ -68,9 +68,12 @@ jobs:
         path: dist/
 
     - name: Get dist directory
-      run: ls -l dist/
+      run: |
+        ls -l dist/
+        tree dist/
 
     - name: git commands
       run: |
+        # get git command results
         git remote -v
         git ls-remote --tags origin
