@@ -53,6 +53,7 @@ jobs:
     - name: Create and push a lightweight tag
       shell: bash
       run: |
+        # create and push a lightweight tag
         if [[ -n $(git ls-remote --tags origin | grep "^${{ needs.build-test.outputs.BUILD_VERSION }}$") ]]; then
           echo "{{ needs.build-test.outputs.BUILD_VERSION }} already exists !!"
           exit 1
