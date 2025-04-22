@@ -93,9 +93,6 @@ jobs:
     - name: Make Test
       run: make test
 
-    - name: check how it looks
-      run: exit 1
-
   validate-release:
     if: ${{ startsWith(github.head_ref, 'release/') }}
 
