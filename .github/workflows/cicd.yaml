@@ -100,7 +100,7 @@ jobs:
 
   pypi-test-validate:
 
-    needs: [publish-pypi-test]
+    needs: [pypi-test-publish]
 
     strategy:
       matrix:
