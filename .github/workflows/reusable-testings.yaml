@@ -61,12 +61,14 @@ jobs:
     - name: Make build
       run: make build
 
+    - name: Set Build Version
+      id: set-build-version
+      run: echo "BUILD_VERSION=$(pkg-15903 --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
+
     - name: Get Build Version
       id: get-build-version
       run: |
-        echo "BUILD_VERSION=$(pkg-15903 --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
-        echo "Build Version: $BUILD_VERSION"
-        echo "Build Version: ${BUILD_VERSION}"
+        echo "Build Version: ${{ steps.set-build-version.outputs.BUILD_VERSION }}"
 
     - name: Upload distributions
       id: artifact-upload
