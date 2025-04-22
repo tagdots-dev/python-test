@@ -29,7 +29,7 @@ jobs:
         os: [ubuntu-latest]
         python-version: [3.12]
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     outputs:
       BUILD_VERSION: ${{ steps.set-build-version.outputs.BUILD_VERSION }}
@@ -39,7 +39,7 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v4
 
-    - name: Setup Python
+    - name: Setup Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
@@ -50,7 +50,7 @@ jobs:
     - name: Set Build Version
       id: set-build-version
       run: |
-        echo "BUILD_VERSION=$(python src/**/run.py --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
+        echo "BUILD_VERSION=$(python src/*/run.py --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
 
     - name: Get Build Version
       id: get-build-version
@@ -75,7 +75,7 @@ jobs:
         os: [ubuntu-latest]
         python-version: [3.12]
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     steps:
 
@@ -93,15 +93,10 @@ jobs:
     - name: Make Test
       run: make test
 
-  validate-release-version:
+  validate-release:
     if: ${{ startsWith(github.head_ref, 'release/') }}
 
     needs: [build, test]
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.12]
 
     runs-on: ubuntu-latest
 
@@ -111,7 +106,10 @@ jobs:
 
     steps:
 
-    - name: Get Release Branch Name and Spec-Version
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - name: Get release branch name and spec-version
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       id: set-release-branch
       run: |
@@ -135,3 +133,12 @@ jobs:
         # compare release branch and software build version
         echo "Issues: Release Branch Specified Version is different from Build Version."
         exit 1
+
+    - name: Check duplicate tag
+      shell: bash
+      run: |
+        TAG_EXIST="$(git ls-remote origin refs/tags/${{ needs.build.outputs.BUILD_VERSION }} | awk '{print $2}' | sed 's/refs\/tags\///g')"
+        echo "$TAG_EXIST"
+        if [ -n "$TAG_EXIST" ]; then
+          exit 1
+        fi
