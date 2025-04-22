@@ -30,7 +30,7 @@ jobs:
     uses: ./.github/workflows/reusable-pre-commit.yaml
 
   build-and-tests:
-    uses: ./.github/workflows/reusable-build-and-tests.yaml
+    uses: ./.github/workflows/reusable-testings.yaml
 
   release:
     # condition: pull request is closed
@@ -72,8 +72,9 @@ jobs:
         ls -l dist/
         tree dist/
 
-    - name: git commands
+    - name: Git commands
       run: |
         # get git command results
         git remote -v
         git ls-remote --tags origin
+        git status
