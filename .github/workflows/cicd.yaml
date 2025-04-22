@@ -34,7 +34,7 @@ jobs:
 
   release:
     # condition: pull request is closed
-    if: startsWith(github.ref_name, 'release/') && ${{ github.event.pull_request.state == 'closed' }}
+    if: startsWith(github.head_ref, 'release/') && ${{ github.event.pull_request.state == 'closed' }}
 
     needs: [pre-commit, build-and-tests]
 
