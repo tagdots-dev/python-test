@@ -65,7 +65,7 @@ jobs:
       id: get-build-version
       run: |
         echo "BUILD_VERSION=$(pkg-15903 --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
-        echo "Build Version: $BUILD_VERSION"
+        echo "Build Version: ${BUILD_VERSION}"
 
     - name: Upload distributions
       id: artifact-upload
