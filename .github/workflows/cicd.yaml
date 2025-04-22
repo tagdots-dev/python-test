@@ -29,14 +29,14 @@ jobs:
   pre-commit:
     uses: ./.github/workflows/reusable-pre-commit.yaml
 
-  build-and-tests:
+  build-and-test:
     uses: ./.github/workflows/reusable-testings.yaml
 
   release:
     # condition: pull request is closed
     if: ${{ startsWith(github.head_ref, 'release/') && github.event.pull_request.state == 'closed' }}
 
-    needs: [pre-commit, build-and-tests]
+    needs: [pre-commit, build-and-test]
 
     strategy:
       matrix:
@@ -58,8 +58,8 @@ jobs:
     - name: Install dependencies
       run: python -m pip install -e .[test]
 
-    - name: Get outputs from build-and-tests
-      run: echo "${{ toJson(needs.build-and-tests.outputs) }}"
+    - name: Get outputs from build-and-test
+      run: echo "${{ toJson(needs.build-and-test.outputs) }}"
 
     - name: Download distributions
       id: artifact-download

@@ -15,10 +15,10 @@ on:  # yamllint disable-line rule:truthy
     outputs:
 
       RELEASE_BRANCH_HEAD_REF:
-        value: ${{ jobs.validate.outputs.RELEASE_BRANCH_HEAD_REF }}
+        value: ${{ jobs.validate-release-version.outputs.RELEASE_BRANCH_HEAD_REF }}
 
       RELEASE_BRANCH_SPEC_VER:
-        value: ${{ jobs.validate.outputs.RELEASE_BRANCH_SPEC_VER }}
+        value: ${{ jobs.validate-release-version.outputs.RELEASE_BRANCH_SPEC_VER }}
 
       BUILD_VERSION:
         value: ${{ jobs.build.outputs.BUILD_VERSION }}
@@ -61,11 +61,14 @@ jobs:
     - name: Make build
       run: make build
 
+    - name: Set Build Version
+      id: set-build-version
+      run: echo "BUILD_VERSION=$(pkg-15903 --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
+
     - name: Get Build Version
       id: get-build-version
       run: |
-        echo "BUILD_VERSION=$(pkg-15903 --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
-        echo "Build Version: ${BUILD_VERSION}"
+        echo "Build Version: ${{ steps.set-build-version.outputs.BUILD_VERSION }}"
 
     - name: Upload distributions
       id: artifact-upload
@@ -103,7 +106,7 @@ jobs:
     - name: Make Test
       run: make test
 
-  validate:
+  validate-release-version:
     if: ${{ startsWith(github.head_ref, 'release/') }}
 
     needs: [build, test]
