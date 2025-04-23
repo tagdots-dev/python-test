@@ -110,5 +110,5 @@ jobs:
         EXTRA_INDEX_URL: "https://pypi.org/simple/"
       run: |
         # install package from TestPyPI and run app to show version
-        pip install ${{ secrets.PACKAGE_NAME }} --index-url ${{ env.INDEX_URL }} --extra-index-url ${{ env.EXTRA_INDEX_URL }}
-        ${{ secrets.PACKAGE_NAME }} --version
+        pip install ${{ env.PACKAGE_NAME }} --index-url ${{ env.INDEX_URL }} --extra-index-url ${{ env.EXTRA_INDEX_URL }}
+        ${{ env.PACKAGE_NAME }} --version
