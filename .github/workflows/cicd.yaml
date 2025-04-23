@@ -31,7 +31,7 @@ jobs:
   build-test:
     uses: ./.github/workflows/reusable-testings.yaml
 
-  git-tag-push:
+  push-git-tag:
     # condition: pull request is merged and closed
     if: ${{ startsWith(github.head_ref, 'release/') && github.event.pull_request.state == 'closed' }}
 
@@ -50,9 +50,9 @@ jobs:
         git tag ${{ needs.build-test.outputs.BUILD_VERSION }}
         git push origin ${{ needs.build-test.outputs.BUILD_VERSION }}
 
-  pypi-test-publish:
+  publish-TestPyPI:
 
-    needs: [git-tag-push]
+    needs: [push-git-tag]
 
     runs-on: ubuntu-latest
 
@@ -61,7 +61,7 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v4
 
-    - name: Setup Python
+    - name: Setup Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ env.PYTHON_VERSION }}
@@ -70,34 +70,26 @@ jobs:
         # install dependencies
         make test-install
 
-    - name: Download distributions
+    - name: Download distributions from build-test
       id: artifact-download
       uses: actions/download-artifact@v4
       with:
         path: dist/
 
-    - name: Check upload distributions
+    - name: Publish distributions to TestPyPI
       env:
         TWINE_USERNAME: "__token__"
         TWINE_PASSWORD: "${{ secrets.PYPI_TEST_PASSWORD }}"
         TWINE_REPOSITORY_URL: "https://test.pypi.org/legacy/"
       run: |
-        # publish to test.pypi.org
+        # publish to TestPyPI
         tree dist/
         python -m twine check  dist/artifact/*
         python -m twine upload dist/artifact/*
 
-    # - name: Publish package distributions to TestPyPI
-    #   uses: pypa/gh-action-pypi-publish@release/v1
-    #   with:
-    #     package-dir: dist/artifact/
-    #     repository-url: https://test.pypi.org/legacy/
-    #     password: ${{ secrets.PYPI_PASSWORD }}
-    #     verbose: true
+  validate-TestPyPI:
 
-  pypi-test-validate:
-
-    needs: [pypi-test-publish]
+    needs: [publish-TestPyPI]
 
     runs-on: ubuntu-latest
 
@@ -111,9 +103,12 @@ jobs:
       with:
         python-version: ${{ env.PYTHON_VERSION }}
 
-    - run: |
-        # download from test.pypi.org
-        # python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ pkg-15903
-        # python -m twine upload --repository testpypi dist/artifact/*
-        pip list
-        echo "hello world"
+    - shell: bash
+      env:
+        PACKAGE_NAME: "pkg-15903"
+        INDEX_URL: "https://test.pypi.org/simple/"
+        EXTRA_INDEX_URL: "https://pypi.org/simple/"
+      run: |
+        # install package from TestPyPI and run app to show version
+        pip install ${{ env.PACKAGE_NAME }} --index-url ${{ env.INDEX_URL }} --extra-index-url ${{ env.EXTRA_INDEX_URL }}
+        ${{ env.PACKAGE_NAME }} --version
