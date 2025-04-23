@@ -78,18 +78,23 @@ jobs:
         path: dist/
 
     - name: Check upload distributions
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_TEST_PASSWORD }}
+        TWINE_REPOSITORY_URL: "https://test.pypi.org/legacy/"
       run: |
         # publish to test.pypi.org
         tree dist/
         python -m twine check dist/artifact/*
+        python -m twine upload dist/artifact/* --username __token__ --password ${{ secrets.PYPI_PASSWORD }}
 
-    - name: Publish package to PyPI Test
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        package_dir: dist/artifact/
-        repository_url: https://test.pypi.org/legacy/
-        username: __token__
-        password: ${{ secrets.PYPI_PASSWORD }}
+    # - name: Publish package distributions to TestPyPI
+    #   uses: pypa/gh-action-pypi-publish@release/v1
+    #   with:
+    #     package-dir: dist/artifact/
+    #     repository-url: https://test.pypi.org/legacy/
+    #     password: ${{ secrets.PYPI_PASSWORD }}
+    #     verbose: true
 
   pypi-test-validate:
 
