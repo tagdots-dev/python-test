@@ -32,7 +32,7 @@ jobs:
   validate-release:
     if: ${{ startsWith(github.head_ref, 'release/') }}
 
-    needs: [pre-ci, build-test]
+    needs: [pre-commit, build-test]
 
     runs-on: ubuntu-latest
 
