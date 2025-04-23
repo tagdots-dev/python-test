@@ -27,12 +27,12 @@ jobs:
     uses: ./.github/workflows/reusable-pre-commit.yaml
 
   build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.12]
+    # strategy:
+    #   matrix:
+    #     os: [ubuntu-latest]
+    #     python-version: [3.12]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     outputs:
       BUILD_VERSION: ${{ steps.set-build-version.outputs.BUILD_VERSION }}
@@ -42,10 +42,10 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v4
 
-    - name: Setup Python ${{ matrix.python-version }}
+    - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: 3.12
 
     - name: Make build
       run: make build
@@ -73,22 +73,22 @@ jobs:
   test:
     needs: build
 
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.12]
+    # strategy:
+    #   matrix:
+    #     os: [ubuntu-latest]
+    #     python-version: [3.12]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
 
     - name: Checkout source code
       uses: actions/checkout@v4
 
-    - name: Setup Python ${{ matrix.python-version }}
+    - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: 3.12
 
     - name: Install test dependencies
       run: make test-install
