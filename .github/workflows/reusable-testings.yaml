@@ -128,7 +128,7 @@ jobs:
       run: |
         # compare release branch and software build version
         if [ "${{ needs.build.outputs.BUILD_VERSION}}" != "${{steps.set-release-branch.outputs.GITHUB_SPEC_VER}}" ]; then
-          echo "Error: Release Branch Specified Version is different from Build Version."
+          echo "Error: Release Branch Specified Version is different from Software Build Version."
           exit 1
         fi
 
