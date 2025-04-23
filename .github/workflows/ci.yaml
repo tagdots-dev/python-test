@@ -59,7 +59,7 @@ jobs:
         # get output variables
         echo "Release Branch Name        : ${{ steps.set-release-branch.outputs.GITHUB_HEAD_REF }}"
         echo "Release Branch Spec Version: ${{ steps.set-release-branch.outputs.GITHUB_SPEC_VER }}"
-        echo "Software Build Version     : ${{ needs.build.outputs.BUILD_VERSION }}"
+        echo "Software Build Version     : ${{ needs.build-test.outputs.BUILD_VERSION }}"
 
     - shell: bash
       run: |

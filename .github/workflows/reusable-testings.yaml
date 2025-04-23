@@ -7,11 +7,11 @@ on:  # yamllint disable-line rule:truthy
   workflow_call:
     outputs:
 
-      RELEASE_BRANCH_HEAD_REF:
-        value: ${{ jobs.validate-release-version.outputs.RELEASE_BRANCH_HEAD_REF }}
+      # RELEASE_BRANCH_HEAD_REF:
+      #   value: ${{ jobs.validate-release-version.outputs.RELEASE_BRANCH_HEAD_REF }}
 
-      RELEASE_BRANCH_SPEC_VER:
-        value: ${{ jobs.validate-release-version.outputs.RELEASE_BRANCH_SPEC_VER }}
+      # RELEASE_BRANCH_SPEC_VER:
+      #   value: ${{ jobs.validate-release-version.outputs.RELEASE_BRANCH_SPEC_VER }}
 
       BUILD_VERSION:
         value: ${{ jobs.build.outputs.BUILD_VERSION }}
