@@ -19,6 +19,7 @@ on:  # yamllint disable-line rule:truthy
   workflow_dispatch:
 
 env:
+  PACKAGE_NAME: pkg-15903
   PYTHON_VERSION: '3.12.10'
 
 permissions:
@@ -51,7 +52,7 @@ jobs:
     - name: Set Build Version
       id: set-build-version
       run: |
-        echo "BUILD_VERSION=$(python src/*/run.py --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
+        echo "BUILD_VERSION=$(${{ env.PACKAGE_NAME }} --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
 
     - name: Get Build Version
       id: get-build-version
@@ -127,7 +128,7 @@ jobs:
       run: |
         # compare release branch and software build version
         if [ "${{ needs.build.outputs.BUILD_VERSION}}" != "${{steps.set-release-branch.outputs.GITHUB_SPEC_VER}}" ]; then
-          echo "Error: Release Branch Specified Version is different from Build Version."
+          echo "Error: Release Branch Specified Version is different from Software Build Version."
           exit 1
         fi
 
@@ -136,6 +137,6 @@ jobs:
         # check duplicate tag
         TAG_EXIST="$(git ls-remote origin refs/tags/${{ needs.build.outputs.BUILD_VERSION }} | awk '{print $2}' | sed 's/refs\/tags\///g')"
         if [ -n "$TAG_EXIST" ]; then
-          echo "Error: Tag ($TAG_EXIST) exists already at remote origin"
+          echo "Error: Tag ($TAG_EXIST) exists already at remote origin."
           exit 1
         fi

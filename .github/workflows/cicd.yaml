@@ -21,6 +21,7 @@ on:  # yamllint disable-line rule:truthy
   workflow_dispatch:
 
 env:
+  PACKAGE_NAME: pkg-15903
   PYTHON_VERSION: '3.12.10'
 
 permissions:
@@ -105,7 +106,6 @@ jobs:
 
     - shell: bash
       env:
-        PACKAGE_NAME: "pkg-15903"
         INDEX_URL: "https://test.pypi.org/simple/"
         EXTRA_INDEX_URL: "https://pypi.org/simple/"
       run: |
