@@ -68,8 +68,7 @@ jobs:
 
     - run: |
         # install dependencies
-        python -m pip install --upgrade pip
-        python -m pip install build twine
+        make test-install
 
     - name: Download distributions
       id: artifact-download
@@ -78,11 +77,15 @@ jobs:
         path: dist/
 
     - name: Check upload distributions
+      env:
+        TWINE_USERNAME: "__token__"
+        TWINE_PASSWORD: "${{ secrets.PYPI_TEST_PASSWORD }}"
+        TWINE_REPOSITORY_URL: "https://test.pypi.org/legacy/"
       run: |
         # publish to test.pypi.org
         tree dist/
-        python -m twine check dist/artifact/*
-        python -m twine upload -u __token__ -p ${{ secrets.PYPI_TEST_PASSWORD }} -r "https://test.pypi.org/legacy/" dist/artifact/*
+        python -m twine check  dist/artifact/*
+        python -m twine upload dist/artifact/*
 
     # - name: Publish package distributions to TestPyPI
     #   uses: pypa/gh-action-pypi-publish@release/v1
