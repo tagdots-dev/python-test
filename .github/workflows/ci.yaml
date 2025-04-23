@@ -1,0 +1,79 @@
+---
+
+name: CI
+
+on:  # yamllint disable-line rule:truthy
+  pull_request:
+
+    branches:
+      - main
+
+    types:
+      - edited
+      - opened
+      - synchronize
+
+  push:
+    branches:
+      - test-*
+
+  workflow_dispatch:
+
+jobs:
+
+  pre-ci:
+    uses: ./.github/workflows/reusable-pre-commit.yaml
+
+  build-test:
+    uses: ./.github/workflows/reusable-testings.yaml
+
+  validate-release:
+    if: ${{ startsWith(github.head_ref, 'release/') }}
+
+    needs: [build-test, pre-ci]
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      RELEASE_BRANCH_HEAD_REF: ${{ steps.set-release-branch.outputs.GITHUB_HEAD_REF }}
+      RELEASE_BRANCH_SPEC_VER: ${{ steps.set-release-branch.outputs.GITHUB_SPEC_VER }}
+
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - id: set-release-branch
+      # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
+      shell: bash
+      run: |
+        # set release branch info
+        GITHUB_HEAD_REF=${{ github.head_ref }}
+        GITHUB_SPEC_VER=${GITHUB_HEAD_REF#release/}
+        # set release branch info to job output
+        echo "GITHUB_HEAD_REF=${{ github.head_ref }}"      >> "$GITHUB_OUTPUT"
+        echo "GITHUB_SPEC_VER=${GITHUB_HEAD_REF#release/}" >> "$GITHUB_OUTPUT"
+
+    - shell: bash
+      run: |
+        # get output variables
+        echo "Release Branch Name        : ${{ steps.set-release-branch.outputs.GITHUB_HEAD_REF }}"
+        echo "Release Branch Spec Version: ${{ steps.set-release-branch.outputs.GITHUB_SPEC_VER }}"
+        echo "Software Build Version     : ${{ needs.build.outputs.BUILD_VERSION }}"
+
+    - shell: bash
+      run: |
+        # compare release branch and software build version
+        if [ "${{ needs.build.outputs.BUILD_VERSION}}" != "${{steps.set-release-branch.outputs.GITHUB_SPEC_VER}}" ]; then
+          echo "Error: Release Branch Specified Version is different from Software Build Version."
+          exit 1
+        fi
+
+    - shell: bash
+      run: |
+        # check duplicate tag
+        TAG_EXIST="$(git ls-remote origin refs/tags/${{ needs.build.outputs.BUILD_VERSION }} | awk '{print $2}' | sed 's/refs\/tags\///g')"
+        if [ -n "$TAG_EXIST" ]; then
+          echo "Error: Tag ($TAG_EXIST) exists already at remote origin."
+          exit 1
+        fi
