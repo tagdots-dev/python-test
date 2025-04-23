@@ -119,4 +119,4 @@ jobs:
         # download from test.pypi.org
         # python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ pkg-15903
         # python -m twine upload --repository testpypi dist/artifact/*
-        echo "hello"
+        echo "hello world"
