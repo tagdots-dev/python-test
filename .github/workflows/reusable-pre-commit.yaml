@@ -20,7 +20,7 @@ permissions:
   contents: read
 
 jobs:
-  default-run:
+  pre-ci-default:
     runs-on: ubuntu-latest
 
     steps:
@@ -65,7 +65,7 @@ jobs:
     - name: Run pre-commit on everything
       run: pre-commit run -a -v
 
-  add-on-checkov:
+  pre-ci-checkov:
     runs-on: ubuntu-latest
 
     steps:

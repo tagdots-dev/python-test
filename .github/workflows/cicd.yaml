@@ -1,5 +1,4 @@
 ---
-# NOTE: this file is managed by terraform
 
 name: CICD
 
@@ -21,27 +20,22 @@ on:  # yamllint disable-line rule:truthy
 
   workflow_dispatch:
 
+env:
+  PYTHON_VERSION: '3.12.10'
+
 permissions:
   contents: write
 
 jobs:
 
-  pre-commit:
-    uses: ./.github/workflows/reusable-pre-commit.yaml
-
   build-test:
     uses: ./.github/workflows/reusable-testings.yaml
 
-  push-tag:
+  git-tag-push:
     # condition: pull request is merged and closed
     if: ${{ startsWith(github.head_ref, 'release/') && github.event.pull_request.state == 'closed' }}
 
-    needs: [pre-commit, build-test]
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.12]
+    needs: [build-test]
 
     runs-on: ubuntu-latest
 
@@ -58,12 +52,7 @@ jobs:
 
   pypi-test-publish:
 
-    needs: [push-tag]
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.12]
+    needs: [git-tag-push]
 
     runs-on: ubuntu-latest
 
@@ -72,10 +61,10 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v4
 
-    - name: Setup Python ${{ matrix.python-version }}
+    - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: ${{ env.PYTHON_VERSION }}
 
     - run: |
         # install dependencies
@@ -88,24 +77,23 @@ jobs:
       with:
         path: dist/
 
-    - name: Publish to test.pypi.org
-      env:
-          PYPI_USERNAME: __token__
-          PYPI_PASSWORD: ${{ secrets.PYPI_TEST_PASSWORD }}
+    - name: Check upload distributions
       run: |
         # publish to test.pypi.org
         tree dist/
         python -m twine check dist/artifact/*
-        python -m twine upload --repository testpypi dist/artifact/*
+
+    - name: Publish package to PyPI Test
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        package_dir: dist/artifact/
+        repository_url: https://test.pypi.org/legacy/
+        username: __token__
+        password: ${{ secrets.PYPI_PASSWORD }}
 
   pypi-test-validate:
 
     needs: [pypi-test-publish]
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.12]
 
     runs-on: ubuntu-latest
 
@@ -114,13 +102,14 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v4
 
-    - name: Setup Python ${{ matrix.python-version }}
+    - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: ${{ env.PYTHON_VERSION }}
 
     - run: |
         # download from test.pypi.org
         # python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ pkg-15903
         # python -m twine upload --repository testpypi dist/artifact/*
-        echo "hello"
+        pip list
+        echo "hello world"
