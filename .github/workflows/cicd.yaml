@@ -52,7 +52,7 @@ jobs:
 
   pypi-test-publish:
 
-    needs: [push-tag]
+    needs: [git-tag-push]
 
     runs-on: ubuntu-latest
 
