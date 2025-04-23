@@ -137,6 +137,6 @@ jobs:
         # check duplicate tag
         TAG_EXIST="$(git ls-remote origin refs/tags/${{ needs.build.outputs.BUILD_VERSION }} | awk '{print $2}' | sed 's/refs\/tags\///g')"
         if [ -n "$TAG_EXIST" ]; then
-          echo "Error: Tag ($TAG_EXIST) exists already at remote origin"
+          echo "Error: Tag ($TAG_EXIST) exists already at remote origin."
           exit 1
         fi
