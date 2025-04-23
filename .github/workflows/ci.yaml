@@ -17,26 +17,28 @@ on:  # yamllint disable-line rule:truthy
     branches:
       - test-*
 
+  workflow_call:
+
   workflow_dispatch:
 
 jobs:
 
-  pre-ci:
+  pre-commit:
     uses: ./.github/workflows/reusable-pre-commit.yaml
 
   build-test:
-    uses: ./.github/workflows/reusable-testings.yaml
+    uses: ./.github/workflows/reusable-build-test.yaml
 
   validate-release:
     if: ${{ startsWith(github.head_ref, 'release/') }}
 
-    needs: [build-test, pre-ci]
+    needs: [pre-ci, build-test]
 
     runs-on: ubuntu-latest
 
-    outputs:
-      RELEASE_BRANCH_HEAD_REF: ${{ steps.set-release-branch.outputs.GITHUB_HEAD_REF }}
-      RELEASE_BRANCH_SPEC_VER: ${{ steps.set-release-branch.outputs.GITHUB_SPEC_VER }}
+    # outputs:
+    #   RELEASE_BRANCH_HEAD_REF: ${{ steps.set-release-branch.outputs.GITHUB_HEAD_REF }}
+    #   RELEASE_BRANCH_SPEC_VER: ${{ steps.set-release-branch.outputs.GITHUB_SPEC_VER }}
 
     steps:
 
@@ -57,9 +59,18 @@ jobs:
     - shell: bash
       run: |
         # get output variables
-        echo "Release Branch Name        : ${{ steps.set-release-branch.outputs.GITHUB_HEAD_REF }}"
-        echo "Release Branch Spec Version: ${{ steps.set-release-branch.outputs.GITHUB_SPEC_VER }}"
-        echo "Software Build Version     : ${{ needs.build-test.outputs.BUILD_VERSION }}"
+        echo "Release Branch Name         : ${{ steps.set-release-branch.outputs.GITHUB_HEAD_REF }}"
+        echo "Release Branch Spec Version : ${{ steps.set-release-branch.outputs.GITHUB_SPEC_VER }}"
+        echo "Software Build Version      : ${{ needs.build-test.outputs.BUILD_VERSION }}"
+
+    # --- release validation starts from here --- #
+    - shell: bash
+      run: |
+        # check release branch specified version match SemVer specification
+        if [[ "${{steps.set-release-branch.outputs.GITHUB_SPEC_VER}}" =~ "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$" ]; then
+          echo "Error: Release Branch Specified Version does not match SemVer Specification (Major.Minior.Patch+)."
+          exit 1
+        fi
 
     - shell: bash
       run: |
@@ -77,3 +88,4 @@ jobs:
           echo "Error: Tag ($TAG_EXIST) exists already at remote origin."
           exit 1
         fi
+    # --- release validation starts from here --- #
