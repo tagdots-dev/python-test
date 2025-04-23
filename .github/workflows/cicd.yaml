@@ -77,15 +77,19 @@ jobs:
       with:
         path: dist/
 
-    - name: Publish to test.pypi.org
-      env:
-          PYPI_USERNAME: __token__
-          PYPI_PASSWORD: ${{ secrets.PYPI_TEST_PASSWORD }}
+    - name: Check upload distributions
       run: |
         # publish to test.pypi.org
         tree dist/
         python -m twine check dist/artifact/*
-        python -m twine upload --repository testpypi dist/artifact/*
+
+    - name: Publish package to PyPI Test
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        package_dir: dist/artifact/
+        repository_url: https://test.pypi.org/legacy/
+        username: __token__
+        password: ${{ secrets.PYPI_PASSWORD }}
 
   pypi-test-validate:
 
@@ -107,4 +111,5 @@ jobs:
         # download from test.pypi.org
         # python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ pkg-15903
         # python -m twine upload --repository testpypi dist/artifact/*
+        pip list
         echo "hello world"
