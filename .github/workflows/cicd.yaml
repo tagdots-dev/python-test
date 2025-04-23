@@ -32,7 +32,7 @@ jobs:
     # condition: pull request is merged and closed
     if: ${{ startsWith(github.head_ref, 'release/') && github.event.pull_request.state == 'closed' }}
 
-    needs: [pre-commit, build-test]
+    needs: [build-test]
 
     strategy:
       matrix:
