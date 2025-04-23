@@ -20,6 +20,9 @@ on:  # yamllint disable-line rule:truthy
 
   workflow_dispatch:
 
+env:
+  PYTHON_VERSION: '3.12.10'
+
 permissions:
   contents: write
 
@@ -33,11 +36,6 @@ jobs:
     if: ${{ startsWith(github.head_ref, 'release/') && github.event.pull_request.state == 'closed' }}
 
     needs: [build-test]
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.12]
 
     runs-on: ubuntu-latest
 
@@ -56,11 +54,6 @@ jobs:
 
     needs: [push-tag]
 
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.12]
-
     runs-on: ubuntu-latest
 
     steps:
@@ -68,10 +61,10 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v4
 
-    - name: Setup Python ${{ matrix.python-version }}
+    - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: ${{ env.PYTHON_VERSION }}
 
     - run: |
         # install dependencies
@@ -98,11 +91,6 @@ jobs:
 
     needs: [pypi-test-publish]
 
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.12]
-
     runs-on: ubuntu-latest
 
     steps:
@@ -110,10 +98,10 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v4
 
-    - name: Setup Python ${{ matrix.python-version }}
+    - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: ${{ env.PYTHON_VERSION }}
 
     - run: |
         # download from test.pypi.org

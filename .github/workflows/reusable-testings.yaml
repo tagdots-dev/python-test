@@ -18,6 +18,9 @@ on:  # yamllint disable-line rule:truthy
 
   workflow_dispatch:
 
+env:
+  PYTHON_VERSION: '3.12.10'
+
 permissions:
   contents: read
 
@@ -27,11 +30,6 @@ jobs:
     uses: ./.github/workflows/reusable-pre-commit.yaml
 
   build:
-    # strategy:
-    #   matrix:
-    #     os: [ubuntu-latest]
-    #     python-version: [3.12]
-
     runs-on: ubuntu-latest
 
     outputs:
@@ -45,7 +43,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: 3.12
+        python-version: ${{ env.PYTHON_VERSION }}
 
     - name: Make build
       run: make build
@@ -73,11 +71,6 @@ jobs:
   test:
     needs: build
 
-    # strategy:
-    #   matrix:
-    #     os: [ubuntu-latest]
-    #     python-version: [3.12]
-
     runs-on: ubuntu-latest
 
     steps:
@@ -88,7 +81,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: 3.12
+        python-version: ${{ env.PYTHON_VERSION }}
 
     - name: Install test dependencies
       run: make test-install
