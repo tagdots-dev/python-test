@@ -52,7 +52,7 @@ jobs:
     - name: Set Build Version
       id: set-build-version
       run: |
-        echo "BUILD_VERSION=$('${{ env.PACKAGE_NAME }}' --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
+        echo "BUILD_VERSION=$(${{ env.PACKAGE_NAME }} --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
 
     - name: Get Build Version
       id: get-build-version
