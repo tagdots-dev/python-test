@@ -66,7 +66,7 @@ jobs:
     # --- release validation starts from here --- #
     - shell: bash
       run: |
-        # check release branch specified version match SemVer specification
+        # validate that release branch specified version matches SemVer specification
         if [[ "${{steps.set-release-branch.outputs.GITHUB_SPEC_VER}}" =~ "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$" ]]; then
           echo "Error: Release Branch Specified Version does not match SemVer Specification (Major.Minior.Patch+)."
           exit 1
@@ -74,7 +74,7 @@ jobs:
 
     - shell: bash
       run: |
-        # compare release branch and software build version
+        # validate that release branch specified version is the same with the software build version
         if [ "${{ needs.build-test.outputs.BUILD_VERSION}}" != "${{steps.set-release-branch.outputs.GITHUB_SPEC_VER}}" ]; then
           echo "Error: Release Branch Specified Version is different from Software Build Version."
           exit 1
@@ -82,7 +82,7 @@ jobs:
 
     - shell: bash
       run: |
-        # check duplicate tag
+        # validate that release version tag has not been created.
         TAG_EXIST="$(git ls-remote origin refs/tags/${{ needs.build-test.outputs.BUILD_VERSION }} | awk '{print $2}' | sed 's/refs\/tags\///g')"
         if [ -n "$TAG_EXIST" ]; then
           echo "Error: Tag ($TAG_EXIST) exists already at remote origin."
