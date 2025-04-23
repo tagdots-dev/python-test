@@ -23,6 +23,9 @@ permissions:
 
 jobs:
 
+  pre-ci:
+    uses: ./.github/workflows/reusable-pre-commit.yaml
+
   build:
     strategy:
       matrix:
@@ -96,7 +99,7 @@ jobs:
   validate-release:
     if: ${{ startsWith(github.head_ref, 'release/') }}
 
-    needs: [build, test]
+    needs: [build, test, pre-ci]
 
     runs-on: ubuntu-latest
 
