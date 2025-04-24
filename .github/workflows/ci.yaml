@@ -17,8 +17,6 @@ on:  # yamllint disable-line rule:truthy
     branches:
       - test-*
 
-  workflow_call:
-
   workflow_dispatch:
 
 jobs:
@@ -35,10 +33,6 @@ jobs:
     needs: [pre-commit, build-test]
 
     runs-on: ubuntu-latest
-
-    # outputs:
-    #   RELEASE_BRANCH_HEAD_REF: ${{ steps.set-release-branch.outputs.GITHUB_HEAD_REF }}
-    #   RELEASE_BRANCH_SPEC_VER: ${{ steps.set-release-branch.outputs.GITHUB_SPEC_VER }}
 
     steps:
 
@@ -66,10 +60,10 @@ jobs:
     # --- release validation starts from here --- #
     - shell: bash
       run: |
-        # validate that release branch specified version matches SemVer specification
+        # validate that release branch specified version matches release specification
         # https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
-        if [[ "${{steps.set-release-branch.outputs.GITHUB_SPEC_VER}}" =~ "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$" ]]; then
-          echo "Error: Release Branch Specified Version does not match SemVer Specification (Major.Minior.Patch+)."
+        if [[ "${{steps.set-release-branch.outputs.GITHUB_SPEC_VER}}" =~ "^[0-9]+\.[0-9]+\.[0-9]+$" ]]; then
+          echo "Error: Release Branch Specified Version does not match Release Specification (Major.Minior.Patch)."
           exit 1
         fi
 
