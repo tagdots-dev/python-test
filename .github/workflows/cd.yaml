@@ -65,6 +65,7 @@ jobs:
     - run: |
         # install dependencies
         make test-install
+        make build
 
     - name: Publish distributions to TestPyPI
       env:
