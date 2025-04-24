@@ -14,10 +14,6 @@ on:  # yamllint disable-line rule:truthy
 
   workflow_dispatch:
 
-  workflow_run:
-    workflows: [ci]
-    types: [completed]
-
 env:
   PACKAGE_NAME: pkg-15903
   PYTHON_VERSION: '3.12.x'
@@ -67,26 +63,8 @@ jobs:
         python-version: ${{ env.PYTHON_VERSION }}
 
     - run: |
-        # get github obj
-        echo "${{ toJson(github)}}"
-
-    - run: |
-        # get upload artifact id
-        echo "Upload-Artifact ID: ${{ github.event.workflow_run.jobs.build.outputs.ARTIFACT_ID }}"
-
-    - run: |
         # install dependencies
         make test-install
-
-    - name: Download distributions from build-test
-      id: artifact-download
-      uses: actions/download-artifact@v4
-      with:
-        path: dist/
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        repository: ${{ github.repository }}
-        run-id: 1234
-
 
     - name: Publish distributions to TestPyPI
       env:
