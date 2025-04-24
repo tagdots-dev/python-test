@@ -67,7 +67,7 @@ jobs:
     - shell: bash
       run: |
         # validate that release branch specified version matches SemVer specification
-        if [[ "${{steps.set-release-branch.outputs.GITHUB_SPEC_VER}}" =~ "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$" ]]; then
+        if [[ "${{steps.set-release-branch.outputs.GITHUB_SPEC_VER}}" =~ "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$" ]]; then
           echo "Error: Release Branch Specified Version does not match SemVer Specification (Major.Minior.Patch+)."
           exit 1
         fi
