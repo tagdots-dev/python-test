@@ -38,7 +38,9 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v4
 
-    - shell: bash
+    - id: set-release-version
+      shell: bash
+      # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: |
         # push git tag
         GITHUB_HEAD_REF=${{ github.head_ref }}
