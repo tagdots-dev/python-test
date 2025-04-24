@@ -27,8 +27,6 @@ jobs:
     # condition: pull request is merged
     if: ${{ startsWith(github.head_ref, 'release/') && github.event.pull_request.merged == true }}
 
-    needs: [build-test]
-
     runs-on: ubuntu-latest
 
     steps:
