@@ -74,8 +74,8 @@ jobs:
       run: |
         # publish to TestPyPI
         tree dist/
-        python -m twine check  dist/artifact/*
-        python -m twine upload dist/artifact/*
+        python -m twine check  dist/*
+        python -m twine upload dist/*
 
   validate-TestPyPI:
 
