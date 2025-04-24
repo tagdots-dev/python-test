@@ -67,8 +67,12 @@ jobs:
         python-version: ${{ env.PYTHON_VERSION }}
 
     - run: |
+        # get github obj
+        echo "${{ toJson(github)}}"
+
+    - run: |
         # get upload artifact id
-        echo "Upload-Artifact ID: ${{ github.event.workflow_run.id }}"
+        echo "Upload-Artifact ID: ${{ github.event.workflow_run.jobs.build.outputs.ARTIFACT_ID }}"
 
     - run: |
         # install dependencies
