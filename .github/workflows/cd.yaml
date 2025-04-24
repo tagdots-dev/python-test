@@ -14,9 +14,9 @@ on:  # yamllint disable-line rule:truthy
 
   workflow_dispatch:
 
-  # workflow_run:
-  #   workflows: [ci]
-  #   types: [completed]
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
 
 env:
   PACKAGE_NAME: pkg-15903
