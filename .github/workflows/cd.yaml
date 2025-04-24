@@ -62,21 +62,26 @@ jobs:
       with:
         python-version: ${{ env.PYTHON_VERSION }}
 
-    - run: |
-        # install dependencies
-        make test-install
+    - shell: bash
+      run: |
+        # install build dependencies
         make build
+        pip install -U twine
 
-    - name: Publish distributions to TestPyPI
+    - shell: bash
+      run: |
+        # check distributions
+        tree dist/
+        python -m twine check  dist/*
+
+    - shell: bash
       env:
         TWINE_USERNAME: "__token__"
         TWINE_PASSWORD: "${{ secrets.PYPI_TEST_PASSWORD }}"
         TWINE_REPOSITORY_URL: "https://test.pypi.org/legacy/"
       run: |
-        # publish to TestPyPI
-        tree dist/
-        python -m twine check  dist/*
-        python -m twine upload dist/*
+        # Publish distributions to TestPyPI
+        python -m twine upload --verbose dist/*
 
   validate-TestPyPI:
 
