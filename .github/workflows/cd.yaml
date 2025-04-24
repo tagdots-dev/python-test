@@ -1,8 +1,9 @@
 ---
 
-name: CICD
+name: CD
 
 on:  # yamllint disable-line rule:truthy
+
   pull_request:
 
     branches:
@@ -10,13 +11,6 @@ on:  # yamllint disable-line rule:truthy
 
     types:
       - closed
-      - edited
-      - opened
-      - synchronize
-
-  push:
-    branches:
-      - test-*
 
   workflow_dispatch:
 
@@ -29,12 +23,9 @@ permissions:
 
 jobs:
 
-  build-test:
-    uses: ./.github/workflows/reusable-testings.yaml
-
   push-git-tag:
-    # condition: pull request is merged and closed
-    if: ${{ startsWith(github.head_ref, 'release/') && github.event.pull_request.state == 'closed' }}
+    # condition: pull request is merged
+    if: ${{ startsWith(github.head_ref, 'release/') && github.event.pull_request.merged == true }}
 
     needs: [build-test]
 
