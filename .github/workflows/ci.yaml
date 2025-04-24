@@ -83,4 +83,4 @@ jobs:
           echo "Error: Tag ($TAG_EXIST) exists already at remote origin."
           exit 1
         fi
-    # --- release validation starts from here --- #
+    # --- release validation ends here --- #
