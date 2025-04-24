@@ -1,0 +1,105 @@
+---
+
+name: CD
+
+on:  # yamllint disable-line rule:truthy
+
+  pull_request:
+
+    branches:
+      - main
+
+    types:
+      - closed
+
+  workflow_dispatch:
+
+env:
+  PACKAGE_NAME: pkg-15903
+  PYTHON_VERSION: '3.12.10'
+
+permissions:
+  contents: write
+
+jobs:
+
+  push-git-tag:
+    # condition: pull request is merged
+    if: ${{ startsWith(github.head_ref, 'release/') && github.event.pull_request.merged == true }}
+
+    needs: [build-test]
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - shell: bash
+      run: |
+        # create and push a lightweight tag
+        git tag ${{ needs.build-test.outputs.BUILD_VERSION }}
+        git push origin ${{ needs.build-test.outputs.BUILD_VERSION }}
+
+  publish-TestPyPI:
+
+    needs: [push-git-tag]
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - name: Setup Python ${{ env.PYTHON_VERSION }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - run: |
+        # install dependencies
+        make test-install
+
+    - name: Download distributions from build-test
+      id: artifact-download
+      uses: actions/download-artifact@v4
+      with:
+        path: dist/
+
+    - name: Publish distributions to TestPyPI
+      env:
+        TWINE_USERNAME: "__token__"
+        TWINE_PASSWORD: "${{ secrets.PYPI_TEST_PASSWORD }}"
+        TWINE_REPOSITORY_URL: "https://test.pypi.org/legacy/"
+      run: |
+        # publish to TestPyPI
+        tree dist/
+        python -m twine check  dist/artifact/*
+        python -m twine upload dist/artifact/*
+
+  validate-TestPyPI:
+
+    needs: [publish-TestPyPI]
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - name: Setup Python ${{ env.PYTHON_VERSION }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - shell: bash
+      env:
+        INDEX_URL: "https://test.pypi.org/simple/"
+        EXTRA_INDEX_URL: "https://pypi.org/simple/"
+      run: |
+        # install package from TestPyPI and run app to show version
+        pip install ${{ env.PACKAGE_NAME }} --index-url ${{ env.INDEX_URL }} --extra-index-url ${{ env.EXTRA_INDEX_URL }}
+        ${{ env.PACKAGE_NAME }} --version

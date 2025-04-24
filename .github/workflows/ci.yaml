@@ -67,6 +67,7 @@ jobs:
     - shell: bash
       run: |
         # validate that release branch specified version matches SemVer specification
+        # https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
         if [[ "${{steps.set-release-branch.outputs.GITHUB_SPEC_VER}}" =~ "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$" ]]; then
           echo "Error: Release Branch Specified Version does not match SemVer Specification (Major.Minior.Patch+)."
           exit 1
@@ -74,7 +75,7 @@ jobs:
 
     - shell: bash
       run: |
-        # validate that release branch specified version is the same with the software build version
+        # validate that release branch specified version AND software build version are the same
         if [ "${{ needs.build-test.outputs.BUILD_VERSION}}" != "${{steps.set-release-branch.outputs.GITHUB_SPEC_VER}}" ]; then
           echo "Error: Release Branch Specified Version is different from Software Build Version."
           exit 1
