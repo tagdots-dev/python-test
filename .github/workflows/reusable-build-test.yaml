@@ -7,12 +7,6 @@ on:  # yamllint disable-line rule:truthy
   workflow_call:
     outputs:
 
-      # RELEASE_BRANCH_HEAD_REF:
-      #   value: ${{ jobs.validate-release-version.outputs.RELEASE_BRANCH_HEAD_REF }}
-
-      # RELEASE_BRANCH_SPEC_VER:
-      #   value: ${{ jobs.validate-release-version.outputs.RELEASE_BRANCH_SPEC_VER }}
-
       ARTIFACT_ID:
         value: ${{ jobs.build.outputs.ARTIFACT_ID }}
 
@@ -28,9 +22,6 @@ permissions:
   contents: read
 
 jobs:
-
-  # pre-ci:
-  #   uses: ./.github/workflows/reusable-pre-commit.yaml
 
   build:
     runs-on: ubuntu-latest
