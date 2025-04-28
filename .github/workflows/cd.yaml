@@ -107,3 +107,64 @@ jobs:
         # install package from TestPyPI and run app to show version
         pip install ${{ env.PACKAGE_NAME }} --index-url ${{ env.INDEX_URL }} --extra-index-url ${{ env.EXTRA_INDEX_URL }}
         ${{ env.PACKAGE_NAME }} --version
+
+  publish-PyPI:
+
+    needs: [push-git-tag]
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - name: Setup Python ${{ env.PYTHON_VERSION }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - shell: bash
+      run: |
+        # install build dependencies
+        make build
+        pip install -U twine
+
+    - shell: bash
+      run: |
+        # check distributions
+        tree dist/
+        python -m twine check  dist/*
+
+    - shell: bash
+      env:
+        TWINE_USERNAME: "__token__"
+        TWINE_PASSWORD: "${{ secrets.PYPI_PASSWORD }}"
+        TWINE_REPOSITORY_URL: "https://upload.pypi.org/legacy/"
+      run: |
+        # Publish distributions to PyPI
+        python -m twine upload --verbose dist/*
+
+  validate-PyPI:
+
+    needs: [publish-PyPI]
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - name: Setup Python ${{ env.PYTHON_VERSION }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - shell: bash
+      env:
+        INDEX_URL: "https://pypi.org/simple/"
+      run: |
+        # install package from PyPI and run app to show version
+        pip install ${{ env.PACKAGE_NAME }}
+        ${{ env.PACKAGE_NAME }} --version

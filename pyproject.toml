@@ -5,7 +5,7 @@ requires = [ "setuptools>=77.0.1", "wheel" ]
 
 [project]
 name = "pkg-15903"
-version = "0.1.9"
+version = "0.1.10"
 
 readme = "README.md"
 license-files = [ "LICENSE" ]
@@ -15,9 +15,11 @@ authors = [
 requires-python = ">=3.12.10"
 
 classifiers = [
+  "Intended Audience :: Developers",
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Build Tools",
 ]
 
 dependencies = [

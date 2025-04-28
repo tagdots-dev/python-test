@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 0.1.10 (2025-04-28)
+
+### Feat
+
+- publish to PyPI
+
+### Fix
+
+- change url to google
+
 ## 0.1.9 (2025-04-24)
 
 ### Refactor
