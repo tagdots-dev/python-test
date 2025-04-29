@@ -67,11 +67,10 @@ jobs:
         artifact-ids: "${{ needs.build-test.outputs.ARTIFACT_ID }}"
         run-id: "${{ needs.build-test.outputs.WORKFLOW_RUN_ID }}"
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path: dist/
 
     - shell: bash
       run: |
-        echo "tree dist/"
+        echo "tree ."
 
     # --- release validation starts from here --- #
     - shell: bash
