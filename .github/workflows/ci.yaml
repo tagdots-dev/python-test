@@ -70,6 +70,7 @@ jobs:
 
     - shell: bash
       run: |
+        # review artifact download
         tree .
 
     # --- release validation starts from here --- #
@@ -77,7 +78,7 @@ jobs:
       run: |
         # validate that release branch specified version matches release specification
         # https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
-        if [[ "${{steps.set-release-branch.outputs.GITHUB_SPEC_VER}}" =~ "^[0-9]+\.[0-9]+\.[0-9]+$" ]]; then
+        if [[ ! "${{steps.set-release-branch.outputs.GITHUB_SPEC_VER}}" =~ "^[0-9]+\.[0-9]+\.[0-9]+$" ]]; then
           echo "Error: Release Branch Specified Version does not match Release Specification (Major.Minior.Patch)."
           exit 1
         fi
