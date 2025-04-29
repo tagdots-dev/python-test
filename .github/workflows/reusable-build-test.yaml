@@ -70,7 +70,7 @@ jobs:
     - name: Set Artifact ID
       id: set-artifact-id
       run: |
-        echo "ARTIFACT_ID=${{ steps.artifact-upload.outputs.artifact-id }}" >> $GITHUB_OUTPUT
+        echo "ARTIFACT_ID=${{ steps.artifact-upload.outputs.artifact-id }}" >> "$GITHUB_OUTPUT"
 
     - shell: bash
       run: |
@@ -80,7 +80,7 @@ jobs:
     - name: Set Workflow Run ID
       id: set-workflow-runid
       run: |
-        echo "WORKFLOW_RUN_ID=${{ github.run_id }}" >> $GITHUB_OUTPUT
+        echo "WORKFLOW_RUN_ID=${{ github.run_id }}" >> "$GITHUB_OUTPUT"
 
     - shell: bash
       run: |
