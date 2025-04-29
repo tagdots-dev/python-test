@@ -64,7 +64,10 @@ jobs:
       id: artifact-download
       uses: actions/download-artifact@v4
       with:
-        artifact-ids: "${{ needs.build-test.outputs.WORKFLOW_RUN_ID }}"
+        artifact-ids: "${{ needs.build-test.outputs.ARTIFACT_ID }}"
+        run-id: "${{ needs.build-test.outputs.WORKFLOW_RUN_ID }}"
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path: dist/
 
     - shell: bash
       run: |
