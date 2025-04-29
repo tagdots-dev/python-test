@@ -56,8 +56,8 @@ jobs:
         echo "Release Branch Name         : ${{ steps.set-release-branch.outputs.GITHUB_HEAD_REF }}"
         echo "Release Branch Spec Version : ${{ steps.set-release-branch.outputs.GITHUB_SPEC_VER }}"
         echo "Software Build Version      : ${{ needs.build-test.outputs.BUILD_VERSION }}"
-        echo "Workflow Run ID             : ${{ needs.built-test.outputs.WORKFLOW_RUN_ID }}"
-        echo "Uploaded Artifact ID        : ${{ needs.built-test.outputs.ARTIFACT_ID }}"
+        echo "Workflow Run ID             : ${{ needs.build-test.outputs.WORKFLOW_RUN_ID }}"
+        echo "Uploaded Artifact ID        : ${{ needs.build-test.outputs.ARTIFACT_ID }}"
 
     # --- release validation starts from here --- #
     - shell: bash
