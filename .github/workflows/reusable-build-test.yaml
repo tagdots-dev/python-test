@@ -47,6 +47,7 @@ jobs:
     - name: Make build
       run: make build
 
+    # set and get build version
     - name: Set Build Version
       id: set-build-version
       run: |
@@ -57,6 +58,7 @@ jobs:
       run: |
         echo "Build Version: ${{ steps.set-build-version.outputs.BUILD_VERSION }}"
 
+    # set and get artifacts
     - name: Upload distributions
       id: artifact-upload
       uses: actions/upload-artifact@v4
@@ -77,6 +79,7 @@ jobs:
         # output artifact id
         echo "ARTIFACT_ID: ${{ steps.artifact-upload.outputs.artifact-id }}"
 
+    # set and get github workflow_run id
     - name: Set Workflow Run ID
       id: set-workflow-runid
       run: |
