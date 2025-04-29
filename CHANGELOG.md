@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.1.12 (2025-04-29)
+
+### Feat
+
+- replace pypi secret source
+
 ## 0.1.11 (2025-04-28)
 
 ### Feat
