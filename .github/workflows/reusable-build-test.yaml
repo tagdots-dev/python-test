@@ -13,6 +13,9 @@ on:  # yamllint disable-line rule:truthy
       BUILD_VERSION:
         value: ${{ jobs.build.outputs.BUILD_VERSION }}
 
+      WORKFLOW_RUN_ID:
+        value: ${{ jobs.build.outputs.WORKFLOW_RUN_ID}}
+
   workflow_dispatch:
 
 env:
@@ -27,8 +30,9 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      ARTIFACT_ID: ${{ steps.artifact-upload.outputs.artifact-id }}
+      ARTIFACT_ID: ${{ steps.set-artifact-id.outputs.ARTIFACT_ID }}
       BUILD_VERSION: ${{ steps.set-build-version.outputs.BUILD_VERSION }}
+      WORKFLOW_RUN_ID: ${{ steps.set-workflow-runid.outputs.WORKFLOW_RUN_ID }}
 
     steps:
 
@@ -43,6 +47,7 @@ jobs:
     - name: Make build
       run: make build
 
+    # set and get build version
     - name: Set Build Version
       id: set-build-version
       run: |
@@ -53,6 +58,7 @@ jobs:
       run: |
         echo "Build Version: ${{ steps.set-build-version.outputs.BUILD_VERSION }}"
 
+    # set and get artifacts
     - name: Upload distributions
       id: artifact-upload
       uses: actions/upload-artifact@v4
@@ -63,10 +69,26 @@ jobs:
         overwrite: true
         compression-level: 6
 
+    - name: Set Artifact ID
+      id: set-artifact-id
+      run: |
+        echo "ARTIFACT_ID=${{ steps.artifact-upload.outputs.artifact-id }}" >> "$GITHUB_OUTPUT"
+
     - shell: bash
       run: |
         # output artifact id
         echo "ARTIFACT_ID: ${{ steps.artifact-upload.outputs.artifact-id }}"
+
+    # set and get github workflow_run id
+    - name: Set Workflow Run ID
+      id: set-workflow-runid
+      run: |
+        echo "WORKFLOW_RUN_ID=${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+
+    - shell: bash
+      run: |
+        # output workflow run-id
+        echo "Workflow Run ID: ${{ github.run_id }}"
 
   test:
     needs: build
@@ -88,54 +110,3 @@ jobs:
 
     - name: Make Test
       run: make test
-
-  # validate-release:
-  #   if: ${{ startsWith(github.head_ref, 'release/') }}
-
-  #   needs: [build, test, pre-ci]
-
-  #   runs-on: ubuntu-latest
-
-  #   outputs:
-  #     RELEASE_BRANCH_HEAD_REF: ${{ steps.set-release-branch.outputs.GITHUB_HEAD_REF }}
-  #     RELEASE_BRANCH_SPEC_VER: ${{ steps.set-release-branch.outputs.GITHUB_SPEC_VER }}
-
-  #   steps:
-
-  #   - name: Checkout source code
-  #     uses: actions/checkout@v4
-
-  #   - id: set-release-branch
-  #     # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-  #     shell: bash
-  #     run: |
-  #       # set release branch info
-  #       GITHUB_HEAD_REF=${{ github.head_ref }}
-  #       GITHUB_SPEC_VER=${GITHUB_HEAD_REF#release/}
-  #       # set release branch info to job output
-  #       echo "GITHUB_HEAD_REF=${{ github.head_ref }}"      >> "$GITHUB_OUTPUT"
-  #       echo "GITHUB_SPEC_VER=${GITHUB_HEAD_REF#release/}" >> "$GITHUB_OUTPUT"
-
-  #   - shell: bash
-  #     run: |
-  #       # get output variables
-  #       echo "Release Branch Name        : ${{ steps.set-release-branch.outputs.GITHUB_HEAD_REF }}"
-  #       echo "Release Branch Spec Version: ${{ steps.set-release-branch.outputs.GITHUB_SPEC_VER }}"
-  #       echo "Software Build Version     : ${{ needs.build.outputs.BUILD_VERSION }}"
-
-  #   - shell: bash
-  #     run: |
-  #       # compare release branch and software build version
-  #       if [ "${{ needs.build.outputs.BUILD_VERSION}}" != "${{steps.set-release-branch.outputs.GITHUB_SPEC_VER}}" ]; then
-  #         echo "Error: Release Branch Specified Version is different from Software Build Version."
-  #         exit 1
-  #       fi
-
-  #   - shell: bash
-  #     run: |
-  #       # check duplicate tag
-  #       TAG_EXIST="$(git ls-remote origin refs/tags/${{ needs.build.outputs.BUILD_VERSION }} | awk '{print $2}' | sed 's/refs\/tags\///g')"
-  #       if [ -n "$TAG_EXIST" ]; then
-  #         echo "Error: Tag ($TAG_EXIST) exists already at remote origin."
-  #         exit 1
-  #       fi

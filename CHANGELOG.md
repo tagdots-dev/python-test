@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.1.11 (2025-04-28)
+
+### Feat
+
+- add workflow id
+
 ## 0.1.10 (2025-04-28)
 
 ### Feat
