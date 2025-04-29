@@ -71,7 +71,7 @@ jobs:
 
     - shell: bash
       run: |
-        # review artifact download
+        # review artifacts located inside dist/artifact/
         tree .
 
     # --- release validation starts from here --- #
