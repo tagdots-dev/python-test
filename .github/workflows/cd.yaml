@@ -34,6 +34,8 @@ jobs:
     - id: set-release-version
       shell: bash
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
+      env:
+        GH_TOKEN: ${{ secrets.SECRET_PAT }}
       run: |
         # push git tag
         GITHUB_HEAD_REF=${{ github.head_ref }}
