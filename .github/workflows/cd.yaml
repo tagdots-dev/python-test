@@ -28,14 +28,21 @@ jobs:
 
     steps:
 
+    - name: Generate a token from Github App
+      id: generate-token
+      uses: actions/create-github-app-token@v2
+      with:
+        app-id: ${{ secrets.SECRET_GH_APP_ID }}
+        private-key: ${{ secrets.SECRET_GH_APP_PRIVATE_KEY }}
+
     - name: Checkout source code
       uses: actions/checkout@v4
 
-    - id: set-release-version
+    - id: set-tag
       shell: bash
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       env:
-        GH_TOKEN: ${{ secrets.SECRET_PAT }}
+        GH_TOKEN: ${{ steps.generate-token.outputs.token }}
       run: |
         # push git tag
         GITHUB_HEAD_REF=${{ github.head_ref }}
