@@ -70,7 +70,7 @@ jobs:
 
     - shell: bash
       run: |
-        # review artifacts located inside dist/artifact/
+        # check artifacts located inside dist/artifact/
         tree .
 
     # --- release validation starts from here --- #
