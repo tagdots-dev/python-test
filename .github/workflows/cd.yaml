@@ -22,7 +22,7 @@ jobs:
 
   push-git-tag:
     # condition: pull request is merged
-    if: ${{ startsWith(github.head_ref, 'release/') && github.event.pull_request.merged == true }}
+    if: ${{ startsWith(github.head_ref, 'release/') && github.event.pull_request.merged == true && github.event.workflow_run.conclusion == 'success' }}
 
     runs-on: ubuntu-latest
 
