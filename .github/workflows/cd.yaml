@@ -29,9 +29,8 @@ jobs:
     steps:
 
     - name: Generate a token from Github App
-      # github_app_id and github_app_pem_file will be used by CD workflow
-      # where tag protection is implemented to restrict ACTOR that can
-      # bypass tag protection.
+      # github_app_id and github_app_pem_file will be used by CD workflow where
+      # tag protection is implemented to restrict ACTOR to bypass tag protection.
       id: generate-token
       uses: actions/create-github-app-token@v2
       with:
