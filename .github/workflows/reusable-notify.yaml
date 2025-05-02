@@ -1,6 +1,6 @@
 ---
 
-name: Notify
+name: notify
 
 on:  # yamllint disable-line rule:truthy
 
