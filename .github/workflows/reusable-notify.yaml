@@ -6,7 +6,7 @@ on:  # yamllint disable-line rule:truthy
 
   workflow_run:
 
-    workflows: [ci]
+    workflows: [ci, cd]
 
     types:
       - completed
@@ -21,10 +21,28 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-      - run: echo 'The triggering workflow passed'
+    - run: echo 'The triggering workflow passed'
+
+    - name: Post text to a Slack channel
+      uses: slackapi/slack-github-action@v2.0.0
+      with:
+        method: chat.postMessage
+        token: ${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}
+        payload: |
+          channel: ${{ secrets.SECRET_SLACK_CHANNEL_CICD }}
+          text: "howdy <@channel>! Result: ${{ github.event.workflow_run.conclusion }} for branch {{ github.head_ref }}"
 
   on-failure:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     steps:
-      - run: echo 'The triggering workflow failed'
+    - run: echo 'The triggering workflow failed'
+
+    - name: Post text to a Slack channel
+      uses: slackapi/slack-github-action@v2.0.0
+      with:
+        method: chat.postMessage
+        token: ${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}
+        payload: |
+          channel: ${{ secrets.SECRET_SLACK_CHANNEL_CICD }}
+          text: "howdy <@channel>! Result: ${{ github.event.workflow_run.conclusion }} for branch {{ github.head_ref }}"
