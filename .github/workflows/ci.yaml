@@ -18,17 +18,17 @@ on:  # yamllint disable-line rule:truthy
     branches:
       - test-*
 
-  workflow_call:
-    outputs:
+  # workflow_call:
+  #   outputs:
 
-      REPO_NAME:
-        value: ${{ jobs.wf.outputs.REPO_NAME }}
+  #     REPO_NAME:
+  #       value: ${{ jobs.wf.outputs.REPO_NAME }}
 
-      WORKFLOW_NAME:
-        value: ${{ jobs.wf.outputs.WORKFLOW_NAME }}
+  #     WORKFLOW_NAME:
+  #       value: ${{ jobs.wf.outputs.WORKFLOW_NAME }}
 
-      WORKFLOW_ID:
-        value: ${{ jobs.wf.outputs.WORKFLOW_ID }}
+  #     WORKFLOW_ID:
+  #       value: ${{ jobs.wf.outputs.WORKFLOW_ID }}
 
   workflow_dispatch:
 
@@ -57,8 +57,8 @@ jobs:
         echo "${{ toJson(github) }}"
 
     # repo name
-    - name: set-repo-name
-      id: set-repo-name
+    - id: set-repo-name
+      shell: bash
       run: |
         # set-repo-name
         echo "$REPO_NAME=${{ github.repository }}" >> "$GITHUB_OUTPUT"
@@ -69,8 +69,8 @@ jobs:
         echo "Repo Name: ${{ steps.set-repo-name.outputs.REPO_NAME }}"
 
     # workflow id
-    - name: set-workflow-run-id
-      id: set-workflow-run-id
+    - id: set-workflow-run-id
+      shell: bash
       run: |
         # set-workflow-run-id
         echo "$WORKFLOW_ID=${{ github.run_id }}" >> "$GITHUB_OUTPUT"
@@ -81,8 +81,8 @@ jobs:
         echo "Workflow ID: ${{ steps.set-workflow-run-id.outputs.WORKFLOW_ID }}"
 
     # workflow name
-    - name: set-workflow-name
-      id: set-workflow-name
+    - id: set-workflow-name
+      shell: bash
       run: |
         # set-workflow-name
         echo "$WORKFLOW_NAME=${{ github.workflow }}" >> "$GITHUB_OUTPUT"
@@ -101,7 +101,7 @@ jobs:
   validate-release:
     if: ${{ startsWith(github.head_ref, 'release/') }}
 
-    needs: [pre-commit, build-test]
+    needs: [pre-commit, build-test, wf]
 
     runs-on: ubuntu-latest
 
