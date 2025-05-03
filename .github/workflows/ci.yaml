@@ -18,17 +18,17 @@ on:  # yamllint disable-line rule:truthy
     branches:
       - test-*
 
-  # workflow_call:
-  #   outputs:
+  workflow_call:
+    outputs:
 
-  #     REPO_NAME:
-  #       value: ${{ jobs.wf.outputs.REPO_NAME }}
+      REPO_NAME:
+        value: ${{ jobs.get-workflow.outputs.REPO_NAME }}
 
-  #     WORKFLOW_NAME:
-  #       value: ${{ jobs.wf.outputs.WORKFLOW_NAME }}
+      WORKFLOW_NAME:
+        value: ${{ jobs.get-workflow.outputs.WORKFLOW_NAME }}
 
-  #     WORKFLOW_ID:
-  #       value: ${{ jobs.wf.outputs.WORKFLOW_ID }}
+      WORKFLOW_ID:
+        value: ${{ jobs.get-workflow.outputs.WORKFLOW_ID }}
 
   workflow_dispatch:
 
@@ -37,7 +37,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  wf:
+  get-workflow:
 
     runs-on: ubuntu-latest
 
