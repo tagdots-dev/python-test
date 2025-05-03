@@ -58,6 +58,7 @@ jobs:
 
     # repo name
     - shell: bash
+      name: set-repo-name
       id: set-repo-name
       run: |
         # set-repo-name
@@ -70,6 +71,7 @@ jobs:
 
     # workflow id
     - shell: bash
+      name: set-workflow-run-id
       id: set-workflow-run-id
       run: |
         # set-workflow-run-id
@@ -82,6 +84,7 @@ jobs:
 
     # workflow name
     - shell: bash
+      name: set-workflow-name
       id: set-workflow-name
       run: |
         # set-workflow-name
