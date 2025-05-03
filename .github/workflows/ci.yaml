@@ -21,6 +21,12 @@ on:  # yamllint disable-line rule:truthy
   workflow_call:
     outputs:
 
+      REPO_NAME:
+        value: ${{ jobs.workflow.outputs.REPO_NAME }}
+
+      WORKFLOW_NAME:
+        value: ${{ jobs.workflow.outputs.WORKFLOW_NAME }}
+
       WORKFLOW_ID:
         value: ${{ jobs.workflow.outputs.WORKFLOW_ID }}
 
@@ -36,24 +42,52 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      WORKFLOW_ID: ${{ steps.set-workflow-id.outputs.WORKFLOW_ID }}
+      REPO_NAME: ${{ steps.set-repo-name.outputs.REPO_NAME }}
+      WORKFLOW_ID: ${{ steps.set-workflow-run-id.outputs.WORKFLOW_ID }}
+      WORKFLOW_NAME: ${{ steps.set-workflow-name.outputs.WORKFLOW_NAME }}
 
     steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v4
 
     - shell: bash
       run: |
         # get github obj
         echo "${{ toJson(github) }}"
 
+    # repo name
     - shell: bash
       run: |
-        # set-workflow-id
-        echo "$WORKFLOW_ID=${{ github.event.workflow_run.id }}" >> "$GITHUB_OUTPUT"
+        # set-repo-name
+        echo "$REPO_NAME=${{ github.repository }}" >> "$GITHUB_OUTPUT"
 
     - shell: bash
       run: |
-        # get-workflow-id
-        echo "WORKFLOW ID: ${{ steps.set-workflow-id.outputs.WORKFLOW_ID }}"
+        # get-repo-name
+        echo "Repo Name: ${{ steps.set-repo-name.outputs.REPO_NAME }}"
+
+    # workflow id
+    - shell: bash
+      run: |
+        # set-workflow-run-id
+        echo "$WORKFLOW_ID=${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+
+    - shell: bash
+      run: |
+        # get-workflow-run-id
+        echo "Workflow ID: ${{ steps.set-workflow-run-id.outputs.WORKFLOW_ID }}"
+
+    # workflow name
+    - shell: bash
+      run: |
+        # set-workflow-name
+        echo "$WORKFLOW_NAME=${{ github.workflow }}" >> "$GITHUB_OUTPUT"
+
+    - shell: bash
+      run: |
+        # get-workflow-name
+        echo "Workflow Name: ${{ steps.set-workflow-name.outputs.WORKFLOW_NAME }}"
 
   pre-commit:
     uses: ./.github/workflows/reusable-pre-commit.yaml
