@@ -27,21 +27,18 @@ jobs:
 
     - shell: bash
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-      if: ${{ github.head_branch }}
       run: |
-        echo "Branch name   : ${{ github.head_branch }}"
-        echo "Workflow name : ${{ github.event.workflow_run.name }}"
-        echo "Workflow URL  : ${{ github.event.workflow_run.html_url }}"
-
-    - shell: bash
-      # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-      if: ${{ github.head_ref }}
-      run: |
-        echo "Branch name     : ${{ github.head_ref }}"
-        echo "Workflow name : ${{ github.event.workflow_run.name }}"
-        echo "Workflow URL  : ${{ github.event.workflow_run.html_url }}"
-        echo "Workflow name   : ${{ github.workflow }}"
-        echo "Pull Requset URL: ${{ github.event.pull_request.html_url }}"
+        if [ "${{ github.head_branch }}" != '' ]; then
+          echo "Branch name   : ${{ github.head_branch }}"
+          echo "Workflow name : ${{ github.event.workflow_run.name }}"
+          echo "Workflow URL  : ${{ github.event.workflow_run.html_url }}"
+        elif [ "${{ github.head_ref }}" != '' ]; then
+          echo "Branch name     : ${{ github.head_ref }}"
+          echo "Workflow name   : ${{ github.event.workflow_run.name }}"
+          echo "Workflow URL    : ${{ github.event.workflow_run.html_url }}"
+          echo "Workflow name   : ${{ github.workflow }}"
+          echo "Pull Requset URL: ${{ github.event.pull_request.html_url }}"
+        fi
 
     # - shell: bash
     #   # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
