@@ -58,39 +58,36 @@ jobs:
 
     # repo name
     - shell: bash
-      name: set repo name
+      id: set-repo-name
       run: |
         # set-repo-name
         echo "$REPO_NAME=${{ github.repository }}" >> "$GITHUB_OUTPUT"
 
     - shell: bash
-      name: get repo name
       run: |
         # get-repo-name
         echo "Repo Name: ${{ steps.set-repo-name.outputs.REPO_NAME }}"
 
     # workflow id
     - shell: bash
-      name: set workflow id
+      id: set-workflow-run-id
       run: |
         # set-workflow-run-id
         echo "$WORKFLOW_ID=${{ github.run_id }}" >> "$GITHUB_OUTPUT"
 
     - shell: bash
-      name: get workflow id
       run: |
         # get-workflow-run-id
         echo "Workflow ID: ${{ steps.set-workflow-run-id.outputs.WORKFLOW_ID }}"
 
     # workflow name
     - shell: bash
-      name: set workflow name
+      id: set-workflow-name
       run: |
         # set-workflow-name
         echo "$WORKFLOW_NAME=${{ github.workflow }}" >> "$GITHUB_OUTPUT"
 
     - shell: bash
-      name: get workflow name
       run: |
         # get-workflow-name
         echo "Workflow Name: ${{ steps.set-workflow-name.outputs.WORKFLOW_NAME }}"
