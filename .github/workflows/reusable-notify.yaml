@@ -13,7 +13,7 @@ on:  # yamllint disable-line rule:truthy
 
     branches:
       - main
-      - release/[0-9]+.[0-9]+[0-9]+$
+      - release/[0-9]+.[0-9]+[0-9]+
 
 jobs:
 
@@ -33,7 +33,7 @@ jobs:
       run: |
         echo "Branch - ${{ github.head_ref }} - triggers workflow - ${{ github.event.workflow_run.name }} - with ${{ github.event.workflow_run.conclusion }}"
 
-    - name: Post message to Slack
+    - name: Post message to Slack Channel
       uses: slackapi/slack-github-action@v2.0.0
       with:
         method: chat.postMessage
