@@ -109,6 +109,9 @@ jobs:
 
 
   notify-slack:
+    if: ${{ always() && !failure() }}
+
+    needs: [validate-release]
 
     runs-on: ubuntu-latest
 
