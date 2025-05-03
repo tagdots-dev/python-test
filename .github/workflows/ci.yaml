@@ -106,3 +106,6 @@ jobs:
           exit 1
         fi
     # --- release validation ends here --- #
+
+  notify:
+    uses: ./.github/workflows/reusable-notify.yaml

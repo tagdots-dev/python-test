@@ -178,3 +178,7 @@ jobs:
         # install package from PyPI and run app to show version
         pip install ${{ env.PACKAGE_NAME }}
         ${{ env.PACKAGE_NAME }} --version
+
+  notify:
+    needs: [publish-PyPI, publish-TestPyPI]
+    uses: ./.github/workflows/reusable-notify.yaml
