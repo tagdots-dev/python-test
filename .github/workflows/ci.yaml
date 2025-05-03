@@ -101,7 +101,7 @@ jobs:
   validate-release:
     if: ${{ startsWith(github.head_ref, 'release/') }}
 
-    needs: [pre-commit, build-test, wf]
+    needs: [pre-commit, build-test, get-workflow]
 
     runs-on: ubuntu-latest
 
