@@ -57,8 +57,7 @@ jobs:
         echo "${{ toJson(github) }}"
 
     # repo name
-    - shell: bash
-      name: set-repo-name
+    - name: set-repo-name
       id: set-repo-name
       run: |
         # set-repo-name
@@ -70,8 +69,7 @@ jobs:
         echo "Repo Name: ${{ steps.set-repo-name.outputs.REPO_NAME }}"
 
     # workflow id
-    - shell: bash
-      name: set-workflow-run-id
+    - name: set-workflow-run-id
       id: set-workflow-run-id
       run: |
         # set-workflow-run-id
@@ -83,8 +81,7 @@ jobs:
         echo "Workflow ID: ${{ steps.set-workflow-run-id.outputs.WORKFLOW_ID }}"
 
     # workflow name
-    - shell: bash
-      name: set-workflow-name
+    - name: set-workflow-name
       id: set-workflow-name
       run: |
         # set-workflow-name
