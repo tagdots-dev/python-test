@@ -4,17 +4,17 @@ name: notify
 
 on:  # yamllint disable-line rule:truthy
 
-  pull_request:
-
-    branches:
-      - main
+  workflow_run:
+    workflows:
+      - ci
+      - cd
 
     types:
-      - closed
+      - completed
 
 jobs:
 
-  notify-channel:
+  notify-slack:
 
     runs-on: ubuntu-latest
 
@@ -27,9 +27,21 @@ jobs:
 
     - shell: bash
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-      # if: ${{ startsWith(github.head_ref, 'release/')
+      if: ${{ github.head_branch }}
       run: |
-        echo "Branch - ${{ github.head_ref }} - triggers workflow - ${{ github.event.workflow_run.name }} - with ${{ github.event.workflow_run.conclusion }}"
+        echo "Branch name   : ${{ github.head_branch }}"
+        echo "Workflow name : ${{ github.event.workflow_run.name }}"
+        echo "Workflow URL  : ${{ github.event.workflow_run.html_url }}"
+
+    - shell: bash
+      # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
+      if: ${{ github.head_ref }}
+      run: |
+        echo "Branch name     : ${{ github.head_ref }}"
+        echo "Workflow name : ${{ github.event.workflow_run.name }}"
+        echo "Workflow URL  : ${{ github.event.workflow_run.html_url }}"
+        echo "Workflow name   : ${{ github.workflow }}"
+        echo "Pull Requset URL: ${{ github.event.pull_request.html_url }}"
 
     # - shell: bash
     #   # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
@@ -37,11 +49,11 @@ jobs:
     #   run: |
     #     echo "Branch - ${{ github.head_branch }} - triggers workflow - ${{ github.event.workflow_run.name }} - with ${{ github.event.workflow_run.conclusion }}"
 
-    - name: Post message to Slack
-      uses: slackapi/slack-github-action@v2.0.0
-      with:
-        method: chat.postMessage
-        token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
-        payload: |
-          channel: "${{ secrets.SECRET_SLACK_CHANNEL_CICD }}"
-          text: "Workflow ${{ github.event.workflow_run.name }} result: ${{ github.event.workflow_run.conclusion }}"
+    # - name: Post message to Slack
+    #   uses: slackapi/slack-github-action@v2.0.0
+    #   with:
+    #     method: chat.postMessage
+    #     token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
+    #     payload: |
+    #       channel: "${{ secrets.SECRET_SLACK_CHANNEL_CICD }}"
+    #       text: "Workflow ${{ github.event.workflow_run.name }} result: ${{ github.event.workflow_run.conclusion }}"
