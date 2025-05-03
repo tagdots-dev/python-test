@@ -108,35 +108,35 @@ jobs:
     # --- release validation ends here --- #
 
 
-  notify-slack:
-    if: ${{ always() && !failure() }}
+  # notify-slack:
+  #   if: ${{ always() && !failure() }}
 
-    needs: [validate-release]
+  #   needs: [validate-release]
 
-    runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest
 
-    steps:
+  #   steps:
 
-    - shell: bash
-      # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-      run: |
-        echo "${{ toJson(github) }}"
+  #   - shell: bash
+  #     # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
+  #     run: |
+  #       echo "${{ toJson(github) }}"
 
-    - shell: bash
-      # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-      run: |
-        echo "${{ toJson(github.event) }}"
+  #   - shell: bash
+  #     # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
+  #     run: |
+  #       echo "${{ toJson(github.event) }}"
 
-    - shell: bash
-      # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-      run: |
-        echo "Branch - ${{ github.head_ref }} - triggers workflow - ${{ github.workflow }}"
+  #   - shell: bash
+  #     # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
+  #     run: |
+  #       echo "Branch - ${{ github.head_ref }} - triggers workflow - ${{ github.workflow }}"
 
-    - name: Post message to Slack
-      uses: slackapi/slack-github-action@v2.0.0
-      with:
-        method: chat.postMessage
-        token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
-        payload: |
-          channel: "${{ secrets.SECRET_SLACK_CHANNEL_CICD }}"
-          text: "Workflow ${{ github.workflow.name }} result: ${{ github.event.workflow_run.conclusion }}"
+  #   - name: Post message to Slack
+  #     uses: slackapi/slack-github-action@v2.0.0
+  #     with:
+  #       method: chat.postMessage
+  #       token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
+  #       payload: |
+  #         channel: "${{ secrets.SECRET_SLACK_CHANNEL_CICD }}"
+  #         text: "Workflow ${{ github.workflow.name }} result: ${{ github.event.workflow_run.conclusion }}"
