@@ -61,7 +61,7 @@ jobs:
       shell: bash
       run: |
         # set-repo-name
-        echo "$REPO_NAME=${{ github.repository }}" >> "$GITHUB_OUTPUT"
+        echo "REPO_NAME=${{ github.repository }}" >> "$GITHUB_OUTPUT"
 
     - shell: bash
       run: |
@@ -73,7 +73,7 @@ jobs:
       shell: bash
       run: |
         # set-workflow-run-id
-        echo "$WORKFLOW_ID=${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+        echo "WORKFLOW_ID=${{ github.run_id }}" >> "$GITHUB_OUTPUT"
 
     - shell: bash
       run: |
@@ -85,7 +85,7 @@ jobs:
       shell: bash
       run: |
         # set-workflow-name
-        echo "$WORKFLOW_NAME=${{ github.workflow }}" >> "$GITHUB_OUTPUT"
+        echo "WORKFLOW_NAME=${{ github.workflow }}" >> "$GITHUB_OUTPUT"
 
     - shell: bash
       run: |
