@@ -30,7 +30,7 @@ jobs:
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: |
         echo 'The triggering workflow passed'
-        echo 'Branch () passed on workflow () at workflow URL ().''
+        echo 'Branch () passed on workflow () at workflow URL ().'
         #
         echo "Branch name (head_branch) : ${{ github.event.workflow_run.head_branch }}"
         echo "Source Workflow Run name  : ${{ github.event.workflow_run.name }}"
@@ -55,7 +55,7 @@ jobs:
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: |
         echo 'The triggering workflow failed'
-        echo 'Branch () failed on workflow () at workflow URL ().''
+        echo 'Branch () failed on workflow () at workflow URL ().'
         #
         echo "Branch name (head_branch) : ${{ github.event.workflow_run.head_branch }}"
         echo "Source Workflow Run name  : ${{ github.event.workflow_run.name }}"
