@@ -45,7 +45,7 @@ jobs:
       uses: actions/checkout@v4
 
     - id: set-release-branch
-      # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
+      # checkov:skip=CKV_GHA_2000:Ensure run commands are not vulnerable to shell injection
       shell: bash
       run: |
         # set release branch info
