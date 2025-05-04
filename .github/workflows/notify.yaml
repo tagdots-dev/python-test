@@ -24,20 +24,21 @@ jobs:
     - shell: bash
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: |
-        echo "${{ toJson(github) }}"
-
-    - shell: bash
-      # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-      run: |
         echo "The triggering workflow passed"
         echo "Branch () passed on workflow () at workflow URL ()."
         echo "Repository name           : ${{ github.repository }}"
         echo "Branch name (head_branch) : ${{ github.event.workflow_run.head_branch }}"
         echo "Source Workflow Run name  : ${{ github.event.workflow_run.name }}"
         echo "Workflow URL              : ${{ github.event.workflow_run.html_url }}"
-        #
-        echo "Pull Requset URL          : ${{ github.event.pull_request.url }}"
-        echo "Branch name (head_ref)    : ${{ github.head_ref }}"
+
+    - name: Post message to Slack
+      uses: slackapi/slack-github-action@v2.0.0
+      with:
+        method: chat.postMessage
+        token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
+        payload: |
+          channel: "${{ secrets.SECRET_SLACK_CHANNEL_CICD }}"
+          text: ":rocket: workflow passed\nRepository name           : ${{ github.repository }}\nBranch name (head_branch) : ${{ github.event.workflow_run.head_branch }}\nSource Workflow Run name  : ${{ github.event.workflow_run.name }}\nWorkflow URL              : ${{ github.event.workflow_run.html_url }}"
 
   on-failure:
     runs-on: ubuntu-latest
@@ -49,58 +50,18 @@ jobs:
     - shell: bash
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: |
-        echo "${{ toJson(github) }}"
-
-    - shell: bash
-      # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-      run: |
         echo "The triggering workflow failed"
         echo "Branch () failed on workflow () at workflow URL ()."
         echo "Repository name           : ${{ github.repository }}"
         echo "Branch name (head_branch) : ${{ github.event.workflow_run.head_branch }}"
         echo "Source Workflow Run name  : ${{ github.event.workflow_run.name }}"
         echo "Workflow URL              : ${{ github.event.workflow_run.html_url }}"
-        #
-        echo "Pull Requset URL          : ${{ github.event.pull_request.url }}"
-        echo "Branch name (head_ref)    : ${{ github.head_ref }}"
 
-  # notify-slack:
-
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-
-  #   - shell: bash
-  #     # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-  #     run: |
-  #       echo "${{ toJson(github) }}"
-
-  #   - shell: bash
-  #     # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-  #     run: |
-  #       if [ "${{ github.head_branch }}" != '' ]; then
-  #         echo "Branch name   : ${{ github.head_branch }}"
-  #         echo "Workflow name : ${{ github.event.workflow_run.name }}"
-  #         echo "Workflow URL  : ${{ github.event.workflow_run.html_url }}"
-  #       elif [ "${{ github.head_ref }}" != '' ]; then
-  #         echo "Branch name     : ${{ github.head_ref }}"
-  #         echo "Workflow name   : ${{ github.event.workflow_run.name }}"
-  #         echo "Workflow URL    : ${{ github.event.workflow_run.html_url }}"
-  #         echo "Workflow name   : ${{ github.workflow }}"
-  #         echo "Pull Requset URL: ${{ github.event.pull_request.html_url }}"
-  #       fi
-
-    # - shell: bash
-    #   # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-    #   if: ${{ startsWith(github.head_branch, 'release/')
-    #   run: |
-    #     echo "Branch - ${{ github.head_branch }} - triggers workflow - ${{ github.event.workflow_run.name }} - with ${{ github.event.workflow_run.conclusion }}"
-
-    # - name: Post message to Slack
-    #   uses: slackapi/slack-github-action@v2.0.0
-    #   with:
-    #     method: chat.postMessage
-    #     token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
-    #     payload: |
-    #       channel: "${{ secrets.SECRET_SLACK_CHANNEL_CICD }}"
-    #       text: "Workflow ${{ github.event.workflow_run.name }} result: ${{ github.event.workflow_run.conclusion }}"
+    - name: Post message to Slack
+      uses: slackapi/slack-github-action@v2.0.0
+      with:
+        method: chat.postMessage
+        token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
+        payload: |
+          channel: "${{ secrets.SECRET_SLACK_CHANNEL_CICD }}"
+          text: ":fire: workflow failed\nRepository name           : ${{ github.repository }}\nBranch name (head_branch) : ${{ github.event.workflow_run.head_branch }}\nSource Workflow Run name  : ${{ github.event.workflow_run.name }}\nWorkflow URL              : ${{ github.event.workflow_run.html_url }}"
