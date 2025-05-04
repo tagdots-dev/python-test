@@ -20,13 +20,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - shell: bash
-      # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-      run: |
-        echo "A PR has been (re)opened or updated"
-        echo "Repository name           : ${{ github.repository }}"
-        echo "Branch name (head_branch) : ${{ github.event.pull_request.head.ref }}"
-        echo "Pull Request URL          : ${{ github.event.pull_request.html_url }}"
+    # - shell: bash
+    #   # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
+    #   run: |
+    #     echo "A PR has been (re)opened or updated"
+    #     echo "Repository name           : ${{ github.repository }}"
+    #     echo "Branch name (head_branch) : ${{ github.event.pull_request.head.ref }}"
+    #     echo "Pull Request URL          : ${{ github.event.pull_request.html_url }}"
 
     - name: Post message to Slack
       uses: slackapi/slack-github-action@v2.0.0
