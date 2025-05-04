@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 0.1.17 (2025-05-03)
+
+### Feat
+
+- add new reusable-notify workflow and GH app github bot secret
+
+### Fix
+
+- prevent push-git-tag from running if CI fail
+
 ## 0.1.16 (2025-04-29)
 
 ## 0.1.15 (2025-04-29)
