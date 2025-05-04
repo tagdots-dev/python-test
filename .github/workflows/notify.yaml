@@ -14,34 +14,65 @@ on:  # yamllint disable-line rule:truthy
 
 jobs:
 
-  notify-slack:
-
+  on-success:
     runs-on: ubuntu-latest
 
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
     steps:
-
     - shell: bash
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: |
-        echo "${{ toJson(github) }}"
+        echo 'The triggering workflow passed'
+        echo "Branch name (head_branch) : ${{ github.head_branch }}"
+        echo "Branch name (head_ref)    : ${{ github.head_ref }}"
+        echo "Workflow name             : ${{ github.workflow }}"
+        echo "Workflow name             : ${{ github.event.workflow_run.name }}"
+        echo "Workflow URL              : ${{ github.event.workflow_run.html_url }}"
+        echo "Pull Requset URL          : ${{ github.event.pull_request.html_url }}"
 
+  on-failure:
+    runs-on: ubuntu-latest
+
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+
+    steps:
     - shell: bash
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-      if: ${{ github.head_branch }}
       run: |
-        echo "Branch name   : ${{ github.head_branch }}"
-        echo "Workflow name : ${{ github.event.workflow_run.name }}"
-        echo "Workflow URL  : ${{ github.event.workflow_run.html_url }}"
+        echo 'The triggering workflow failed'
+        echo "Branch name (head_branch) : ${{ github.head_branch }}"
+        echo "Branch name (head_ref)    : ${{ github.head_ref }}"
+        echo "Workflow name             : ${{ github.workflow }}"
+        echo "Workflow name             : ${{ github.event.workflow_run.name }}"
+        echo "Workflow URL              : ${{ github.event.workflow_run.html_url }}"
+        echo "Pull Requset URL          : ${{ github.event.pull_request.html_url }}"
 
-    - shell: bash
-      # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-      if: ${{ github.head_ref }}
-      run: |
-        echo "Branch name     : ${{ github.head_ref }}"
-        echo "Workflow name : ${{ github.event.workflow_run.name }}"
-        echo "Workflow URL  : ${{ github.event.workflow_run.html_url }}"
-        echo "Workflow name   : ${{ github.workflow }}"
-        echo "Pull Requset URL: ${{ github.event.pull_request.html_url }}"
+  # notify-slack:
+
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+
+  #   - shell: bash
+  #     # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
+  #     run: |
+  #       echo "${{ toJson(github) }}"
+
+  #   - shell: bash
+  #     # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
+  #     run: |
+  #       if [ "${{ github.head_branch }}" != '' ]; then
+  #         echo "Branch name   : ${{ github.head_branch }}"
+  #         echo "Workflow name : ${{ github.event.workflow_run.name }}"
+  #         echo "Workflow URL  : ${{ github.event.workflow_run.html_url }}"
+  #       elif [ "${{ github.head_ref }}" != '' ]; then
+  #         echo "Branch name     : ${{ github.head_ref }}"
+  #         echo "Workflow name   : ${{ github.event.workflow_run.name }}"
+  #         echo "Workflow URL    : ${{ github.event.workflow_run.html_url }}"
+  #         echo "Workflow name   : ${{ github.workflow }}"
+  #         echo "Pull Requset URL: ${{ github.event.pull_request.html_url }}"
+  #       fi
 
     # - shell: bash
     #   # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
