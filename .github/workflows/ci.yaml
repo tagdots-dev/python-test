@@ -85,7 +85,7 @@ jobs:
       shell: bash
       run: |
         # set-workflow-name
-        echo "$WORKFLOW_NAME=${{ github.workflow }}" >> "$GITHUB_OUTPUT"
+        echo "WORKFLOW_NAME=${{ github.workflow }}" >> "$GITHUB_OUTPUT"
 
     - shell: bash
       run: |
