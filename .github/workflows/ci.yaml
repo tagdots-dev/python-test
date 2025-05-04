@@ -222,10 +222,10 @@ jobs:
       run: |
         echo "${{ toJson(github.event) }}"
 
-  #   - shell: bash
-  #     # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-  #     run: |
-  #       echo "Branch - ${{ github.head_ref }} - triggers workflow - ${{ github.workflow }}"
+    - shell: bash
+      # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
+      run: |
+        echo "Branch - ${{ github.head_ref }} - triggers workflow - ${{ github.workflow }}"
 
     - name: Post message to Slack
       uses: slackapi/slack-github-action@v2.0.0
@@ -234,4 +234,4 @@ jobs:
         token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
         payload: |
           channel: "${{ secrets.SECRET_SLACK_CHANNEL_CICD }}"
-          text: "Workflow ${{ github.workflow.name }} result: ${{ github.event.workflow_run.conclusion }}"
+          text: "Workflow ${{ github.workflow }} result: ${{ job.status }}"
