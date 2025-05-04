@@ -25,7 +25,6 @@ jobs:
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: |
         echo "The triggering workflow passed"
-        echo "Branch () passed on workflow () at workflow URL ()."
         echo "Repository name           : ${{ github.repository }}"
         echo "Branch name (head_branch) : ${{ github.event.workflow_run.head_branch }}"
         echo "Source Workflow Run name  : ${{ github.event.workflow_run.name }}"
@@ -38,7 +37,7 @@ jobs:
         token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
         payload: |
           channel: "${{ secrets.SECRET_SLACK_CHANNEL_CICD }}"
-          text: ":rocket: workflow passed\n\n```Repository name           : ${{ github.repository }}\nBranch name (head_branch) : ${{ github.event.workflow_run.head_branch }}\nSource Workflow Run name  : ${{ github.event.workflow_run.name }}\nWorkflow URL              : ${{ github.event.workflow_run.html_url }}```"
+          text: ":rocket: *Workflow Passed*\n\n```Repository name           : ${{ github.repository }}\nBranch name (head_branch) : ${{ github.event.workflow_run.head_branch }}\nSource Workflow Run name  : ${{ github.event.workflow_run.name }}\nWorkflow URL              : ${{ github.event.workflow_run.html_url }}```"
 
   on-failure:
     runs-on: ubuntu-latest
@@ -51,7 +50,6 @@ jobs:
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: |
         echo "The triggering workflow failed"
-        echo "Branch () failed on workflow () at workflow URL ()."
         echo "Repository name           : ${{ github.repository }}"
         echo "Branch name (head_branch) : ${{ github.event.workflow_run.head_branch }}"
         echo "Source Workflow Run name  : ${{ github.event.workflow_run.name }}"
@@ -64,4 +62,4 @@ jobs:
         token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
         payload: |
           channel: "${{ secrets.SECRET_SLACK_CHANNEL_CICD }}"
-          text: ":fire: workflow failed\n\n```Repository name           : ${{ github.repository }}\nBranch name (head_branch) : ${{ github.event.workflow_run.head_branch }}\nSource Workflow Run name  : ${{ github.event.workflow_run.name }}\nWorkflow URL              : ${{ github.event.workflow_run.html_url }}```"
+          text: ":fire: *Workflow Failed*\n\n```Repository name           : ${{ github.repository }}\nBranch name (head_branch) : ${{ github.event.workflow_run.head_branch }}\nSource Workflow Run name  : ${{ github.event.workflow_run.name }}\nWorkflow URL              : ${{ github.event.workflow_run.html_url }}```"
