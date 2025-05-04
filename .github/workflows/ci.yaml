@@ -18,18 +18,6 @@ on:  # yamllint disable-line rule:truthy
     branches:
       - test-*
 
-  # workflow_call:
-  #   outputs:
-
-  #     REPO_NAME:
-  #       value: ${{ jobs.get-workflow.outputs.REPO_NAME }}
-
-  #     WORKFLOW_NAME:
-  #       value: ${{ jobs.get-workflow.outputs.WORKFLOW_NAME }}
-
-  #     WORKFLOW_ID:
-  #       value: ${{ jobs.get-workflow.outputs.WORKFLOW_ID }}
-
   workflow_dispatch:
 
 permissions:
@@ -37,60 +25,6 @@ permissions:
   pull-requests: write
 
 jobs:
-  get-workflow:
-
-    runs-on: ubuntu-latest
-
-    outputs:
-      REPO_NAME: ${{ steps.set-repo-name.outputs.REPO_NAME }}
-      WORKFLOW_ID: ${{ steps.set-workflow-run-id.outputs.WORKFLOW_ID }}
-      WORKFLOW_NAME: ${{ steps.set-workflow-name.outputs.WORKFLOW_NAME }}
-
-    steps:
-
-    - name: Checkout source code
-      uses: actions/checkout@v4
-
-    - shell: bash
-      run: |
-        # get github obj
-        echo "${{ toJson(github) }}"
-
-    # repo name
-    - id: set-repo-name
-      shell: bash
-      run: |
-        # set-repo-name
-        echo "REPO_NAME=${{ github.repository }}" >> "$GITHUB_OUTPUT"
-
-    - shell: bash
-      run: |
-        # get-repo-name
-        echo "Repo Name: ${{ steps.set-repo-name.outputs.REPO_NAME }}"
-
-    # workflow id
-    - id: set-workflow-run-id
-      shell: bash
-      run: |
-        # set-workflow-run-id
-        echo "WORKFLOW_ID=${{ github.run_id }}" >> "$GITHUB_OUTPUT"
-
-    - shell: bash
-      run: |
-        # get-workflow-run-id
-        echo "Workflow ID: ${{ steps.set-workflow-run-id.outputs.WORKFLOW_ID }}"
-
-    # workflow name
-    - id: set-workflow-name
-      shell: bash
-      run: |
-        # set-workflow-name
-        echo "WORKFLOW_NAME=${{ github.workflow }}" >> "$GITHUB_OUTPUT"
-
-    - shell: bash
-      run: |
-        # get-workflow-name
-        echo "Workflow Name: ${{ steps.set-workflow-name.outputs.WORKFLOW_NAME }}"
 
   pre-commit:
     uses: ./.github/workflows/reusable-pre-commit.yaml
@@ -172,66 +106,3 @@ jobs:
           exit 1
         fi
     # --- release validation ends here --- #
-
-
-  # notify-slack:
-  #   if: ${{ always() && !failure() }}
-
-  #   needs: [validate-release]
-
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-
-  #   - shell: bash
-  #     # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-  #     run: |
-  #       echo "${{ toJson(github) }}"
-
-  #   - shell: bash
-  #     # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-  #     run: |
-  #       if [ "${{ github.head_branch }}" != '' ]; then
-  #         echo "Branch name   : ${{ github.head_branch }}"
-  #         echo "Workflow name : ${{ github.event.workflow_run.name }}"
-  #         echo "Workflow URL  : ${{ github.event.workflow_run.html_url }}"
-  #       elif [ "${{ github.head_ref }}" != '' ]; then
-  #         # scenario - pull request
-  #         echo "Branch name     : ${{ github.head_ref }}"
-  #         echo "Workflow name   : ${{ github.workflow }}"
-  #         echo "Pull Requset URL: ${{ github.event.pull_request.html_url }}"
-  #       fi
-
-
-  # notify-slack:
-  #   if: ${{ always() && !failure() }}
-
-  #   needs: [validate-release]
-
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-
-  #   - shell: bash
-  #     # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-  #     run: |
-  #       echo "${{ toJson(github) }}"
-
-  #   - shell: bash
-  #     # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-  #     run: |
-  #       echo "${{ toJson(github.event) }}"
-
-  #   - shell: bash
-  #     # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
-  #     run: |
-  #       echo "Branch - ${{ github.head_ref }} - triggers workflow - ${{ github.workflow }}"
-
-  #   - name: Post message to Slack
-  #     uses: slackapi/slack-github-action@v2.0.0
-  #     with:
-  #       method: chat.postMessage
-  #       token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
-  #       payload: |
-  #         channel: "${{ secrets.SECRET_SLACK_CHANNEL_CICD }}"
-  #         text: "Workflow ${{ github.workflow }} result: ${{ job.status }}"
