@@ -20,6 +20,12 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
+
+    - shell: bash
+      # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
+      run: |
+        echo "${{ toJson(github) }}"
+
     - shell: bash
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: |
@@ -37,6 +43,12 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
 
     steps:
+
+    - shell: bash
+      # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
+      run: |
+        echo "${{ toJson(github) }}"
+
     - shell: bash
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: |
