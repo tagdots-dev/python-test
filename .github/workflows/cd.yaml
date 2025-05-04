@@ -84,7 +84,7 @@ jobs:
     - shell: bash
       env:
         TWINE_USERNAME: "__token__"
-        TWINE_PASSWORD: "${{ secrets.SECRET_TESTPYPI }}"
+        TWINE_PASSWORD: "${{ secrets.SECRET_PYPITEST }}"
         TWINE_REPOSITORY_URL: "https://test.pypi.org/legacy/"
       run: |
         # Publish distributions to TestPyPI

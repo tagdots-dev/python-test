@@ -1,6 +1,6 @@
 ---
 
-name: notify
+name: notify-cicd
 
 on:  # yamllint disable-line rule:truthy
 
