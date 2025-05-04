@@ -12,29 +12,15 @@ on:  # yamllint disable-line rule:truthy
     types:
       - closed
 
-  workflow_dispatch:
-
 env:
   PACKAGE_NAME: pkg-15903
   PYTHON_VERSION: '3.12.x'
 
 jobs:
 
-  get-github:
-
-    runs-on: ubuntu-latest
-
-    steps:
-
-    - name: get GitHub Obj
-      shell: bash
-      run: |
-        echo "${{ toJson(github) }}"
-
   push-git-tag:
-    # condition: pull request is merged
-    if: ${{ startsWith(github.head_ref, 'release/') && github.event.pull_request.merged == true && github.event.workflow_run.conclusion == 'success' }}
-
+    # ISSUE - failed-CI release branch, if merged, can continue through this CD workflow
+    if: ${{ startsWith(github.head_ref, 'release/') && github.event.pull_request.merged == true }}
     runs-on: ubuntu-latest
 
     steps:
