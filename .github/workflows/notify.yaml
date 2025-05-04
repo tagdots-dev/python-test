@@ -31,7 +31,7 @@ jobs:
         echo "Source Workflow Run name  : ${{ github.event.workflow_run.name }}"
         echo "Workflow URL              : ${{ github.event.workflow_run.html_url }}"
 
-    - name: Post message to Slack
+    - name: Post message to Slack Channel
       uses: slackapi/slack-github-action@v2.0.0
       with:
         method: chat.postMessage
@@ -57,7 +57,7 @@ jobs:
         echo "Source Workflow Run name  : ${{ github.event.workflow_run.name }}"
         echo "Workflow URL              : ${{ github.event.workflow_run.html_url }}"
 
-    - name: Post message to Slack
+    - name: Post message to Slack Channel
       uses: slackapi/slack-github-action@v2.0.0
       with:
         method: chat.postMessage
