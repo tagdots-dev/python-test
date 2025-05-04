@@ -85,7 +85,7 @@ jobs:
       shell: bash
       run: |
         # set-workflow-name
-        echo "WORKFLOW_NAME=${{ github.workflow }}" >> "$GITHUB_OUTPUT"
+        echo "$WORKFLOW_NAME=${{ github.workflow }}" >> "$GITHUB_OUTPUT"
 
     - shell: bash
       run: |
@@ -101,7 +101,7 @@ jobs:
   validate-release:
     if: ${{ startsWith(github.head_ref, 'release/') }}
 
-    needs: [pre-commit, build-test, get-workflow-bad]
+    needs: [pre-commit, build-test, get-workflow]
 
     runs-on: ubuntu-latest
 
