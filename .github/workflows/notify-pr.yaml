@@ -25,8 +25,8 @@ jobs:
       run: |
         echo "A PR has been (re)opened or updated"
         echo "Repository name           : ${{ github.repository }}"
-        echo "Branch name (head_branch) : ${{ github.event.pull_request.base.head.ref }}"
-        echo "Pull Request URL          : ${{ github.event.pull_request.base.html_url }}"
+        echo "Branch name (head_branch) : ${{ github.event.pull_request.head.ref }}"
+        echo "Pull Request URL          : ${{ github.event.pull_request.html_url }}"
 
     - name: Post message to Slack
       uses: slackapi/slack-github-action@v2.0.0
@@ -35,4 +35,4 @@ jobs:
         token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
         payload: |
           channel: "${{ secrets.SECRET_SLACK_CHANNEL_PR }}"
-          text: ":fire: *Pull Request (re)opened or updated.*\n\n```Repository name           : ${{ github.repository }}\nBranch name (head_branch) : ${{ github.event.pull_request.base.head.ref }}\nPull Request URL          : ${{ github.event.pull_request.base.html_url }}```"
+          text: ":fire: *Pull Request (re)opened or updated.*\n\n```Repository name           : ${{ github.repository }}\nBranch name (head_branch) : ${{ github.event.pull_request.head.ref }}\nPull Request URL          : ${{ github.event.pull_request.html_url }}```"
