@@ -77,7 +77,7 @@ jobs:
       id: set-step
       run: |
         echo "WF_NAME=stale-branch"                        >> "$GITHUB_OUTPUT"
-        echo "OUTCOME=${{ steps.stale-branches.outcome }}" >> "$GITHUB_OUTPUT"
+        echo "OUTCOME=${{ steps.stale-branches.outputs }}" >> "$GITHUB_OUTPUT"
 
   notify-slack:
     if: always()
@@ -95,9 +95,9 @@ jobs:
         payload: |
           channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
           text: "
-              *Workflow: ${{ github.workflow }} 🗑️*\n
+              *Workflow: ${{ github.workflow }}*\n
               ```
-              URL     : https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n\n
+              URL     : https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n
               Job     : ${{ needs.stale-workflow.outputs.WF_NAME }}\n
               Result  : ${{ needs.stale-workflow.outputs.OUTCOME }}\n
               Job     : ${{ needs.stale-issue-pr.outputs.WF_NAME }}\n
