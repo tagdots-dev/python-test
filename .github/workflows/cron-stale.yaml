@@ -1,0 +1,84 @@
+name: cron-stale
+
+on:
+  schedule:
+    - cron: '30 22 * * *'
+
+  workflow_dispatch:
+    inputs:
+
+      days:
+        description: 'retain-days'
+        required: true
+        default: '30'
+
+      minimum_runs:
+        description: 'Minimum runs to keep for each workflow'
+        required: true
+        default: '6'
+
+jobs:
+  # https://github.com/Mattraks/delete-workflow-runs
+  stale-workflow:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - id: stale-workflows
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          retain_days: ${{ github.event.inputs.days }}
+          keep_minimum_runs: ${{ github.event.inputs.minimum_runs }}
+
+      - name: Post message to Slack
+        uses: slackapi/slack-github-action@v2.0.0
+        with:
+          method: chat.postMessage
+          token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
+          payload: |
+            channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
+            text: "🗑️ *${{ github.event.workflow_run.name }} Workflow - ${{ github.job }} - ${{ steps.stale-workflows.outcome }} Run*\n\n```${{ steps.stale-workflows.outputs }}```"
+
+  # https://github.com/actions/stale
+  stale-issue-pr:
+    runs-on: ubuntu-latest
+    steps:
+    - id: stale-issues-pr
+      uses: actions/stale@v9
+      with:
+        stale-issue-message: 'This issue is stale because it has been open 30 days with no activity. Remove stale label or comment or this will be closed in 5 days.'
+        days-before-stale: 2
+        days-before-close: 1
+
+    - name: Post message to Slack
+      uses: slackapi/slack-github-action@v2.0.0
+      with:
+        method: chat.postMessage
+        token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
+        payload: |
+          channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
+          text: "🗑️ *${{ github.event.workflow_run.name }} Workflow - ${{ github.job }} - ${{ steps.stale-issues-pr.outcome }} Run*\n\n```${{ steps.stale-issues-pr.outputs }}```"
+
+  # https://github.com/crs-k/stale-branches
+  stale-branches:
+    runs-on: ubuntu-latest
+    steps:
+    - id: stale-branches
+      uses: crs-k/stale-branches@v5.0.0
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        days-before-stale: 30
+        days-before-delete: 45
+        pr-check: true
+
+    - name: Post message to Slack
+      uses: slackapi/slack-github-action@v2.0.0
+      with:
+        method: chat.postMessage
+        token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
+        payload: |
+          channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
+          text: "🗑️ *${{ github.event.workflow_run.name }} Workflow - ${{ github.job }} - ${{ steps.stale-branches.outcome }} Run*\n\n```${{ steps.stale-branches.outputs }}```"
