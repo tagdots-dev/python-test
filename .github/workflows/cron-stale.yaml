@@ -86,6 +86,7 @@ jobs:
         echo "OUTPUTS=${{ toJson(steps.stale-branches.outputs) }}" >> "$GITHUB_OUTPUT"
 
   notify-slack:
+    if: always()
     needs: [stale-workflow, stale-issue-pr, stale-branch]
 
     runs-on: ubuntu-latest
