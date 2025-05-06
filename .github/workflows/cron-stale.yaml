@@ -76,8 +76,9 @@ jobs:
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       id: set-step
       run: |
+        exit 1
         echo "WF_NAME=stale-branch"                        >> "$GITHUB_OUTPUT"
-        echo "OUTCOME=${{ steps.stale-branches.outputs }}" >> "$GITHUB_OUTPUT"
+        echo "OUTCOME=${{ steps.stale-branches.outcome }}" >> "$GITHUB_OUTPUT"
 
   notify-slack:
     if: always()
