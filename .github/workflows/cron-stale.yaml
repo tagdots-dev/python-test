@@ -10,6 +10,12 @@ jobs:
   # https://github.com/Mattraks/delete-workflow-runs
   stale-workflow:
     runs-on: ubuntu-latest
+
+    outputs:
+      WF_NAME: ${{ steps.set-step.outputs.WF_NAME }}
+      OUTCOME: ${{ steps.set-step.outputs.OUTCOME }}
+      OUTPUTS: ${{ steps.set-step.outputs.OUTPUTS }}
+
     steps:
     - id: stale-workflows
       uses: Mattraks/delete-workflow-runs@v2
@@ -20,22 +26,22 @@ jobs:
         keep_minimum_runs: 6
 
     - shell: bash
+      id: set-step
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: |
-        echo "${{ toJson(steps.stale-workflows.outputs) }}"
-
-    - name: Post message to Slack
-      uses: slackapi/slack-github-action@v2
-      with:
-        method: chat.postMessage
-        token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
-        payload: |
-          channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
-          text: "🗑️ JOB: ${{ github.job }} - ${{ steps.stale-workflows.outcome }}"
+        echo "WF_NAME=${{ github.workflow }}"                       >> "$GITHUB_OUTPUT"
+        echo "OUTCOME=${{ steps.stale-workflows.outcome }}"         >> "$GITHUB_OUTPUT"
+        echo "OUTPUTS=${{ toJson(steps.stale-workflows.outputs) }}" >> "$GITHUB_OUTPUT"
 
   # https://github.com/actions/stale
   stale-issue-pr:
     runs-on: ubuntu-latest
+
+    outputs:
+      WF_NAME: ${{ steps.set-step.outputs.WF_NAME }}
+      OUTCOME: ${{ steps.set-step.outputs.OUTCOME }}
+      OUTPUTS: ${{ steps.set-step.outputs.OUTPUTS }}
+
     steps:
     - id: stale-issues-prs
       uses: actions/stale@v9
@@ -46,21 +52,22 @@ jobs:
 
     - shell: bash
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
+      id: set-step
       run: |
-        echo "${{ toJson(steps.stale-issues-prs.outputs) }}"
+        echo "WF_NAME=${{ github.workflow }}"                        >> "$GITHUB_OUTPUT"
+        echo "OUTCOME=${{ steps.stale-issues-prs.outcome }}"         >> "$GITHUB_OUTPUT"
+        echo "OUTPUTS=${{ toJson(steps.stale-issues-prs.outputs) }}" >> "$GITHUB_OUTPUT"
 
-    - name: Post message to Slack
-      uses: slackapi/slack-github-action@v2
-      with:
-        method: chat.postMessage
-        token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
-        payload: |
-          channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
-          text: "🗑️ JOB: ${{ github.job }} - ${{ steps.stale-issues-prs.outcome }}"
 
   # https://github.com/crs-k/stale-branches
   stale-branch:
     runs-on: ubuntu-latest
+
+    outputs:
+      WF_NAME: ${{ steps.set-step.outputs.WF_NAME }}
+      OUTCOME: ${{ steps.set-step.outputs.OUTCOME }}
+      OUTPUTS: ${{ steps.set-step.outputs.OUTPUTS }}
+
     steps:
     - id: stale-branches
       uses: crs-k/stale-branches@v7.0.1
@@ -72,8 +79,18 @@ jobs:
 
     - shell: bash
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
+      id: set-step
       run: |
-        echo "${{ toJson(steps.stale-branches.outputs) }}"
+        echo "WF_NAME=${{ github.workflow }}"                      >> "$GITHUB_OUTPUT"
+        echo "OUTCOME=${{ steps.stale-branches.outcome }}"         >> "$GITHUB_OUTPUT"
+        echo "OUTPUTS=${{ toJson(steps.stale-branches.outputs) }}" >> "$GITHUB_OUTPUT"
+
+  notify-slack:
+    needs: [stale-workflow, stale-issue-pr, stale-branch]
+
+    runs-on: ubuntu-latest
+
+    steps:
 
     - name: Post message to Slack
       uses: slackapi/slack-github-action@v2
@@ -82,4 +99,16 @@ jobs:
         token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
         payload: |
           channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
-          text: "🗑️ JOB: ${{ github.job }} - ${{ steps.stale-branches.outcome }}"
+          text: "🗑️ *Workflow - ${{ github.action_status }}*\n
+              *URL:* https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n
+              ```
+              Job     : ${{ needs.stale-workflow.outputs.WF_NAME }}\n
+              Result  : ${{ needs.stale-workflow.outputs.OUTCOME }}\n
+              Output  : ${{ needs.stale-workflow.outputs.OUTPUTS }}\n\n
+              Job     : ${{ needs.stale-issue-pr.outputs.WF_NAME }}\n
+              Result  : ${{ needs.stale-issue-pr.outputs.OUTCOME }}\n
+              Output  : ${{ needs.stale-issue-pr.outputs.OUTPUTS }}\n\n
+              Job     : ${{ needs.stale-branch.outputs.WF_NAME }}\n
+              Result  : ${{ needs.stale-branch.outputs.OUTCOME }}\n
+              Output  : ${{ needs.stale-branch.outputs.OUTPUTS }}\n\n
+              ```"
