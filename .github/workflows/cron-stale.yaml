@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      WF_NAME: ${{ steps.set-step.outputs.WF_NAME }}
+      JB_NAME: ${{ steps.set-step.outputs.JB_NAME }}
       OUTCOME: ${{ steps.set-step.outputs.OUTCOME }}
 
     steps:
@@ -28,7 +28,7 @@ jobs:
       id: set-step
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: |
-        echo "WF_NAME=stale-workflow"                       >> "$GITHUB_OUTPUT"
+        echo "JB_NAME=stale-workflow"                       >> "$GITHUB_OUTPUT"
         echo "OUTCOME=${{ steps.stale-workflows.outcome }}" >> "$GITHUB_OUTPUT"
 
   # https://github.com/actions/stale
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      WF_NAME: ${{ steps.set-step.outputs.WF_NAME }}
+      JB_NAME: ${{ steps.set-step.outputs.JB_NAME }}
       OUTCOME: ${{ steps.set-step.outputs.OUTCOME }}
 
     steps:
@@ -51,7 +51,7 @@ jobs:
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       id: set-step
       run: |
-        echo "WF_NAME=stale-issue-pr"                        >> "$GITHUB_OUTPUT"
+        echo "JB_NAME=stale-issue-pr"                        >> "$GITHUB_OUTPUT"
         echo "OUTCOME=${{ steps.stale-issues-prs.outcome }}" >> "$GITHUB_OUTPUT"
 
 
@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      WF_NAME: ${{ steps.set-step.outputs.WF_NAME }}
+      JB_NAME: ${{ steps.set-step.outputs.JB_NAME }}
       OUTCOME: ${{ steps.set-step.outputs.OUTCOME }}
 
     steps:
@@ -76,9 +76,8 @@ jobs:
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       id: set-step
       run: |
-        exit 1
-        echo "WF_NAME=stale-branch"                        >> "$GITHUB_OUTPUT"
-        echo "OUTCOME=${{ steps.stale-branches.outcome }}" >> "$GITHUB_OUTPUT"
+        echo "JB_NAME=stale-branch"                                >> "$GITHUB_OUTPUT"
+        echo "OUTCOME=${{ toJson(steps.stale-branches.outcome) }}" >> "$GITHUB_OUTPUT"
 
   notify-slack:
     if: always()
@@ -96,13 +95,13 @@ jobs:
         payload: |
           channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
           text: "
-              *Workflow: ${{ github.workflow }}*\n
+              *:wastebasket: workflow: ${{ github.workflow }}*
               ```
               URL     : https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n
-              Job     : ${{ needs.stale-workflow.outputs.WF_NAME }}\n
+              Job     : ${{ needs.stale-workflow.outputs.JB_NAME }}\n
               Result  : ${{ needs.stale-workflow.outputs.OUTCOME }}\n
-              Job     : ${{ needs.stale-issue-pr.outputs.WF_NAME }}\n
+              Job     : ${{ needs.stale-issue-pr.outputs.JB_NAME }}\n
               Result  : ${{ needs.stale-issue-pr.outputs.OUTCOME }}\n
-              Job     : ${{ needs.stale-branch.outputs.WF_NAME }}\n
+              Job     : ${{ needs.stale-branch.outputs.JB_NAME }}\n
               Result  : ${{ needs.stale-branch.outputs.OUTCOME }}\n
               ```"
