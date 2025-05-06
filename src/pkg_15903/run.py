@@ -11,7 +11,7 @@ from pkg_15903 import __version__
 
 
 @click.command()
-@click.option('--url', required=False, default='https://google.com', help='enter URL')
+@click.option('--url', required=False, default='https://google.com', help='Enter URL')
 @click.version_option(version=__version__)
 def main(url):
     response = requests.get(url)
