@@ -14,7 +14,6 @@ jobs:
     outputs:
       WF_NAME: ${{ steps.set-step.outputs.WF_NAME }}
       OUTCOME: ${{ steps.set-step.outputs.OUTCOME }}
-      OUTPUTS: ${{ steps.set-step.outputs.OUTPUTS }}
 
     steps:
     - id: stale-workflows
@@ -29,9 +28,8 @@ jobs:
       id: set-step
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: |
-        echo "WF_NAME=${{ github.workflow }}"                       >> "$GITHUB_OUTPUT"
-        echo "OUTCOME=${{ steps.stale-workflows.outcome }}"         >> "$GITHUB_OUTPUT"
-        echo "OUTPUTS=${{ toJson(steps.stale-workflows.outputs) }}" >> "$GITHUB_OUTPUT"
+        echo "WF_NAME=stale-workflow"                       >> "$GITHUB_OUTPUT"
+        echo "OUTCOME=${{ steps.stale-workflows.outcome }}" >> "$GITHUB_OUTPUT"
 
   # https://github.com/actions/stale
   stale-issue-pr:
@@ -40,7 +38,6 @@ jobs:
     outputs:
       WF_NAME: ${{ steps.set-step.outputs.WF_NAME }}
       OUTCOME: ${{ steps.set-step.outputs.OUTCOME }}
-      OUTPUTS: ${{ steps.set-step.outputs.OUTPUTS }}
 
     steps:
     - id: stale-issues-prs
@@ -54,9 +51,8 @@ jobs:
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       id: set-step
       run: |
-        echo "WF_NAME=${{ github.workflow }}"                        >> "$GITHUB_OUTPUT"
-        echo "OUTCOME=${{ steps.stale-issues-prs.outcome }}"         >> "$GITHUB_OUTPUT"
-        echo "OUTPUTS=${{ toJson(steps.stale-issues-prs.outputs) }}" >> "$GITHUB_OUTPUT"
+        echo "WF_NAME=stale-issue-pr"                        >> "$GITHUB_OUTPUT"
+        echo "OUTCOME=${{ steps.stale-issues-prs.outcome }}" >> "$GITHUB_OUTPUT"
 
 
   # https://github.com/crs-k/stale-branches
@@ -66,7 +62,6 @@ jobs:
     outputs:
       WF_NAME: ${{ steps.set-step.outputs.WF_NAME }}
       OUTCOME: ${{ steps.set-step.outputs.OUTCOME }}
-      OUTPUTS: ${{ steps.set-step.outputs.OUTPUTS }}
 
     steps:
     - id: stale-branches
@@ -81,9 +76,8 @@ jobs:
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       id: set-step
       run: |
-        echo "WF_NAME=${{ github.workflow }}"                      >> "$GITHUB_OUTPUT"
-        echo "OUTCOME=${{ steps.stale-branches.outcome }}"         >> "$GITHUB_OUTPUT"
-        echo "OUTPUTS=${{ toJson(steps.stale-branches.outputs) }}" >> "$GITHUB_OUTPUT"
+        echo "WF_NAME=stale-branch"                        >> "$GITHUB_OUTPUT"
+        echo "OUTCOME=${{ steps.stale-branches.outcome }}" >> "$GITHUB_OUTPUT"
 
   notify-slack:
     if: always()
@@ -100,16 +94,14 @@ jobs:
         token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
         payload: |
           channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
-          text: "🗑️ *Workflow - ${{ github.action_status }}*\n
-              *URL:* https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n
+          text: "
+              *Workflow: ${{ github.workflow }} 🗑️*\n
               ```
+              URL     : https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n\n
               Job     : ${{ needs.stale-workflow.outputs.WF_NAME }}\n
               Result  : ${{ needs.stale-workflow.outputs.OUTCOME }}\n
-              Output  : ${{ needs.stale-workflow.outputs.OUTPUTS }}\n\n
               Job     : ${{ needs.stale-issue-pr.outputs.WF_NAME }}\n
               Result  : ${{ needs.stale-issue-pr.outputs.OUTCOME }}\n
-              Output  : ${{ needs.stale-issue-pr.outputs.OUTPUTS }}\n\n
               Job     : ${{ needs.stale-branch.outputs.WF_NAME }}\n
               Result  : ${{ needs.stale-branch.outputs.OUTCOME }}\n
-              Output  : ${{ needs.stale-branch.outputs.OUTPUTS }}\n\n
               ```"
