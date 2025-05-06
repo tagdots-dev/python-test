@@ -8,7 +8,7 @@ on:
 
 jobs:
   # https://github.com/Mattraks/delete-workflow-runs
-  stale-workflows:
+  stale-workflow:
     runs-on: ubuntu-latest
     steps:
     - id: stale-workflows
@@ -22,7 +22,7 @@ jobs:
     - shell: bash
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: |
-        echo "${{ toJson(github) }}"
+        echo "${{ toJson(steps.stale-workflows.outputs) }}"
 
     - name: Post message to Slack
       uses: slackapi/slack-github-action@v2
@@ -34,7 +34,7 @@ jobs:
           text: "🗑️ JOB: ${{ github.job }} - ${{ steps.stale-workflows.outcome }}"
 
   # https://github.com/actions/stale
-  stale-issues-prs:
+  stale-issue-pr:
     runs-on: ubuntu-latest
     steps:
     - id: stale-issues-prs
@@ -47,7 +47,7 @@ jobs:
     - shell: bash
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: |
-        echo "${{ toJson(github) }}"
+        echo "${{ toJson(steps.stale-issues-prs.outputs) }}"
 
     - name: Post message to Slack
       uses: slackapi/slack-github-action@v2
@@ -59,7 +59,7 @@ jobs:
           text: "🗑️ JOB: ${{ github.job }} - ${{ steps.stale-issues-prs.outcome }}"
 
   # https://github.com/crs-k/stale-branches
-  stale-branches:
+  stale-branch:
     runs-on: ubuntu-latest
     steps:
     - id: stale-branches
@@ -73,7 +73,7 @@ jobs:
     - shell: bash
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
       run: |
-        echo "${{ toJson(github) }}"
+        echo "${{ toJson(steps.stale-branches.outputs) }}"
 
     - name: Post message to Slack
       uses: slackapi/slack-github-action@v2
