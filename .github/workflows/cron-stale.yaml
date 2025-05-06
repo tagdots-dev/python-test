@@ -8,7 +8,7 @@ on:
 
 jobs:
   # https://github.com/Mattraks/delete-workflow-runs
-  stale-workflow:
+  stale-workflows:
     runs-on: ubuntu-latest
 
     outputs:
@@ -32,7 +32,7 @@ jobs:
         echo "OUTCOME=${{ steps.stale-workflows.outcome }}" >> "$GITHUB_OUTPUT"
 
   # https://github.com/actions/stale
-  stale-issue-pr:
+  stale-issues-prs:
     runs-on: ubuntu-latest
 
     outputs:
@@ -56,7 +56,7 @@ jobs:
 
 
   # https://github.com/crs-k/stale-branches
-  stale-branch:
+  stale-branches:
     runs-on: ubuntu-latest
 
     outputs:
@@ -81,7 +81,7 @@ jobs:
 
   notify-slack:
     if: always()
-    needs: [stale-workflow, stale-issue-pr, stale-branch]
+    needs: [stale-workflows, stale-issues-prs, stale-branches]
 
     runs-on: ubuntu-latest
 
@@ -98,10 +98,10 @@ jobs:
               *:wastebasket: workflow: ${{ github.workflow }}*
               ```
               URL     : https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n
-              Job     : ${{ needs.stale-workflow.outputs.JB_NAME }}\n
-              Result  : ${{ needs.stale-workflow.outputs.OUTCOME }}\n
-              Job     : ${{ needs.stale-issue-pr.outputs.JB_NAME }}\n
-              Result  : ${{ needs.stale-issue-pr.outputs.OUTCOME }}\n
-              Job     : ${{ needs.stale-branch.outputs.JB_NAME }}\n
-              Result  : ${{ needs.stale-branch.outputs.OUTCOME }}\n
+              Job     : ${{ needs.stale-workflows.outputs.JB_NAME }}\n
+              Result  : ${{ needs.stale-workflows.outputs.OUTCOME }}\n
+              Job     : ${{ needs.stale-issues-prs.outputs.JB_NAME }}\n
+              Result  : ${{ needs.stale-issues-prs.outputs.OUTCOME }}\n
+              Job     : ${{ needs.stale-branches.outputs.JB_NAME }}\n
+              Result  : ${{ needs.stale-branches.outputs.OUTCOME }}\n
               ```"
