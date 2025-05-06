@@ -10,9 +10,6 @@ jobs:
   # https://github.com/Mattraks/delete-workflow-runs
   stale-workflow:
     runs-on: ubuntu-latest
-    permissions:
-      actions: write
-      contents: read
     steps:
       - id: stale-workflows
         uses: Mattraks/delete-workflow-runs@v2
@@ -29,7 +26,7 @@ jobs:
           token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
           payload: |
             channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
-            text: "🗑️ *Job: ${{ github.job }} - ${{ steps.stale-workflows.outcome }}*\n\n```${{ toJson(steps.stale-workflows.outputs) }}```"
+            text: "🗑️ *Job: ${{ github.job }} - ${{ steps.stale-workflows.outcome }}*\n\n```${{ toJson(steps) }}```"
 
   # https://github.com/actions/stale
   stale-issue-pr:
@@ -49,7 +46,7 @@ jobs:
         token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
         payload: |
           channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
-          text: "🗑️ *Job: ${{ github.job }} - ${{ steps.stale-issues-pr.outcome }}*\n\n```${{ toJson(steps.stale-issues-pr.outputs) }}```"
+          text: "🗑️ *Job: ${{ github.job }} - ${{ steps.stale-issues-pr.outcome }}*\n\n```${{ toJson(steps) }}```"
 
   # https://github.com/crs-k/stale-branches
   stale-branches:
@@ -70,4 +67,4 @@ jobs:
         token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
         payload: |
           channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
-          text: "🗑️ *Job: ${{ github.job }} - ${{ steps.stale-branches.outcome }}*\n\n```${{ toJson(steps.stale-branches.outputs) }}```"
+          text: "🗑️ *Job: ${{ github.job }} - ${{ steps.stale-branches.outcome }}*\n\n```${{ toJson(steps) }}```"
