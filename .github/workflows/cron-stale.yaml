@@ -29,7 +29,7 @@ jobs:
           token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
           payload: |
             channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
-            text: "🗑️ *${{ github.event.workflow_run.name }} Workflow - ${{ github.job }} - ${{ steps.stale-workflows.outcome }} Run*\n\n```${{ steps.stale-workflows.outputs }}```"
+            text: "🗑️ *Job: ${{ github.job }} - ${{ steps.stale-workflows.outcome }}*\n\n```${{ steps.stale-workflows.outputs }}```"
 
   # https://github.com/actions/stale
   stale-issue-pr:
@@ -49,7 +49,7 @@ jobs:
         token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
         payload: |
           channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
-          text: "🗑️ *${{ github.event.workflow_run.name }} Workflow - ${{ github.job }} - ${{ steps.stale-issues-pr.outcome }} Run*\n\n```${{ steps.stale-issues-pr.outputs }}```"
+          text: "🗑️ *Job: ${{ github.job }} - ${{ steps.stale-issues-pr.outcome }}*\n\n```${{ steps.stale-issues-pr.outputs }}```"
 
   # https://github.com/crs-k/stale-branches
   stale-branches:
@@ -70,4 +70,4 @@ jobs:
         token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
         payload: |
           channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
-          text: "🗑️ *${{ github.event.workflow_run.name }} Workflow - ${{ github.job }} - ${{ steps.stale-branches.outcome }} Run*\n\n```${{ steps.stale-branches.outputs }}```"
+          text: "🗑️ *Job: ${{ github.job }} - ${{ steps.stale-branches.outcome }}*\n\n```${{ steps.stale-branches.outputs }}```"
