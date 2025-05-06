@@ -43,9 +43,9 @@ jobs:
     - id: stale-issues-prs
       uses: actions/stale@v9
       with:
-        stale-issue-message: 'This issue is stale because it has been open 30 days with no activity. Remove stale label or comment or this will be closed in 5 days.'
-        days-before-stale: 2
-        days-before-close: 1
+        stale-issue-message: 'This issue is stale because it has been open 14 days with no activity. Remove stale label or comment or this will be closed in 5 days.'
+        days-before-stale: 14
+        days-before-close: 5
 
     - shell: bash
       # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
@@ -53,7 +53,6 @@ jobs:
       run: |
         echo "JB_NAME=stale-issue-pr"                        >> "$GITHUB_OUTPUT"
         echo "OUTCOME=${{ steps.stale-issues-prs.outcome }}" >> "$GITHUB_OUTPUT"
-
 
   # https://github.com/crs-k/stale-branches
   stale-branches:
@@ -68,8 +67,8 @@ jobs:
       uses: crs-k/stale-branches@v7.0.1
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        days-before-stale: 30
-        days-before-delete: 45
+        days-before-stale: 14
+        days-before-delete: 21
         pr-check: true
 
     - shell: bash
