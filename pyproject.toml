@@ -1,7 +1,7 @@
 [build-system]
 build-backend = "setuptools.build_meta"
 
-requires = [ "setuptools>=77.0.1", "wheel" ]
+requires = [ "setuptools", "wheel" ]
 
 [project]
 name = "pkg-15903"
@@ -24,13 +24,12 @@ classifiers = [
 
 dependencies = [
   "click==8.1.8",
-  "click-option-group==0.5.6",
-  "pre-commit==4.2",
+  "click-option-group==0.5.7",
   "requests==2.32.3",
-  "setuptools==77.0.1",
-  "virtualenv==20.29.3",
+  "setuptools==78.1",
+  "virtualenv==20.30",
 ]
-optional-dependencies.test = [ "build", "commitizen", "coverage", "flake8", "isort", "pyscan-rs", "twine" ]
+optional-dependencies.test = [ "commitizen", "coverage", "flake8", "isort", "pre-commit" ]
 
 urls.Changelog = "https://www.notavailable.com/changelog"
 urls.Documentation = "https://www.notavailable.com/doc"
