@@ -19,7 +19,7 @@ env:
 jobs:
 
   push-git-tag:
-    # ISSUE - failed-CI release branch, if merged, can continue through this CD workflow
+    # ALERT!! - failed-CI release branch, if merged, can continue through this CD workflow
     if: ${{ startsWith(github.head_ref, 'release/') && github.event.pull_request.merged == true }}
     runs-on: ubuntu-latest
 
