@@ -32,13 +32,13 @@ jobs:
   build-test:
     uses: ./.github/workflows/reusable-build-test.yaml
 
-  dep:
+  dependency:
     uses: ./.github/workflows/reusable-dependency-review.yaml
 
   validate-release:
     if: ${{ startsWith(github.head_ref, 'release/') }}
 
-    needs: [pre-commit, build-test, dep]
+    needs: [pre-commit, build-test, dependency]
 
     runs-on: ubuntu-latest
 
