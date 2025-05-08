@@ -4,9 +4,13 @@ updates:
     directory: /
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 0
+    open-pull-requests-limit: 5
+    group:
+      github-actions:
+        patterns:
+          - "*"
     commit-message:
-      prefix: "[GHA-SEC-UPDATES] "
+      prefix: "[GITHUB-ACTIONS] "
     rebase-strategy: "disabled"
     allow:
       - dependency-type: "direct"
@@ -16,9 +20,13 @@ updates:
     directory: /
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 0
+    open-pull-requests-limit: 5
+    group:
+      pip:
+        patterns:
+          - "*"
     commit-message:
-      prefix: "[PIP-SEC-UPDATES] "
+      prefix: "[PIP] "
     rebase-strategy: "disabled"
     versioning-strategy: increase
     allow:
@@ -29,9 +37,13 @@ updates:
     directory: /
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 0
+    open-pull-requests-limit: 5
+    group:
+      terraform:
+        patterns:
+          - "*"
     commit-message:
-      prefix: "[TF-SEC-UPDATES] "
+      prefix: "[TERRAFORM] "
     rebase-strategy: "disabled"
     allow:
       - dependency-type: "direct"
