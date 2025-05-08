@@ -26,8 +26,8 @@ dependencies = [
   "click==8.1.8",
   "click-option-group==0.5.7",
   "requests==2.32.3",
-  "setuptools==78.1",
-  "virtualenv==20.30",
+  "setuptools==80.3.1",
+  "virtualenv==20.31.2",
 ]
 optional-dependencies.test = [ "commitizen", "coverage", "flake8", "isort", "pre-commit" ]
 
