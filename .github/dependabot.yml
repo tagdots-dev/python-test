@@ -33,18 +33,18 @@ updates:
       - dependency-type: "direct"
       - dependency-type: "indirect"
 
-  - package-ecosystem: terraform
-    directory: /
-    schedule:
-      interval: "daily"
-    open-pull-requests-limit: 5
-    groups:
-      terraform:
-        patterns:
-          - "*"
-    commit-message:
-      prefix: "[TERRAFORM] "
-    rebase-strategy: "disabled"
-    allow:
-      - dependency-type: "direct"
-      - dependency-type: "indirect"
+  # - package-ecosystem: terraform
+  #   directory: /
+  #   schedule:
+  #     interval: "daily"
+  #   open-pull-requests-limit: 5
+  #   groups:
+  #     terraform:
+  #       patterns:
+  #         - "*"
+  #   commit-message:
+  #     prefix: "[TERRAFORM] "
+  #   rebase-strategy: "disabled"
+  #   allow:
+  #     - dependency-type: "direct"
+  #     - dependency-type: "indirect"
