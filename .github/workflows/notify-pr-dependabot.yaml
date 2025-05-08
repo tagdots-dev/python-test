@@ -18,11 +18,16 @@ on:  # yamllint disable-line rule:truthy
 jobs:
 
   notify-slack:
-    if: ${{ startsWith(github.actor, 'dependabot') }}
+    if: ${{ startsWith(github.actor, 'dependabot')  == true }}
 
     runs-on: ubuntu-latest
 
     steps:
+
+    - shell: bash
+      # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
+      run: |
+        echo "${{ toJson(github) }}"
 
     # - shell: bash
     #   # checkov:skip=CKV_GHA_2:Ensure run commands are not vulnerable to shell injection
