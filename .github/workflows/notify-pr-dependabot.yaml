@@ -1,11 +1,11 @@
 ---
 # NOTE: this file is managed by terraform
 
-name: notify-pr
+name: notify-pr-dependabot
 
 on:  # yamllint disable-line rule:truthy
 
-  pull_request:
+  pull_request_target:
     types:
       - edited
       - opened
