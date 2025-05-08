@@ -5,7 +5,7 @@ updates:
     schedule:
       interval: "daily"
     open-pull-requests-limit: 5
-    group:
+    groups:
       github-actions:
         patterns:
           - "*"
@@ -21,7 +21,7 @@ updates:
     schedule:
       interval: "daily"
     open-pull-requests-limit: 5
-    group:
+    groups:
       pip:
         patterns:
           - "*"
@@ -38,7 +38,7 @@ updates:
     schedule:
       interval: "daily"
     open-pull-requests-limit: 5
-    group:
+    groups:
       terraform:
         patterns:
           - "*"
