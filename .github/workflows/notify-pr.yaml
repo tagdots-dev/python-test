@@ -5,15 +5,15 @@ name: notify-pr
 
 on:  # yamllint disable-line rule:truthy
 
-  # pull_request:
-  #   types:
-  #     - edited
-  #     - opened
-  #     - reopened
-  #     - synchronize
+  pull_request:
+    types:
+      - edited
+      - opened
+      - reopened
+      - synchronize
 
-  #   branches:
-  #     - main
+    branches:
+      - main
 
   pull_request_target:
     types:
