@@ -15,6 +15,10 @@ on:  # yamllint disable-line rule:truthy
     branches:
       - main
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
 
   notify-slack:
