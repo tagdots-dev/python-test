@@ -18,7 +18,7 @@ on:  # yamllint disable-line rule:truthy
 jobs:
 
   notify-slack:
-    if: startsWith(github.actor, 'dependabot') == false
+    if: startsWith(github.actor, 'dependabot') != true
 
     runs-on: ubuntu-latest
 
