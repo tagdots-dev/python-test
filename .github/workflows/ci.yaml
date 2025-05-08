@@ -32,12 +32,14 @@ jobs:
   build-test:
     uses: ./.github/workflows/reusable-build-test.yaml
 
+  # need to remove dependency on private repos
   dependency:
     uses: ./.github/workflows/reusable-dependency-review.yaml
 
   validate-release:
     if: ${{ startsWith(github.head_ref, 'release/') }}
 
+    # need to remove dependency on private repos
     needs: [pre-commit, build-test, dependency]
 
     runs-on: ubuntu-latest
