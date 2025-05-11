@@ -1,0 +1,13 @@
+CHANGELOG.md
+LICENSE
+Makefile
+README.md
+SECURITY.md
+dist
+file-test
+htmlcov
+parts
+pyproject.toml
+setup.cfg
+src
+tests
