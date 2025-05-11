@@ -1,0 +1,14 @@
+total 56
+-rw-r--r--   1 andre  staff   997 May  8 10:40 CHANGELOG.md
+-rw-r--r--   1 andre  staff  1114 May 10 21:53 LICENSE
+-rw-r--r--   1 andre  staff  1747 May 10 21:53 Makefile
+-rw-r--r--   1 andre  staff   216 May  8 10:35 README.md
+-rw-r--r--   1 andre  staff  1566 May  2 10:51 SECURITY.md
+drwxr-xr-x   4 andre  staff   128 May  6 20:50 dist
+drwxr-xr-x  13 andre  staff   416 Apr 18 21:34 htmlcov
+-rw-r--r--   1 andre  staff     0 May 10 21:58 jira-test
+drwxr-xr-x  14 andre  staff   448 May  4 07:56 parts
+-rw-r--r--   1 andre  staff  1668 May  8 13:47 pyproject.toml
+-rw-r--r--   1 andre  staff   349 Apr 20 16:07 setup.cfg
+drwxr-xr-x   4 andre  staff   128 Apr 16 14:39 src
+drwxr-xr-x   5 andre  staff   160 May  7 23:43 tests
