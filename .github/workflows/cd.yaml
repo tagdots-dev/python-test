@@ -16,6 +16,9 @@ env:
   PACKAGE_NAME: pkg-15903
   PYTHON_VERSION: '3.12.x'
 
+permissions:
+  contents: read
+
 jobs:
 
   push-git-tag:
@@ -27,6 +30,9 @@ jobs:
     env:
       GITHUB_HEAD_REF: ${{ github.head_ref }}
       GITHUB_SPEC_VER: ${GITHUB_HEAD_REF#release/}
+
+    permissions:
+      contents: write
 
     steps:
 
