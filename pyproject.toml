@@ -29,7 +29,7 @@ dependencies = [
   "setuptools==80.7.1",
   "virtualenv==20.31.2",
 ]
-optional-dependencies.test = [ "build", "commitizen", "coverage", "flake8", "isort", "pre-commit", "twine" ]
+optional-dependencies.test = [ "build", "commitizen", "coverage", "flake8", "isort", "pre-commit", "pyscan-rs", "twine" ]
 
 urls.Changelog = "https://www.notavailable.com/changelog"
 urls.Documentation = "https://www.notavailable.com/doc"
