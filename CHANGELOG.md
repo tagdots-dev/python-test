@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.1.22 (2025-05-20)
+
+### Fix
+
+- fix tag name not passed from ENV VAR on workflow
+
 ## 0.1.21 (2025-05-20)
 
 ### Fix

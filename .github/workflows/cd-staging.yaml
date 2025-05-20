@@ -27,8 +27,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GITHUB_HEAD_REF: ${{ github.head_ref }}
-      GITHUB_SPEC_VER: ${GITHUB_HEAD_REF#release/}
+      GITHUB_HEAD_REF: "${{ github.head_ref }}"
+      GITHUB_SPEC_VER: "${GITHUB_HEAD_REF#release/}"
 
     permissions:
       contents: write
@@ -154,7 +154,7 @@ jobs:
               *Workflow : ${{ github.workflow }} ${{ steps.get-overall-jobs-results.outputs.WORKFLOW_RESULT }}*
               ```
               URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n
-              Job: publish-git-tag   - ${{ needs.publish-git-tag.result }}\n
+              Job: push-git-tag      - ${{ needs.publish-git-tag.result }}\n
               Job: publish-TestPyPI  - ${{ needs.publish-TestPyPI.result }}\n
               Job: validate-TestPyPI - ${{ needs.validate-TestPyPI.result }}
               ```"
