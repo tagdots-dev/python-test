@@ -38,20 +38,15 @@ jobs:
         make test-install
         make build
 
-    - shell: bash
-      run: |
-        # check distributions
-        tree dist/
-        python -m twine check  dist/*
-
-    - shell: bash
-      env:
-        TWINE_USERNAME: "__token__"
-        TWINE_PASSWORD: "${{ secrets.SECRET_PYPI }}"
-        TWINE_REPOSITORY_URL: "https://upload.pypi.org/legacy/"
-      run: |
-        # Publish distributions to PyPI
-        python -m twine upload --verbose dist/*
+    - name: Publish package distributions to PyPI
+      uses: pypa/gh-action-pypi-publish@76f52bc884231f62b9a034ebfe128415bbaabdfc # v1.12.4
+      with:
+        packages-dir: dist/
+        password: ${{ secrets.SECRET_PYPI }}
+        print-hash: true
+        repository-url: https://upload.pypi.org/legacy/
+        verbose: true
+        verify-metadata: true
 
   validate-PyPI:
 
