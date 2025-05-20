@@ -33,7 +33,7 @@ jobs:
       contents: write
 
     outputs:
-      VERSION: ${{ steps.set-tag.outputs.VERSION }}}}
+      VERSION: ${{ steps.set-tag.outputs.VERSION }}
 
     steps:
 
@@ -157,8 +157,8 @@ jobs:
           channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_CICD }}"
           text: "
               *Repository: ${{ github.repository }}*\n
-              *Workflow : ${{ github.workflow }} ${{ steps.get-overall-jobs-results.outputs.WORKFLOW_RESULT }}*
-              *Tag Name : ${{ needs.push-git-tag.outputs.VERSION }}*
+              *Workflow : ${{ github.workflow }} ${{ steps.get-overall-jobs-results.outputs.WORKFLOW_RESULT }}*\n
+              *Tag Name : ${{ needs.push-git-tag.outputs.VERSION }}*\n
               ```
               URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n
               Job: push-git-tag      - ${{ needs.push-git-tag.result }}\n
