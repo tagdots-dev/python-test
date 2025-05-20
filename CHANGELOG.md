@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 0.1.21 (2025-05-20)
+
+### Fix
+
+- address coddql finding
+- update optional dependencies and add tool.pyproject-fmt section
+- ossf initiative to pin hash to GitHub Actions
+
+### Refactor
+
+- break up CD into staging and production
+
 ## 0.1.20 (2025-05-15)
 
 ## 0.1.19 (2025-05-08)
