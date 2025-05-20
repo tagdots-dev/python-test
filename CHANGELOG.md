@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.1.27 (2025-05-20)
+
+### Fix
+
+- fix missing slack messages
+
 ## 0.1.26 (2025-05-20)
 
 ### Fix
