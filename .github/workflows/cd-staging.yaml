@@ -154,11 +154,11 @@ jobs:
         method: chat.postMessage
         token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
         payload: |
-          channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_CICD }}"
+          channel: "${{ secrets.SECRET_SLACK_CHANNEL_CICD }}"
           text: "
               *Repository: ${{ github.repository }}*\n
               *Workflow : ${{ github.workflow }} ${{ steps.get-overall-jobs-results.outputs.WORKFLOW_RESULT }}*\n
-              *Tag Name : ${{ needs.push-git-tag.outputs.VERSION }}*\n
+              *Tag Name : ${{ needs.push-git-tag.outputs.VERSION }}*
               ```
               URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n
               Job: push-git-tag      - ${{ needs.push-git-tag.result }}\n

@@ -108,7 +108,7 @@ jobs:
           text: "
               *Repository: ${{ github.repository }}*\n
               *Workflow : ${{ github.workflow }} ${{ steps.get-overall-jobs-results.outputs.WORKFLOW_RESULT }}*\n
-              *Tag Name : ${{ github.tag_name }}\n
+              *Tag Name : ${{ github.tag_name }}*
               ```
               URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n
               Job: publish-PyPI  - ${{ needs.publish-PyPI.result }}\n
