@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.1.28 (2025-05-20)
+
+### Fix
+
+- fix error in CD production where it could not find dist folder
+
 ## 0.1.27 (2025-05-20)
 
 ### Fix
