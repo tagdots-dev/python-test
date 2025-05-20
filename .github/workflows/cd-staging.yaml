@@ -144,6 +144,8 @@ jobs:
         # get overall result from all of the previous jobs
         if "${{ needs.push-git-tag.result == 'success' && needs.publish-TestPyPI.result == 'success' && needs.validate-TestPyPI.result == 'success' }}"; then
           echo "WORKFLOW_RESULT=:white_check_mark:" >> "$GITHUB_OUTPUT"
+        elif "${{ needs.push-git-tag.result == 'skipped' && needs.publish-TestPyPI.result == 'skipped' && needs.validate-TestPyPI.result == 'skipped' }}"; then
+          echo "WORKFLOW_RESULT=:fast_forward:" >> "$GITHUB_OUTPUT"
         else
           echo "WORKFLOW_RESULT=:no_entry:" >> "$GITHUB_OUTPUT"
         fi
