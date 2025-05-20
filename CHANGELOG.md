@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.1.29 (2025-05-20)
+
+### Fix
+
+- fix version from tag_name to ref_name
+
 ## 0.1.28 (2025-05-20)
 
 ### Fix
