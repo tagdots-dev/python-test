@@ -27,8 +27,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GITHUB_HEAD_REF: "${{ github.head_ref }}"
-      GITHUB_SPEC_VER: "${GITHUB_HEAD_REF#release/}"
+      GITHUB_HEAD_REF_TEST: ${{ github.head_ref }}
+      GITHUB_SPEC_VER_TEST: ${GITHUB_HEAD_REF_TEST#release/}
 
     permissions:
       contents: write
@@ -54,6 +54,15 @@ jobs:
       env:
         GH_TOKEN: ${{ steps.generate-token.outputs.token }}
       run: |
+        # echo env
+        echo "${{ toJson(github) }}"
+        echo "GITHUB_HEAD_REF_TEST: ${{ env.GITHUB_HEAD_REF_TEST }}"
+        echo "GITHUB_SPEC_VER_TEST: ${{ env.GITHUB_SPEC_VER_TEST }}"
+
+        # push git tag
+        GITHUB_HEAD_REF=${{ github.head_ref }}
+        GITHUB_SPEC_VER=${GITHUB_HEAD_REF#release/}
+
         # create and push a lightweight tag
         git tag ${GITHUB_SPEC_VER}
         git push origin ${GITHUB_SPEC_VER}
