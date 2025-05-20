@@ -145,6 +145,7 @@ jobs:
 
     outputs:
       WORKFLOW_RESULT: ${{ steps.get-previous-jobs-results.outputs.WORKFLOW_RESULT }}
+      TAG_NAME: ${{ steps.get-previous-jobs-results.outputs.TAG_NAME }}
 
     steps:
 
@@ -161,6 +162,13 @@ jobs:
           echo "WORKFLOW_RESULT=:no_entry:" >> "$GITHUB_OUTPUT"
         fi
 
+        # get tag name
+        if ${{ needs.push-git-tag.outputs.VERSION == '' }}; then
+          echo "TAG_NAME=not-available" >> "$GITHUB_OUTPUT"
+        else
+          echo "TAG_NAME=${{ needs.push-git-tag.outputs.VERSION }}" >> "$GITHUB_OUTPUT"
+        fi
+
     - name: Post message to Slack
       uses: slackapi/slack-github-action@b0fa283ad8fea605de13dc3f449259339835fc52 # v2.1.0
       with:
@@ -171,7 +179,7 @@ jobs:
           text: "
               *Repository: ${{ github.repository }}*\n
               *Workflow : ${{ github.workflow }} ${{ steps.get-overall-jobs-results.outputs.WORKFLOW_RESULT }}*\n
-              *Tag Name : ${{ needs.push-git-tag.outputs.VERSION }}*
+              *Tag Name : ${{ steps.get-overall-jobs-results.outputs.TAG_NAME }}*
               ```
               URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n
               Job: push-git-tag      - ${{ needs.push-git-tag.result }}\n
