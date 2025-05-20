@@ -34,9 +34,13 @@ jobs:
 
     - shell: bash
       run: |
+        # run it
+        echo "${{ toJson(github) }}"
+
+    - shell: bash
+      run: |
         # install build dependencies
-        make build
-        pip install -U twine
+        make test-install
 
     - shell: bash
       run: |

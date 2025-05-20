@@ -32,6 +32,9 @@ jobs:
     permissions:
       contents: write
 
+    outputs:
+      VERSION: ${{ steps.set-tag.outputs.VERSION }}}}
+
     steps:
 
     - name: Generate a token from Github App
@@ -53,112 +56,112 @@ jobs:
       env:
         GH_TOKEN: ${{ steps.generate-token.outputs.token }}
       run: |
-        # run it
+        # parse out the version
         GITHUB_SPEC_VER=${GITHUB_HEAD_REF#release/}
-        echo "$GITHUB_SPEC_VER"
-        echo "${GITHUB_SPEC_VER}"
+        echo "VERSION=${GITHUB_SPEC_VER}" >> "$GITHUB_OUTPUT"
 
-        # # create and push a lightweight tag
-        # git tag ${GITHUB_SPEC_VER}
-        # git push origin ${GITHUB_SPEC_VER}
+        # create and push a lightweight tag
+        git tag ${GITHUB_SPEC_VER}
+        git push origin ${GITHUB_SPEC_VER}
 
-  # publish-TestPyPI:
+  publish-TestPyPI:
 
-  #   needs: [push-git-tag]
+    needs: [push-git-tag]
 
-  #   runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-  #   steps:
+    steps:
 
-  #   - name: Checkout source code
-  #     uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+    - name: Checkout source code
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-  #   - name: Setup Python ${{ env.PYTHON_VERSION }}
-  #     uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
-  #     with:
-  #       python-version: ${{ env.PYTHON_VERSION }}
+    - name: Setup Python ${{ env.PYTHON_VERSION }}
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
 
-  #   - shell: bash
-  #     run: |
-  #       # install build dependencies
-  #       make build
-  #       python -m pip install -U twine
+    - shell: bash
+      run: |
+        # install build dependencies
+        make build
+        python -m pip install -U twine
 
-  #   - shell: bash
-  #     run: |
-  #       # check distributions
-  #       tree dist/
-  #       python -m twine check  dist/*
+    - shell: bash
+      run: |
+        # check distributions
+        tree dist/
+        python -m twine check  dist/*
 
-  #   - shell: bash
-  #     env:
-  #       TWINE_USERNAME: "__token__"
-  #       TWINE_PASSWORD: "${{ secrets.SECRET_PYPITEST }}"
-  #       TWINE_REPOSITORY_URL: "https://test.pypi.org/legacy/"
-  #     run: |
-  #       # Publish distributions to TestPyPI
-  #       python -m twine upload --verbose dist/*
+    - shell: bash
+      env:
+        TWINE_USERNAME: "__token__"
+        TWINE_PASSWORD: "${{ secrets.SECRET_PYPITEST }}"
+        TWINE_REPOSITORY_URL: "https://test.pypi.org/legacy/"
+      run: |
+        # Publish distributions to TestPyPI
+        python -m twine upload --verbose dist/*
 
-  # validate-TestPyPI:
+  validate-TestPyPI:
 
-  #   needs: [publish-TestPyPI]
+    needs: [publish-TestPyPI]
 
-  #   runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-  #   steps:
+    steps:
 
-  #   - name: Checkout source code
-  #     uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+    - name: Checkout source code
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-  #   - name: Setup Python ${{ env.PYTHON_VERSION }}
-  #     uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
-  #     with:
-  #       python-version: ${{ env.PYTHON_VERSION }}
+    - name: Setup Python ${{ env.PYTHON_VERSION }}
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
 
-  #   - shell: bash
-  #     env:
-  #       INDEX_URL: "https://test.pypi.org/simple/"
-  #       EXTRA_INDEX_URL: "https://pypi.org/simple/"
-  #     run: |
-  #       # install package from TestPyPI and run app to show version
-  #       pip install ${{ env.PACKAGE_NAME }} --index-url ${{ env.INDEX_URL }} --extra-index-url ${{ env.EXTRA_INDEX_URL }}
-  #       ${{ env.PACKAGE_NAME }} --version
+    - shell: bash
+      env:
+        INDEX_URL: "https://test.pypi.org/simple/"
+        EXTRA_INDEX_URL: "https://pypi.org/simple/"
+      run: |
+        # install package from TestPyPI and run app to show version
+        pip install ${{ env.PACKAGE_NAME }} --index-url ${{ env.INDEX_URL }} --extra-index-url ${{ env.EXTRA_INDEX_URL }}
+        ${{ env.PACKAGE_NAME }} --version
 
-  # notify-slack:
-  #   if: always()
-  #   needs: [push-git-tag, publish-TestPyPI, validate-TestPyPI]
+  notify-slack:
+    if: always()
+    needs: [push-git-tag, publish-TestPyPI, validate-TestPyPI]
 
-  #   runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-  #   outputs:
-  #     WORKFLOW_RESULT: ${{ steps.get-previous-jobs-results.outputs.WORKFLOW_RESULT }}
+    outputs:
+      WORKFLOW_RESULT: ${{ steps.get-previous-jobs-results.outputs.WORKFLOW_RESULT }}
 
-  #   steps:
+    steps:
 
-  #   - name: Get Overall Jobs Results
-  #     id: get-overall-jobs-results
-  #     shell: bash
-  #     run: |
-  #       # get overall result from all of the previous jobs
-  #       if "${{ needs.push-git-tag.result == 'success' && needs.publish-TestPyPI.result == 'success' && needs.validate-TestPyPI.result == 'success' }}"; then
-  #         echo "WORKFLOW_RESULT=:white_check_mark:" >> "$GITHUB_OUTPUT"
-  #       else
-  #         echo "WORKFLOW_RESULT=:no_entry:" >> "$GITHUB_OUTPUT"
-  #       fi
+    - name: Get Overall Jobs Results
+      id: get-overall-jobs-results
+      shell: bash
+      run: |
+        # get overall result from all of the previous jobs
+        if "${{ needs.push-git-tag.result == 'success' && needs.publish-TestPyPI.result == 'success' && needs.validate-TestPyPI.result == 'success' }}"; then
+          echo "WORKFLOW_RESULT=:white_check_mark:" >> "$GITHUB_OUTPUT"
+        else
+          echo "WORKFLOW_RESULT=:no_entry:" >> "$GITHUB_OUTPUT"
+        fi
 
-  #   - name: Post message to Slack
-  #     uses: slackapi/slack-github-action@b0fa283ad8fea605de13dc3f449259339835fc52 # v2.1.0
-  #     with:
-  #       method: chat.postMessage
-  #       token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
-  #       payload: |
-  #         channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_CICD }}"
-  #         text: "
-  #             *Repository: ${{ github.repository }}*\n
-  #             *Workflow : ${{ github.workflow }} ${{ steps.get-overall-jobs-results.outputs.WORKFLOW_RESULT }}*
-  #             ```
-  #             URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n
-  #             Job: push-git-tag      - ${{ needs.publish-git-tag.result }}\n
-  #             Job: publish-TestPyPI  - ${{ needs.publish-TestPyPI.result }}\n
-  #             Job: validate-TestPyPI - ${{ needs.validate-TestPyPI.result }}
-  #             ```"
+    - name: Post message to Slack
+      uses: slackapi/slack-github-action@b0fa283ad8fea605de13dc3f449259339835fc52 # v2.1.0
+      with:
+        method: chat.postMessage
+        token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
+        payload: |
+          channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_CICD }}"
+          text: "
+              *Repository: ${{ github.repository }}*\n
+              *Workflow : ${{ github.workflow }} ${{ steps.get-overall-jobs-results.outputs.WORKFLOW_RESULT }}*
+              *Tag Name : ${{ needs.push-git-tag.outputs.VERSION }}*
+              ```
+              URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n
+              Job: push-git-tag      - ${{ needs.push-git-tag.result }}\n
+              Job: publish-TestPyPI  - ${{ needs.publish-TestPyPI.result }}\n
+              Job: validate-TestPyPI - ${{ needs.validate-TestPyPI.result }}
+              ```"
