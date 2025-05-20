@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.1.31 (2025-05-20)
+
+### Refactor
+
+- propagate cd staging changes to production
+
 ## 0.1.30 (2025-05-20)
 
 ### Fix
