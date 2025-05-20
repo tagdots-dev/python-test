@@ -34,11 +34,6 @@ jobs:
 
     - shell: bash
       run: |
-        # run it
-        echo "${{ toJson(github) }}"
-
-    - shell: bash
-      run: |
         # install build dependencies
         make test-install
 
@@ -112,7 +107,8 @@ jobs:
           channel: "${{ secrets.SECRET_SLACK_CHANNEL_CICD }}"
           text: "
               *Repository: ${{ github.repository }}*\n
-              *Workflow : ${{ github.workflow }} ${{ steps.get-overall-jobs-results.outputs.WORKFLOW_RESULT }}*
+              *Workflow : ${{ github.workflow }} ${{ steps.get-overall-jobs-results.outputs.WORKFLOW_RESULT }}*\n
+              *Tag Name : ${{ github.tag_name }}\n
               ```
               URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n
               Job: publish-PyPI  - ${{ needs.publish-PyPI.result }}\n
