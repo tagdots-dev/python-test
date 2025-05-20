@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 0.1.30 (2025-05-20)
+
+### Fix
+
+- skipped steps on PR merge caues empty tag name
+- on CD staging workflow, skipped-all-jobs shows as failure
+- pin pip command with hash
+
+### Refactor
+
+- switch pypi publishing from shell to GHA
+
 ## 0.1.29 (2025-05-20)
 
 ### Fix
