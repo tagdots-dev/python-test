@@ -86,9 +86,11 @@ jobs:
         make test-install
         make build
 
+    # https://github.com/marketplace/actions/pypi-publish
     - name: Publish package distributions to TestPyPI
       uses: pypa/gh-action-pypi-publish@76f52bc884231f62b9a034ebfe128415bbaabdfc # v1.12.4
       with:
+        attestations: false
         packages-dir: dist/
         password: ${{ secrets.SECRET_PYPITEST }}
         print-hash: true
