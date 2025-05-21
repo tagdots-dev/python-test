@@ -80,7 +80,7 @@ jobs:
       run: |
         # setup file - coverage.json
         # use template.json to create/replace coverage.json
-        sed -e 's/TPL_LABEL/Coverage/g;s/TPL_LCOLOR/2e2e2e/g;s/TPL_MESSAGE/${{ steps.get-coverage-results.outputs.COV_PER }}/g;s/TPL_COLOR/2ade2a/g' template.json > coverage.json
+        sed -e 's/TPL_LABEL/Code Coverage/g;s/TPL_LCOLOR/2e2e2e/g;s/TPL_MESSAGE/${{ steps.get-coverage-results.outputs.COV_PER }}/g;s/TPL_COLOR/2ade2a/g' template.json > coverage.json
 
     - run: git config --global user.email "mona-lisa@tagdots.com"
     - run: git config --global user.name "Mona Lisa"
