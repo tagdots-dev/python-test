@@ -73,7 +73,7 @@ jobs:
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # 4.2.2
       with:
         ref: coverage
-    
+
     - name: setup file - coverage.json
       # create coverage.json from template.json
       # { "schemaVersion": 1, "label": "TPL_LABEL", "labelColor": "TPL_LCOLOR", "message": "TPL_MESSAGE", "color": "TPL_COLOR" }
