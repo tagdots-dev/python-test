@@ -75,7 +75,7 @@ jobs:
         ref: badge
 
     - name: Setup file - coverage.json
-      # create coverage.json from template.json
+      # create/update coverage.json from template.json
       # { "schemaVersion": 1, "label": "TPL_LABEL", "labelColor": "TPL_LCOLOR", "message": "TPL_MESSAGE", "color": "TPL_COLOR" }
       env:
         LABEL: "Code Coverage"
@@ -85,7 +85,7 @@ jobs:
       run: |
         # setup file - coverage.json
         # use template.json to create/replace coverage.json
-        sed -e 's/TPL_LABEL/$LABEL/g;s/TPL_LCOLOR/$LCOLOR/g;s/TPL_MESSAGE/$MESSAGE/g;s/TPL_COLOR/$COLOR/g' template.json > coverage.json
+        sed -e 's/TPL_LABEL/${{ env.LABEL }}/g;s/TPL_LCOLOR/${{ env.LCOLOR }}/g;s/TPL_MESSAGE/${{ env.MESSAGE }}/g;s/TPL_COLOR/${{ env.COLOR }}/g' template.json > coverage.json
 
     - name: Push commits to badge
       run: |
