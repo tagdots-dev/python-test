@@ -1,4 +1,4 @@
-name: coverage
+name: cron-coverage
 
 on:
   schedule:
@@ -72,9 +72,9 @@ jobs:
     - name: Checkout source code of coverage branch
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # 4.2.2
       with:
-        ref: coverage
+        ref: badge
 
-    - name: setup file - coverage.json
+    - name: Setup file - coverage.json
       # create coverage.json from template.json
       # { "schemaVersion": 1, "label": "TPL_LABEL", "labelColor": "TPL_LCOLOR", "message": "TPL_MESSAGE", "color": "TPL_COLOR" }
       run: |
@@ -82,11 +82,14 @@ jobs:
         # use template.json to create/replace coverage.json
         sed -e 's/TPL_LABEL/Code Coverage/g;s/TPL_LCOLOR/2e2e2e/g;s/TPL_MESSAGE/${{ steps.get-coverage-results.outputs.COV_PER }}/g;s/TPL_COLOR/2ade2a/g' template.json > coverage.json
 
-    - run: git config --global user.email "mona-lisa@tagdots.com"
-    - run: git config --global user.name "Mona Lisa"
-    - run: git add coverage.json
-    - run: git commit -m 'create/update coverage.json'
-    - run: git push -u origin coverage
+    - name: Push commits to badge
+      run: |
+        # push commits to badge
+        git config --global user.email "mona-lisa@tagdots.com"
+        git config --global user.name "Mona Lisa"
+        git add coverage.json
+        git commit -m 'create/update coverage.json'
+        git push -u origin badge
 
   notify-slack:
     if: always()
