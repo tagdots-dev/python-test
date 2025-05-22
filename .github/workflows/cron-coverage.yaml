@@ -69,7 +69,7 @@ jobs:
         overwrite: true
         compression-level: 6
 
-    - name: Checkout source code of coverage branch
+    - name: Checkout source code of badge branch
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # 4.2.2
       with:
         ref: badge
@@ -77,10 +77,15 @@ jobs:
     - name: Setup file - coverage.json
       # create coverage.json from template.json
       # { "schemaVersion": 1, "label": "TPL_LABEL", "labelColor": "TPL_LCOLOR", "message": "TPL_MESSAGE", "color": "TPL_COLOR" }
+      env:
+        LABEL: "Code Coverage"
+        LCOLOR: "2e2e2e" # hex color: Dark Charcoal
+        MESSAGE: "${{ steps.get-coverage-results.outputs.COV_PER }}"
+        COLOR: "2986CC"  # hex color: Muted and Cold Shade of blue
       run: |
         # setup file - coverage.json
         # use template.json to create/replace coverage.json
-        sed -e 's/TPL_LABEL/Code Coverage/g;s/TPL_LCOLOR/2e2e2e/g;s/TPL_MESSAGE/${{ steps.get-coverage-results.outputs.COV_PER }}/g;s/TPL_COLOR/2ade2a/g' template.json > coverage.json
+        sed -e 's/TPL_LABEL/$LABEL/g;s/TPL_LCOLOR/$LCOLOR/g;s/TPL_MESSAGE/$MESSAGE/g;s/TPL_COLOR/$COLOR/g' template.json > coverage.json
 
     - name: Push commits to badge
       run: |
