@@ -32,7 +32,8 @@ jobs:
     - shell: bash
       run: |
         # install package
-        make test-install
+        python -m pip install -U pip
+        python -m pip install pre_commit pyscan-rs
 
     - shell: bash
       run: |
