@@ -89,7 +89,7 @@ jobs:
         git config --global user.name "Mona Lisa"
         git add coverage.json
         git commit -m 'create/update coverage.json'
-        git push -u origin coverage
+        git push -u origin badge
 
   notify-slack:
     if: always()
