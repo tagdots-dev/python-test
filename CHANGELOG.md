@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 0.1.32 (2025-05-25)
+
+### Feat
+
+- add coverage to test badge
+
+### Fix
+
+- sed to pick up env var properly
+- add env variables to maange shields endpoint attributes
+- add git account identity to coverage
+
+### Refactor
+
+- rename coverage workflow and branch
+
 ## 0.1.31 (2025-05-20)
 
 ### Refactor
