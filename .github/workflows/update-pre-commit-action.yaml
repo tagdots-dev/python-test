@@ -1,9 +1,9 @@
-name: upc-action-test
+name: update-pre-commit-action
 
 on:
-  # on schedule: e.g. every day at 5:30 pm UTC
+  # on schedule: e.g. every day at 11:10 pm UTC
   schedule:
-    - cron: '30 17 * * *'
+    - cron: '10 23 * * *'
 
   # on demand
   workflow_dispatch:
@@ -22,9 +22,15 @@ jobs:
     steps:
     - name: Run update-pre-commit
       id: update-pre-commit
+
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      uses: tagdots-dev/upc-action-test@ceebb82af3610a6f8b505a21525cc1a3fb4aa59e # 1.0.0
+
+      # https://github.com/tagdots/update-pre-commit-action/releases
+      # - replace XXXXXXXXXXXXXXX with full commit hash from the latest release
+      # - replace 1.0.0           with the corresponding release tag name
+      uses: tagdots/update-pre-commit-action@cb6363823906dcc5d6b0920eb161d1e2114fd55e # 1.0.0
+
       with:
         file: .pre-commit-config.yaml
         dry-run: false
