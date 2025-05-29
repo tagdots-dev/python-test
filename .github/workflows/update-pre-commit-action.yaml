@@ -3,7 +3,7 @@ name: update-pre-commit-action
 on:
   # on schedule: e.g. every day at 11:10 pm UTC
   schedule:
-    - cron: '10 23 * * *'
+    - cron: '5 0 * * *'
 
   # on demand
   workflow_dispatch:
