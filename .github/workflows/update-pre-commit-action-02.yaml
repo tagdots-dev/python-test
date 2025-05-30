@@ -1,0 +1,34 @@
+name: update-pre-commit-action
+
+on:
+  # on schedule: e.g. every day at 5:30 pm UTC
+  schedule:
+    - cron: '45 0 * * *'
+
+  # on demand
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  update-pre-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Run update-pre-commit
+      id: update-pre-commit
+
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # https://github.com/tagdots/update-pre-commit-action/releases
+      # - replace XXXXXXXXXXXXXXX with full commit hash from the latest release
+      # - replace 1.0.0           with the corresponding release tag name
+      uses: tagdots/update-pre-commit-action@cb6363823906dcc5d6b0920eb161d1e2114fd55e # 1.0.0
+
+      with:
+        file: .pre-commit-config.yaml
+        dry-run: false
+        open-pr: false
