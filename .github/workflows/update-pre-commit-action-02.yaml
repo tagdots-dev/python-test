@@ -26,7 +26,7 @@ jobs:
       # https://github.com/tagdots/update-pre-commit-action/releases
       # - replace XXXXXXXXXXXXXXX with full commit hash from the latest release
       # - replace 1.0.0           with the corresponding release tag name
-      uses: tagdots/update-pre-commit-action@cb6363823906dcc5d6b0920eb161d1e2114fd55e # 1.0.0
+      uses: tagdots/update-pre-commit-action@2cd407af92c1c9435c6406f4e23657d3ea14dcbb # 1.0.1
 
       with:
         file: .pre-commit-config.yaml
