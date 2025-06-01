@@ -26,7 +26,7 @@ dependencies = [
   "click==8.2.1",
   "click-option-group==0.5.7",
   "requests==2.32.3",
-  "setuptools==80.8.0",
+  "setuptools==80.9.0",
   "virtualenv==20.31.2",
 ]
 optional-dependencies.test = [ "build", "commitizen", "coverage", "flake8", "isort", "pre-commit", "pyscan-rs", "twine" ]
