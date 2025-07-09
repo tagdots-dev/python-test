@@ -53,6 +53,7 @@ jobs:
         stale-issue-message: 'This issue is stale because it has been open 4 days with no activity. Remove stale label or comment or this will be closed in 3 days.'
         days-before-stale: 5
         days-before-close: 3
+        operations-per-run: 50
 
   stale-branches:
   # https://github.com/crs-k/stale-branches
