@@ -74,6 +74,8 @@ jobs:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         days-before-stale: 2
         days-before-delete: 3
+        include-protected-branches: true
+        max-issues: 50
         pr-check: false
         branches-filter-regex: '^((?!main|badge))'
 
