@@ -74,7 +74,7 @@ jobs:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         days-before-stale: 2
         days-before-delete: 3
-        pr-check: true
+        pr-check: false
         branches-filter-regex: '^((?!main|badge))'
 
   notify-slack:
