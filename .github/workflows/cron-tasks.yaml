@@ -78,9 +78,29 @@ jobs:
         pr-check: true
         repo-token: ${{ secrets.GITHUB_TOKEN }}
 
+  update-pre-commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+    - name: Run update-pre-commit
+      id: update-pre-commit
+
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      uses: tagdots/update-pre-commit-action@2cd407af92c1c9435c6406f4e23657d3ea14dcbb # 1.0.1
+
+      with:
+        file: .pre-commit-config.yaml
+        dry-run: false
+        open-pr: true
+
   notify-slack:
     if: always()
-    needs: [stale-workflows, stale-issues-prs, stale-branches]
+    needs: [stale-workflows, stale-issues-prs, stale-branches, update-pre-commit]
 
     runs-on: ubuntu-latest
 
@@ -94,7 +114,7 @@ jobs:
       shell: bash
       run: |
         # get overall result from all of the previous jobs
-        if "${{ needs.stale-workflows.result == 'success' && needs.stale-issues-prs.result == 'success' && needs.stale-branches.result == 'success' }}"; then
+        if "${{ needs.stale-workflows.result == 'success' && needs.stale-issues-prs.result == 'success' && needs.stale-branches.result == 'success' && needs.update-pre-commit.result == 'success' }}"; then
           echo "WORKFLOW_RESULT=:white_check_mark:" >> "$GITHUB_OUTPUT"
         else
           echo "WORKFLOW_RESULT=:no_entry:" >> "$GITHUB_OUTPUT"
@@ -112,7 +132,8 @@ jobs:
               *Workflow : ${{ github.workflow }} ${{ steps.get-overall-jobs-results.outputs.WORKFLOW_RESULT }}*
               ```
               URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n
-              Job: stale-workflows  - ${{ needs.stale-workflows.result }}\n
-              Job: stale-issues-prs - ${{ needs.stale-issues-prs.result }}\n
-              Job: stale-branches   - ${{ needs.stale-branches.result }}
+              Job: stale-workflows   - ${{ needs.stale-workflows.result }}\n
+              Job: stale-issues-prs  - ${{ needs.stale-issues-prs.result }}\n
+              Job: stale-branches    - ${{ needs.stale-branches.result }}\n
+              Job: update-pre-commit - ${{ needs.update-pre-commit.result }}
               ```"

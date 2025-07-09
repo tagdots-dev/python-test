@@ -1,10 +1,6 @@
 name: update-pre-commit-action
 
 on:
-  # on schedule: e.g. every day at 11:10 pm UTC
-  schedule:
-    - cron: '5 0 * * *'
-
   # on demand
   workflow_dispatch:
 
@@ -26,9 +22,6 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # https://github.com/tagdots/update-pre-commit-action/releases
-      # - replace XXXXXXXXXXXXXXX with full commit hash from the latest release
-      # - replace 1.0.0           with the corresponding release tag name
       uses: tagdots/update-pre-commit-action@2cd407af92c1c9435c6406f4e23657d3ea14dcbb # 1.0.1
 
       with:
