@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 0.1.55 (2025-07-21)
+
+### Feat
+
+- add cron-badge and update Makefile (coverage run)
+- integrate update-pre-commit to cron-tasks
+- add upc-action-test
+
+### Fix
+
+- update badges in README, correct typo on cron-badges, and remove cron-coverage
+- add operation-per-run to stale-pr
+- fix the number of days-before-stale and days-before-close
+
 ## 0.1.33 (2025-05-26)
 
 ## 0.1.32 (2025-05-25)
