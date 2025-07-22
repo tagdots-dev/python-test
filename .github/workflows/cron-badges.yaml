@@ -1,0 +1,147 @@
+name: cron-badges
+
+on:
+  schedule:
+    - cron: '30 3 * * 0'
+
+  workflow_dispatch:
+
+env:
+  PYTHON_VERSION: '3.12.x'
+
+permissions:
+  contents: read
+
+jobs:
+  coverage-badge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    outputs:
+      COV_PER: ${{ steps.get-coverage-results.outputs.COV_PER }}
+      COV_RUN: ${{ steps.get-coverage-results.outputs.COV_RUN }}
+
+    steps:
+
+    - id: checkout-source-code
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # 4.2.2
+
+    - id: setup-Python
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - id: install-python-deps
+      run: make test-install
+
+    - id: coverage-run
+      env:
+        PYTHONUNBUFFERED: "1"
+      run: make test
+
+    - id: get-coverage-results
+      run: |
+        # get coverage results
+        echo "COV_RUN=${{ steps.run-coverage.outcome }}"                  >> "$GITHUB_OUTPUT"
+        echo "COV_PER=$(coverage report | grep TOTAL | awk '{print $6}')" >> "$GITHUB_OUTPUT"
+
+    - id: upload-coverage
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        name: coverage
+        path: htmlcov/
+        if-no-files-found: error
+        retention-days: 1
+        overwrite: true
+        compression-level: 6
+
+    - id: coverage-badge
+      uses: tagdots-dev/badge-201-action@8250bef80c5e3edefc409c067dc7235b0b83352d # 1.0.0
+      with:
+        badge-name: coverage
+        label: "Code Coverage"
+        message: "${{ steps.get-coverage-results.outputs.COV_PER }}"
+
+  language-badge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - id: language-badge
+      uses: tagdots-dev/badge-201-action@8250bef80c5e3edefc409c067dc7235b0b83352d # 1.0.0
+      with:
+        badge-name: language
+        label: Language
+        message: Python
+        message-color: FFA500
+
+  license-badge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - id: license-badge
+      uses: tagdots-dev/badge-201-action@8250bef80c5e3edefc409c067dc7235b0b83352d # 1.0.0
+      with:
+        badge-name: license
+        badge-url: https://raw.githubusercontent.com/tagdots-dev/badge-201/refs/heads/main/LICENSE
+        label: License
+        message: MIT
+        message-color: FFA500
+
+  marketplace-badge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - id: marketplace-badge
+      uses: tagdots-dev/badge-201-action@8250bef80c5e3edefc409c067dc7235b0b83352d # 1.0.0
+      with:
+        badge-name: marketplace
+        badge-url: https://github.com/marketplace/actions/setup-badge-action
+        label: Marketplace
+        message: setup-badge-action
+
+  notify-slack:
+    if: always()
+    needs: [coverage-badge, language-badge, license-badge, marketplace-badge]
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      WORKFLOW_RESULT: ${{ steps.get-previous-jobs-results.outputs.WORKFLOW_RESULT }}
+
+    steps:
+
+    - name: Get Overall Jobs Results
+      id: get-overall-jobs-results
+      shell: bash
+      run: |
+        # get overall result from all of the previous jobs
+        if "${{ needs.coverage-badge.result == 'success' && needs.language-badge.result == 'success' && needs.license-badge.result == 'success' && needs.marketplace-badge.result == 'success' }}"; then
+          echo "WORKFLOW_RESULT=:white_check_mark:" >> "$GITHUB_OUTPUT"
+        else
+          echo "WORKFLOW_RESULT=:no_entry:" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Post message to Slack
+      uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # v2.1.1
+      with:
+        method: chat.postMessage
+        token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
+        payload: |
+          channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
+          text: "
+              *Repository: ${{ github.repository }}*\n
+              *Workflow : ${{ github.workflow }} ${{ steps.get-overall-jobs-results.outputs.WORKFLOW_RESULT }}*
+              ```
+              URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n
+              Job: coverage-badge    - ${{ needs.coverage-badge.result }}\n
+              Job: language-badge    - ${{ needs.language-badge.result }}\n
+              Job: license-badge     - ${{ needs.license-badge.result }}\n
+              Job: marketplace-badge - ${{ needs.marketplace-badge.result }}
+              ```"
