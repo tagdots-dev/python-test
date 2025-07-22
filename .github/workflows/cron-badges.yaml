@@ -87,7 +87,7 @@ jobs:
       uses: tagdots-dev/badge-201-action@8250bef80c5e3edefc409c067dc7235b0b83352d # 1.0.0
       with:
         badge-name: license
-        badge-url: https://raw.githubusercontent.com/tagdots-dev/badge-201/refs/heads/main/LICENSE
+        badge-url: https://raw.githubusercontent.com/tagdots-dev/python-test/refs/heads/main/LICENSE
         label: License
         message: MIT
         message-color: FFA500
