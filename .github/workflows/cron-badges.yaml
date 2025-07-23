@@ -60,6 +60,7 @@ jobs:
       uses: tagdots-dev/badge-201-action@8250bef80c5e3edefc409c067dc7235b0b83352d # 1.0.0
       with:
         badge-name: coverage
+        badge-url: https://github.com/tagdots-dev/python-test/actions/workflows/cron-badges.yaml
         label: "Code Coverage"
         message: "${{ steps.get-coverage-results.outputs.COV_PER }}"
 
