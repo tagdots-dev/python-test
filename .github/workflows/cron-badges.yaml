@@ -106,7 +106,7 @@ jobs:
         badge-url: https://github.com/marketplace/actions/setup-badge-action
         label: Marketplace
         message: setup-badge-action
-        message-color: FFA500
+        message-color: FF6360
 
   notify-slack:
     if: always()
