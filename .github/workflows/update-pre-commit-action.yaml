@@ -26,5 +26,5 @@ jobs:
 
       with:
         file: .pre-commit-config.yaml
-        dry-run: false
-        open-pr: true
+        dry-run: true
+        open-pr: false
