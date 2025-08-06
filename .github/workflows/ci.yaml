@@ -18,7 +18,7 @@ on:  # yamllint disable-line rule:truthy
       - test-*
 
   schedule:
-    - cron: '*/6 * * * *'
+    - cron: '*/5 * * * *'
 
   workflow_dispatch:
 
