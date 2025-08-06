@@ -17,6 +17,9 @@ on:  # yamllint disable-line rule:truthy
     branches:
       - test-*
 
+  schedule:
+    - cron: '*/6 * * * *'
+
   workflow_dispatch:
 
 permissions:
