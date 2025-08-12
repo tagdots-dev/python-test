@@ -3,8 +3,8 @@ name: cron-badges
 on:
   workflow_dispatch:
 
-  schedule:
-    - cron: '*/5 * * * *'
+  # schedule:
+  #   - cron: '*/5 * * * *'
 
 env:
   PYTHON_VERSION: '3.12.x'
