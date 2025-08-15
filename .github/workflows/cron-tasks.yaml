@@ -114,7 +114,7 @@ jobs:
       with:
         badge-name: marketplace
         label: Marketplace
-        message: badge-201-action
+        message: setup-badge-action
         message-color: FF6360
 
   stale-workflow-runs: # https://github.com/tagdots/delete-workflow-runs-action
