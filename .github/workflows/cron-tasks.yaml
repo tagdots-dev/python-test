@@ -18,7 +18,7 @@ permissions:
     pull-requests: read
 
 jobs:
-  badge-coverage:
+  badge-coverage: # https://github.com/tagdots/setup-badge-action
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -68,18 +68,22 @@ jobs:
         label: "Code Coverage"
         message: "${{ steps.get-coverage-results.outputs.COV_PER }}"
 
-  badge-demo:
+  badge-demo: # https://github.com/tagdots/setup-badge-action
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
+
     steps:
     - id: demo-badge
       uses: tagdots/setup-badge-action@cfe062e2921260b385fbe23dcfe43b2b9eb3d3c5 # 1.0.12
 
-  badge-language:
+  badge-language: # https://github.com/tagdots/setup-badge-action
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
+
     steps:
     - id: language-badge
       uses: tagdots/setup-badge-action@cfe062e2921260b385fbe23dcfe43b2b9eb3d3c5 # 1.0.12
@@ -90,10 +94,12 @@ jobs:
         message: Python
         message-color: FFA500
 
-  badge-license:
+  badge-license: # https://github.com/tagdots/setup-badge-action
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
+
     steps:
     - id: license-badge
       uses: tagdots/setup-badge-action@cfe062e2921260b385fbe23dcfe43b2b9eb3d3c5 # 1.0.12
@@ -104,10 +110,12 @@ jobs:
         message: MIT
         message-color: FFA500
 
-  badge-marketplace:
+  badge-marketplace: # https://github.com/tagdots/setup-badge-action
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
+
     steps:
     - id: marketplace-badge
       uses: tagdots/setup-badge-action@cfe062e2921260b385fbe23dcfe43b2b9eb3d3c5 # 1.0.12
@@ -119,9 +127,11 @@ jobs:
 
   stale-workflow-runs: # https://github.com/tagdots/delete-workflow-runs-action
     runs-on: ubuntu-latest
+
     permissions:
       actions: write
       contents: read
+
     steps:
     - name: Run stale-workflow-runs
       id: stale-workflow-runs
@@ -132,6 +142,7 @@ jobs:
         repo-url: ${{ github.repository }}
         max-days: 10
         dry-run: false
+
     - name: Get data and set GITHUB_OUTPUT
       id: get_data
       shell: bash
@@ -141,11 +152,13 @@ jobs:
 
   stale-issues-prs: # https://github.com/actions/stale
     runs-on: ubuntu-latest
+
     permissions:
       actions: write
       contents: write
       issues: write
       pull-requests: write
+
     steps:
     - id: stale-issues-prs
       uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639 # v9.1.0
@@ -174,11 +187,13 @@ jobs:
         exclude-branches: 'badges'
         dry-run: false
 
-  update-pre-commit:
+  update-pre-commit: # https://github.com/tagdots/update-pre-commit
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
       pull-requests: write
+
     steps:
     - name: Run update-pre-commit
       id: update-pre-commit
