@@ -18,130 +18,23 @@ permissions:
     pull-requests: read
 
 jobs:
-  badge-coverage: # https://github.com/tagdots/setup-badge-action
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    outputs:
-      COV_PER: ${{ steps.get-coverage-results.outputs.COV_PER }}
-      COV_RUN: ${{ steps.get-coverage-results.outputs.COV_RUN }}
-
-    steps:
-    - id: checkout-source-code
-      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # 5.0.0
-
-    - id: setup-Python
-      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
-      with:
-        python-version: ${{ env.PYTHON_VERSION }}
-
-    - id: install-python-deps
-      run: make test-install
-
-    - id: coverage-run
-      env:
-        PYTHONUNBUFFERED: "1"
-      run: make test
-
-    - id: get-coverage-results
-      run: |
-        # get coverage results
-        echo "COV_RUN=${{ steps.run-coverage.outcome }}"                  >> "$GITHUB_OUTPUT"
-        echo "COV_PER=$(coverage report | grep TOTAL | awk '{print $6}')" >> "$GITHUB_OUTPUT"
-
-    - id: upload-coverage
-      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-      with:
-        name: coverage
-        path: htmlcov/
-        if-no-files-found: error
-        retention-days: 1
-        overwrite: true
-        compression-level: 6
-
-    - id: coverage-badge
-      uses: tagdots/setup-badge-action@cfe062e2921260b385fbe23dcfe43b2b9eb3d3c5 # 1.0.12
-      with:
-        badge-name: coverage
-        badge-url: https://github.com/tagdots/setup-badge/actions/workflows/cron-tasks.yaml
-        label: "Code Coverage"
-        message: "${{ steps.get-coverage-results.outputs.COV_PER }}"
-
-  badge-demo: # https://github.com/tagdots/setup-badge-action
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-
-    steps:
-    - id: demo-badge
-      uses: tagdots/setup-badge-action@cfe062e2921260b385fbe23dcfe43b2b9eb3d3c5 # 1.0.12
-
-  badge-language: # https://github.com/tagdots/setup-badge-action
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-
-    steps:
-    - id: language-badge
-      uses: tagdots/setup-badge-action@cfe062e2921260b385fbe23dcfe43b2b9eb3d3c5 # 1.0.12
-      with:
-        badge-name: language
-        badge-url: https://raw.githubusercontent.com/tagdots-dev/python-test/refs/heads/main/LICENSE
-        label: Language
-        message: Python
-        message-color: FFA500
-
-  badge-license: # https://github.com/tagdots/setup-badge-action
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-
-    steps:
-    - id: license-badge
-      uses: tagdots/setup-badge-action@cfe062e2921260b385fbe23dcfe43b2b9eb3d3c5 # 1.0.12
-      with:
-        badge-name: license
-        badge-url: https://raw.githubusercontent.com/tagdots-dev/python-test/refs/heads/main/LICENSE
-        label: License
-        message: MIT
-        message-color: FFA500
-
-  badge-marketplace: # https://github.com/tagdots/setup-badge-action
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-
-    steps:
-    - id: marketplace-badge
-      uses: tagdots/setup-badge-action@cfe062e2921260b385fbe23dcfe43b2b9eb3d3c5 # 1.0.12
-      with:
-        badge-name: marketplace
-        label: Marketplace
-        message: setup-badge-action
-        message-color: FF6360
-
   stale-workflow-runs: # https://github.com/tagdots/delete-workflow-runs-action
     runs-on: ubuntu-latest
 
     permissions:
-      actions: write
+      actions: read
       contents: read
 
     steps:
     - name: Run stale-workflow-runs
       id: stale-workflow-runs
-      uses: tagdots/delete-workflow-runs-action@58a1d5cc098bd375f82e70a5c8b45261024f100c # 1.0.4
+      uses: tagdots/delete-workflow-runs-action@8c2f169b7c560df6c1ee6d001f51ba8be0e4acfd # 1.0.7
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         repo-url: ${{ github.repository }}
         max-days: 10
-        dry-run: false
+        dry-run: true
 
     - name: Get data and set GITHUB_OUTPUT
       id: get_data
@@ -150,102 +43,234 @@ jobs:
         # get data from the last step to set GITHUB_OUTPUT
         cat data_dict.log | jq .
 
-  stale-issues-prs: # https://github.com/actions/stale
-    runs-on: ubuntu-latest
+  # badge-coverage: # https://github.com/tagdots/setup-badge-action
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: write
 
-    permissions:
-      actions: write
-      contents: write
-      issues: write
-      pull-requests: write
+  #   outputs:
+  #     COV_PER: ${{ steps.get-coverage-results.outputs.COV_PER }}
+  #     COV_RUN: ${{ steps.get-coverage-results.outputs.COV_RUN }}
 
-    steps:
-    - id: stale-issues-prs
-      uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639 # v9.1.0
-      with:
-        stale-issue-message: 'This issue is stale because it has been open 4 days with no activity. Remove stale label or comment or this will be closed in 3 days.'
-        days-before-stale: 5
-        days-before-close: 3
-        delete-branch: true
+  #   steps:
+  #   - id: checkout-source-code
+  #     uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # 5.0.0
 
-  stale-branches: # https://github.com/tagdots/delete-branches-action
-    runs-on: ubuntu-latest
+  #   - id: setup-Python
+  #     uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+  #     with:
+  #       python-version: ${{ env.PYTHON_VERSION }}
 
-    permissions:
-      contents: write
-      pull-requests: read
+  #   - id: install-python-deps
+  #     run: make test-install
 
-    steps:
-    - name: Run stale-branches
-      id: stale-branches
-      uses: tagdots/delete-branches-action@fad59ec4b73f3a47a2b8687ec8613e25a832debc # 1.0.2
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        repo-url: ${{ github.repository }}
-        max-idle-days: 10
-        exclude-branches: 'badges'
-        dry-run: false
+  #   - id: coverage-run
+  #     env:
+  #       PYTHONUNBUFFERED: "1"
+  #     run: make test
 
-  update-pre-commit: # https://github.com/tagdots/update-pre-commit
-    runs-on: ubuntu-latest
+  #   - id: get-coverage-results
+  #     run: |
+  #       # get coverage results
+  #       echo "COV_RUN=${{ steps.run-coverage.outcome }}"                  >> "$GITHUB_OUTPUT"
+  #       echo "COV_PER=$(coverage report | grep TOTAL | awk '{print $6}')" >> "$GITHUB_OUTPUT"
 
-    permissions:
-      contents: write
-      pull-requests: write
+  #   - id: upload-coverage
+  #     uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+  #     with:
+  #       name: coverage
+  #       path: htmlcov/
+  #       if-no-files-found: error
+  #       retention-days: 1
+  #       overwrite: true
+  #       compression-level: 6
 
-    steps:
-    - name: Run update-pre-commit
-      id: update-pre-commit
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      uses: tagdots/update-pre-commit-action@7b2124d4ac1abdaf462b2ee85312e2b564aa2709 # 1.0.27
-      with:
-        file: .pre-commit-config.yaml
-        dry-run: false
-        open-pr: true
+  #   - id: coverage-badge
+  #     uses: tagdots/setup-badge-action@cfe062e2921260b385fbe23dcfe43b2b9eb3d3c5 # 1.0.12
+  #     with:
+  #       badge-name: coverage
+  #       badge-url: https://github.com/tagdots/setup-badge/actions/workflows/cron-tasks.yaml
+  #       label: "Code Coverage"
+  #       message: "${{ steps.get-coverage-results.outputs.COV_PER }}"
 
-  notify-slack: # https://github.com/slackapi/slack-github-action
-    if: always()
-    needs: [badge-coverage, badge-demo, badge-language, badge-license, badge-marketplace, stale-workflow-runs, stale-issues-prs, stale-branches, update-pre-commit]
+  # badge-demo: # https://github.com/tagdots/setup-badge-action
+  #   runs-on: ubuntu-latest
 
-    runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: write
 
-    outputs:
-      WORKFLOW_RESULT: ${{ steps.get-overall-jobs-results.outputs.WORKFLOW_RESULT }}
+  #   steps:
+  #   - id: demo-badge
+  #     uses: tagdots/setup-badge-action@cfe062e2921260b385fbe23dcfe43b2b9eb3d3c5 # 1.0.12
 
-    steps:
+  # badge-language: # https://github.com/tagdots/setup-badge-action
+  #   runs-on: ubuntu-latest
 
-    - name: Get Overall Jobs Results
-      id: get-overall-jobs-results
-      shell: bash
-      run: |
-        # get overall result from all of the previous jobs
-        if "${{ needs.badge-coverage.result == 'success' && needs.badge-demo.result == 'success' && needs.badge-language.result == 'success' && needs.badge-license.result == 'success' && needs.badge-marketplace.result == 'success' && needs.stale-workflow-runs.result == 'success' && needs.stale-issues-prs.result == 'success' && needs.stale-branches.result == 'success' && needs.update-pre-commit.result == 'success' }}"; then
-          echo "WORKFLOW_RESULT=:white_check_mark:" >> "$GITHUB_OUTPUT"
-        else
-          echo "WORKFLOW_RESULT=:no_entry:" >> "$GITHUB_OUTPUT"
-        fi
+  #   permissions:
+  #     contents: write
 
-    - name: Post message to Slack
-      uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # v2.1.1
-      with:
-        method: chat.postMessage
-        token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
-        payload: |
-          channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
-          text: "
-              *Repository: ${{ github.repository }}*\n
-              *Workflow : ${{ github.workflow }} ${{ steps.get-overall-jobs-results.outputs.WORKFLOW_RESULT }}*
-              ```
-              URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n
-              Job: badge-coverage      - ${{ needs.badge-coverage.result }}\n
-              Job: badge-demo          - ${{ needs.badge-demo.result }}\n
-              Job: badge-language      - ${{ needs.badge-language.result }}\n
-              Job: badge-license       - ${{ needs.badge-license.result }}\n
-              Job: badge-marketplace   - ${{ needs.badge-marketplace.result }}\n
-              Job: stale-workflow-runs - ${{ needs.stale-workflow-runs.result }}\n
-              Job: stale-issues-prs    - ${{ needs.stale-issues-prs.result }}\n
-              Job: stale-branches      - ${{ needs.stale-branches.result }}\n
-              Job: update-pre-commit   - ${{ needs.update-pre-commit.result }}
-              ```"
+  #   steps:
+  #   - id: language-badge
+  #     uses: tagdots/setup-badge-action@cfe062e2921260b385fbe23dcfe43b2b9eb3d3c5 # 1.0.12
+  #     with:
+  #       badge-name: language
+  #       badge-url: https://raw.githubusercontent.com/tagdots-dev/python-test/refs/heads/main/LICENSE
+  #       label: Language
+  #       message: Python
+  #       message-color: FFA500
+
+  # badge-license: # https://github.com/tagdots/setup-badge-action
+  #   runs-on: ubuntu-latest
+
+  #   permissions:
+  #     contents: write
+
+  #   steps:
+  #   - id: license-badge
+  #     uses: tagdots/setup-badge-action@cfe062e2921260b385fbe23dcfe43b2b9eb3d3c5 # 1.0.12
+  #     with:
+  #       badge-name: license
+  #       badge-url: https://raw.githubusercontent.com/tagdots-dev/python-test/refs/heads/main/LICENSE
+  #       label: License
+  #       message: MIT
+  #       message-color: FFA500
+
+  # badge-marketplace: # https://github.com/tagdots/setup-badge-action
+  #   runs-on: ubuntu-latest
+
+  #   permissions:
+  #     contents: write
+
+  #   steps:
+  #   - id: marketplace-badge
+  #     uses: tagdots/setup-badge-action@cfe062e2921260b385fbe23dcfe43b2b9eb3d3c5 # 1.0.12
+  #     with:
+  #       badge-name: marketplace
+  #       label: Marketplace
+  #       message: setup-badge-action
+  #       message-color: FF6360
+
+  # stale-workflow-runs: # https://github.com/tagdots/delete-workflow-runs-action
+  #   runs-on: ubuntu-latest
+
+  #   permissions:
+  #     actions: write
+  #     contents: read
+
+  #   steps:
+  #   - name: Run stale-workflow-runs
+  #     id: stale-workflow-runs
+  #     uses: tagdots/delete-workflow-runs-action@58a1d5cc098bd375f82e70a5c8b45261024f100c # 1.0.4
+  #     env:
+  #       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     with:
+  #       repo-url: ${{ github.repository }}
+  #       max-days: 10
+  #       dry-run: false
+
+  #   - name: Get data and set GITHUB_OUTPUT
+  #     id: get_data
+  #     shell: bash
+  #     run: |
+  #       # get data from the last step to set GITHUB_OUTPUT
+  #       cat data_dict.log | jq .
+
+  # stale-issues-prs: # https://github.com/actions/stale
+  #   runs-on: ubuntu-latest
+
+  #   permissions:
+  #     actions: write
+  #     contents: write
+  #     issues: write
+  #     pull-requests: write
+
+  #   steps:
+  #   - id: stale-issues-prs
+  #     uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639 # v9.1.0
+  #     with:
+  #       stale-issue-message: 'This issue is stale because it has been open 4 days with no activity. Remove stale label or comment or this will be closed in 3 days.'
+  #       days-before-stale: 5
+  #       days-before-close: 3
+  #       delete-branch: true
+
+  # stale-branches: # https://github.com/tagdots/delete-branches-action
+  #   runs-on: ubuntu-latest
+
+  #   permissions:
+  #     contents: write
+  #     pull-requests: read
+
+  #   steps:
+  #   - name: Run stale-branches
+  #     id: stale-branches
+  #     uses: tagdots/delete-branches-action@fad59ec4b73f3a47a2b8687ec8613e25a832debc # 1.0.2
+  #     env:
+  #       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     with:
+  #       repo-url: ${{ github.repository }}
+  #       max-idle-days: 10
+  #       exclude-branches: 'badges'
+  #       dry-run: false
+
+  # update-pre-commit: # https://github.com/tagdots/update-pre-commit
+  #   runs-on: ubuntu-latest
+
+  #   permissions:
+  #     contents: write
+  #     pull-requests: write
+
+  #   steps:
+  #   - name: Run update-pre-commit
+  #     id: update-pre-commit
+  #     env:
+  #       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     uses: tagdots/update-pre-commit-action@7b2124d4ac1abdaf462b2ee85312e2b564aa2709 # 1.0.27
+  #     with:
+  #       file: .pre-commit-config.yaml
+  #       dry-run: false
+  #       open-pr: true
+
+  # notify-slack: # https://github.com/slackapi/slack-github-action
+  #   if: always()
+  #   needs: [badge-coverage, badge-demo, badge-language, badge-license, badge-marketplace, stale-workflow-runs, stale-issues-prs, stale-branches, update-pre-commit]
+
+  #   runs-on: ubuntu-latest
+
+  #   outputs:
+  #     WORKFLOW_RESULT: ${{ steps.get-overall-jobs-results.outputs.WORKFLOW_RESULT }}
+
+  #   steps:
+
+  #   - name: Get Overall Jobs Results
+  #     id: get-overall-jobs-results
+  #     shell: bash
+  #     run: |
+  #       # get overall result from all of the previous jobs
+  #       if "${{ needs.badge-coverage.result == 'success' && needs.badge-demo.result == 'success' && needs.badge-language.result == 'success' && needs.badge-license.result == 'success' && needs.badge-marketplace.result == 'success' && needs.stale-workflow-runs.result == 'success' && needs.stale-issues-prs.result == 'success' && needs.stale-branches.result == 'success' && needs.update-pre-commit.result == 'success' }}"; then
+  #         echo "WORKFLOW_RESULT=:white_check_mark:" >> "$GITHUB_OUTPUT"
+  #       else
+  #         echo "WORKFLOW_RESULT=:no_entry:" >> "$GITHUB_OUTPUT"
+  #       fi
+
+  #   - name: Post message to Slack
+  #     uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # v2.1.1
+  #     with:
+  #       method: chat.postMessage
+  #       token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
+  #       payload: |
+  #         channel: "${{ secrets.SECRET_SLACK_CHANNEL_CRON_TASKS }}"
+  #         text: "
+  #             *Repository: ${{ github.repository }}*\n
+  #             *Workflow : ${{ github.workflow }} ${{ steps.get-overall-jobs-results.outputs.WORKFLOW_RESULT }}*
+  #             ```
+  #             URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n
+  #             Job: badge-coverage      - ${{ needs.badge-coverage.result }}\n
+  #             Job: badge-demo          - ${{ needs.badge-demo.result }}\n
+  #             Job: badge-language      - ${{ needs.badge-language.result }}\n
+  #             Job: badge-license       - ${{ needs.badge-license.result }}\n
+  #             Job: badge-marketplace   - ${{ needs.badge-marketplace.result }}\n
+  #             Job: stale-workflow-runs - ${{ needs.stale-workflow-runs.result }}\n
+  #             Job: stale-issues-prs    - ${{ needs.stale-issues-prs.result }}\n
+  #             Job: stale-branches      - ${{ needs.stale-branches.result }}\n
+  #             Job: update-pre-commit   - ${{ needs.update-pre-commit.result }}
+  #             ```"
