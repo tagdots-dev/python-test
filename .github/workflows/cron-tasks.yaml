@@ -33,7 +33,7 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         repo-url: ${{ github.repository }}
-        max-days: 14
+        max-days: 12
         dry-run: true
 
     - name: Get data and set GITHUB_OUTPUT
