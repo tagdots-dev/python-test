@@ -28,12 +28,12 @@ jobs:
     steps:
     - name: Run stale-workflow-runs
       id: stale-workflow-runs
-      uses: tagdots/delete-workflow-runs-action@8c2f169b7c560df6c1ee6d001f51ba8be0e4acfd # 1.0.7
+      uses: tagdots/delete-workflow-runs@ff892995d02483811ca8046753f314f699a13d22 # 1.1.14
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         repo-url: ${{ github.repository }}
-        max-days: 12
+        max-days: 10
         dry-run: true
 
     - name: Get data and set GITHUB_OUTPUT
