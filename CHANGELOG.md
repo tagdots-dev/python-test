@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 0.1.84 (2025-09-11)
+
+### Feat
+
+- add delete-branches-action to cron-tasks
+
+### Fix
+
+- update cron-tasks - delete-workflow-runs and delete-branches
+- cleanup cron-tasks, update codeql, and remove outdated workflows
+- replace cron task action that deletes workflow runs
+
 ## 0.1.55 (2025-07-21)
 
 ### Feat
