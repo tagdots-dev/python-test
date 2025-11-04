@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 0.1.100 (2025-11-04)
+
+### Fix
+
+- use 3.14.x in non-build-test workflows
+- fix distribution name
+- fix matrix version number and artifact name
+- build-test with python matrix
+- add uv to Makefile
+- add vscode to gitignore and add 3.14 to classifiers in pyproject
+
 ## 0.1.84 (2025-09-11)
 
 ### Feat
