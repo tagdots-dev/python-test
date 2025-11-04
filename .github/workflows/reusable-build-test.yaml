@@ -36,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ['3.12.x', '3.13.x', 3.14.x]
+        python: ['3.12.12', '3.13.9', 3.14.x]
 
     steps:
 
@@ -107,7 +107,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ['3.12.x', '3.13.x', 3.14.x]
+        python: ['3.12.12', '3.13.9', 3.14.x]
 
     steps:
 
@@ -133,7 +133,7 @@ jobs:
       id: upload-coverage
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 #v5.0.0
       with:
-        name: coverage
+        name: coverage-${{ matrix.python }}
         path: htmlcov/
         if-no-files-found: error
         retention-days: 3
