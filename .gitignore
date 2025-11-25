@@ -272,6 +272,7 @@ cython_debug/
 
 
 # --------------- Miscellaneous ------------------- #
+*.log.*
 *.key
 *.pem
 *.tmp

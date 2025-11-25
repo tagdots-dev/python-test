@@ -8,7 +8,7 @@ import unittest
 
 from click.testing import CliRunner
 
-from pkg_15903.run import main
+from pkg_15903.cli import main
 
 
 class TestMain(unittest.TestCase):
@@ -18,7 +18,7 @@ class TestMain(unittest.TestCase):
 
     ''' assert zero exit code with url success '''
     def test_main_url_option_success(self):
-        result = self.runner.invoke(main, ['--url', 'https://google.com'])
+        result = self.runner.invoke(main, ['--url', 'https://example.com'])
         self.assertEqual(result.exit_code, 0)
 
     ''' assert non-zero exit code with url failure '''
@@ -37,7 +37,7 @@ class TestMain(unittest.TestCase):
         result = self.runner.invoke(main, ['--url', 'https://iamnotarobotdotcom.ai'])
         self.assertNotEqual(result.exit_code, 0)
 
-    ''' assert zero exit code without url option success '''
-    def test_main_url_option_none_success(self):
-        result = self.runner.invoke(main)
-        self.assertEqual(result.exit_code, 0)
+    ''' assert non-zero exit code with httperror '''
+    def test_main_url_httperror(self):
+        result = self.runner.invoke(main, ['--url', 'https://example.com/thepathdoesnotexist'])
+        self.assertNotEqual(result.exit_code, 0)
