@@ -27,7 +27,7 @@ dependencies = [
   "click==8.3.1",
   "requests==2.32.5",
   "setuptools==80.9.0",
-  "virtualenv==20.35.4",
+  "virtualenv==20.36.1",
 ]
 optional-dependencies.test = [
   "build",
