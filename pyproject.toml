@@ -26,8 +26,8 @@ classifiers = [
 dependencies = [
   "click==8.3.1",
   "requests==2.32.5",
-  "setuptools==80.9.0",
-  "virtualenv==20.36.1",
+  "setuptools==82.0.1",
+  "virtualenv==21.2.0",
 ]
 optional-dependencies.test = [
   "build",
