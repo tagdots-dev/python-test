@@ -272,6 +272,8 @@ cython_debug/
 
 
 # --------------- Miscellaneous ------------------- #
+**/codeql-results
+*.log.*
 *.key
 *.pem
 *.tmp
