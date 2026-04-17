@@ -20,9 +20,7 @@ from pkg_15903.main import app
 
 class TestMain(unittest.TestCase):
 
-    """
-    Click Testing on CLI
-    """
+    # Click Testing on CLI
     def setUp(self):
         self.runner = CliRunner()
         self.client = TestClient(app)
@@ -58,9 +56,7 @@ class TestMain(unittest.TestCase):
         # result.exception: 400: Error_Type - RequestException
         self.assertIn("400: Error_Type - RequestException", str(result.exception))
 
-    """
-    FastAPI Test Client on API Router
-    """
+    # FastAPI Test Client on API Router
     def test_fastapi_api_get_error(self):
         """Assert status code 405 with get /api"""
         result = self.client.get("/api")
@@ -92,9 +88,7 @@ class TestMain(unittest.TestCase):
         # result_text: {'Error': "Invalid data - (2) Expect data in JSON KV Pair Structure {'url': 'http(s)://xxxx'}"}
         self.assertIn("Expect data in JSON KV Pair Structure", str(result_text))
 
-    """
-    FastAPI Test Client on Health Router
-    """
+    # FastAPI Test Client on Health Router
     def test_fastapi_health_success_redirect(self):
         """Assert zero exit code with / to redirect to /health"""
         result = self.client.get("/")
@@ -105,17 +99,13 @@ class TestMain(unittest.TestCase):
         result = self.client.get("/health")
         self.assertEqual(result.status_code, 200)
 
-    """
-    FastAPI Test Client on Versions Router
-    """
+    # FastAPI Test Client on Versions Router
     def test_fastapi_url_versions(self):
         """Assert zero exit code with /versions"""
         result = self.client.get("/versions")
         self.assertEqual(result.status_code, 200)
 
-    """
-    FastAPI Test Client on Info Router
-    """
+    # FastAPI Test Client on Info Router
     def test_fastapi_url_info_healthy(self):
         """Assert healthy status with /info"""
         result = self.client.get("/info")
