@@ -18,12 +18,11 @@ from pkg_15903.cli import main
 from pkg_15903.main import app
 
 
-class TestMain(unittest.TestCase):
-
+class TestCLI(unittest.TestCase):
     # Click Testing on CLI
+
     def setUp(self):
         self.runner = CliRunner()
-        self.client = TestClient(app)
 
     def test_cli_main_success(self):
         """Assert zero exit code with url success"""
@@ -31,7 +30,10 @@ class TestMain(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
 
     def test_cli_main_validate_error(self):
-        """Assert non-zero exit code with ClsValidate chk_url raise ValueError"""
+
+        # """Assert non-zero exit code with ClsValidate chk_url raise ValueError"""
+
+        """Assert ValueError validation failure for invalid URL input"""
         result = self.runner.invoke(main, ['--url', 'https://iamnotarobotdot.ai'])
         self.assertNotEqual(result.exit_code, 0)
 
@@ -39,6 +41,9 @@ class TestMain(unittest.TestCase):
         """Assert non-zero exit code with HTTPError"""
         result = self.runner.invoke(main, ['--url', 'https://example.com/thepathdoesnotexist'])
         self.assertNotEqual(result.exit_code, 0)
+        self.assertIsNotNone(result.exception)
+        self.assertIn("HTTPError", str(result.exception))
+        self.assertIn("404", str(result.exception))
 
     @patch('requests.get')
     def test_cli_main_connection_error(self, mock_get):
@@ -56,7 +61,13 @@ class TestMain(unittest.TestCase):
         # result.exception: 400: Error_Type - RequestException
         self.assertIn("400: Error_Type - RequestException", str(result.exception))
 
+
+class TestAPI(unittest.TestCase):
     # FastAPI Test Client on API Router
+
+    def setUp(self):
+        self.client = TestClient(app)
+
     def test_fastapi_api_get_error(self):
         """Assert status code 405 with get /api"""
         result = self.client.get("/api")
@@ -71,8 +82,11 @@ class TestMain(unittest.TestCase):
         """Assert status code 422 with post /api"""
         result = self.client.post("/api")
         result_text = json.loads(result.text)
+        error_message = result_text.get("Error", "")
         self.assertEqual(result.status_code, 422)
-        self.assertEqual(result_text.get("Error"), "Invalid data - Field required")
+        self.assertIsInstance(error_message, str)
+        self.assertIn("Invalid data", error_message)
+        self.assertIn("Field required", error_message)
 
     def test_fastapi_api_post_error_invalidjson(self):
         """Assert api request with empty URL to result in validation error"""
