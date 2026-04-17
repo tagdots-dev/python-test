@@ -27,22 +27,22 @@ class TestMain(unittest.TestCase):
         self.runner = CliRunner()
         self.client = TestClient(app)
 
-    ''' assert zero exit code with url success '''
+    """ assert zero exit code with url success """
     def test_cli_main_success(self):
         result = self.runner.invoke(main, ['--url', 'https://example.com'])
         self.assertEqual(result.exit_code, 0)
 
-    ''' assert non-zero exit code with ClsValidate chk_url raise ValueError '''
+    """ assert non-zero exit code with ClsValidate chk_url raise ValueError """
     def test_cli_main_validate_error(self):
         result = self.runner.invoke(main, ['--url', 'https://iamnotarobotdot.ai'])
         self.assertNotEqual(result.exit_code, 0)
 
-    ''' assert non-zero exit code with HTTPError '''
+    """ assert non-zero exit code with HTTPError """
     def test_cli_main_http_error(self):
         result = self.runner.invoke(main, ['--url', 'https://example.com/thepathdoesnotexist'])
         self.assertNotEqual(result.exit_code, 0)
 
-    ''' assert ConnectionError in mock_get result.exception '''
+    """ assert ConnectionError in mock_get result.exception """
     @patch('requests.get')
     def test_cli_main_connection_error(self, mock_get):
         mock_get.side_effect = requests.exceptions.ConnectionError()
@@ -50,7 +50,7 @@ class TestMain(unittest.TestCase):
         # result.exception: 500: Error_Type - ConnectionError
         self.assertIn("500: Error_Type - ConnectionError", str(result.exception))
 
-    ''' assert RequestException in mock_get result.exception '''
+    """ assert RequestException in mock_get result.exception """
     @patch('requests.get')
     def test_cli_main_requests_error(self, mock_get):
         mock_get.side_effect = requests.exceptions.RequestException()
@@ -61,31 +61,31 @@ class TestMain(unittest.TestCase):
     """
     FastAPI Test Client on API Router
     """
-    ''' assert status code 405 with get /api '''
+    """ assert status code 405 with get /api """
     def test_fastapi_api_get_error(self):
         result = self.client.get("/api")
         self.assertEqual(result.status_code, 405)
 
-    ''' assert api request with valid URL to result in success '''
+    """ assert api request with valid URL to result in success """
     def test_fastapi_api_post_success(self):
         result = self.client.post("/api", json={"url": "https://example.com"})
         self.assertEqual(result.status_code, 200)
 
-    ''' assert status code 422 with post /api '''
+    """ assert status code 422 with post /api """
     def test_fastapi_api_post_error_nojson(self):
         result = self.client.post("/api")
         result_text = json.loads(result.text)
         self.assertEqual(result.status_code, 422)
         self.assertEqual(result_text.get("Error"), "Invalid data - Field required")
 
-    ''' assert api request with empty URL to result in validation error '''
+    """ assert api request with empty URL to result in validation error """
     def test_fastapi_api_post_error_invalidjson(self):
         result = self.client.post("/api", json={"url": ""})
         result_text = json.loads(result.text)
         # result_text: {'Error': "Invalid data - (1) Expect data in JSON KV Pair Structure {'url': 'http(s)://xxxx'}"}
         self.assertIn("Expect data in JSON KV Pair Structure", str(result_text))
 
-    ''' assert api request with empty JSON data to result in validation error '''
+    """ assert api request with empty JSON data to result in validation error """
     def test_fastapi_api_post_error_nulljson(self):
         result = self.client.post("/api", json={})
         result_text = json.loads(result.text)
@@ -95,12 +95,12 @@ class TestMain(unittest.TestCase):
     """
     FastAPI Test Client on Health Router
     """
-    ''' assert zero exit code with / to redirect to /health '''
+    """ assert zero exit code with / to redirect to /health """
     def test_fastapi_health_success_redirect(self):
         result = self.client.get("/")
         self.assertEqual(result.status_code, 200)
 
-    ''' assert zero exit code with /health '''
+    """ assert zero exit code with /health """
     def test_fastapi_health_success_direct(self):
         result = self.client.get("/health")
         self.assertEqual(result.status_code, 200)
@@ -108,7 +108,7 @@ class TestMain(unittest.TestCase):
     """
     FastAPI Test Client on Versions Router
     """
-    ''' assert zero exit code with /versions '''
+    """ assert zero exit code with /versions """
     def test_fastapi_url_versions(self):
         result = self.client.get("/versions")
         self.assertEqual(result.status_code, 200)
@@ -116,7 +116,7 @@ class TestMain(unittest.TestCase):
     """
     FastAPI Test Client on Info Router
     """
-    ''' assert healthy status with /info '''
+    """ assert healthy status with /info """
     def test_fastapi_url_info_healthy(self):
         result = self.client.get("/info")
         result_text = json.loads(result.text)
@@ -125,7 +125,7 @@ class TestMain(unittest.TestCase):
         self.assertEqual(result.status_code, 200)
         self.assertEqual(result_text.get("status"), "healthy")
 
-    ''' assert warning status with /info '''
+    """ assert warning status with /info """
     @patch('psutil.cpu_percent')
     def test_fastapi_url_info_warning(self, mock_cpu):
         mock_cpu.return_value = 96.0
