@@ -1,0 +1,43 @@
+# .dockerignore
+
+# git files and folders
+.git
+.github
+.gitignore
+
+# docker files
+.dockerignore
+Dockerfile
+dokcer-compose.yml
+
+# build and test outputs
+**/*.egg-info
+**/__pycache__
+.coverage
+build
+dist
+htmlcov
+parts
+tests
+
+# ide
+.vscode
+
+# sensitive files & folders
+.env
+.env.*
+
+# system files
+.DS_Store
+*.ico
+
+# other files and folders
+.pre-commit-config.yaml
+codeql-results
+**/*.log
+**/*.log.*
+**/*.md
+**/tmp
+**/temp
+LICENSE
+Makefile
