@@ -5,10 +5,4 @@
 ![language](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/tagdots-dev/python-test/refs/heads/badges/badges/language.json)
 [![license](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/tagdots-dev/python-test/refs/heads/badges/badges/license.json)](https://raw.githubusercontent.com/tagdots-dev/python-test/refs/heads/main/LICENSE)
 
-
-**pkg-15903** is a python test program. It runs a request call to your desired url and returns http status code
-
-```
-$ pkg-15903 --url https://www.google.com
-URL (https://www.google.com/) result: 200
-```
+**pkg-15903** is a Python FastAPI server application. It takes URL input and returns http request result.
