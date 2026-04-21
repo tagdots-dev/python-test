@@ -36,14 +36,14 @@ class TestCLI(unittest.TestCase):
         self.assertIn("HTTPError", str(result.exception))
         self.assertNotEqual(result.exit_code, 0)
 
-    @patch('requests.get')
+    @patch('pkg_15903.core.cls_requests.requests.get')
     def test_cli_main_connection_error(self, mock_get):
         mock_get.side_effect = requests.exceptions.ConnectionError()
         result = self.runner.invoke(main, ['--url', 'https://example.com'])
         self.assertIn("500: Error_Type - ConnectionError", str(result.exception))
         self.assertNotEqual(result.exit_code, 0)
 
-    @patch('requests.get')
+    @patch('pkg_15903.core.cls_requests.requests.get')
     def test_cli_main_requests_error(self, mock_get):
         mock_get.side_effect = requests.exceptions.RequestException()
         result = self.runner.invoke(main, ['--url', 'https://example.com'])
