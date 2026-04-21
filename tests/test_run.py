@@ -68,20 +68,21 @@ class TestAPI(unittest.TestCase):
         result_text = json.loads(result.text)
         error_message = result_text.get("Error", "")
         self.assertEqual(result.status_code, 422)
-        self.assertIsInstance(error_message, str)
-        self.assertIn("Invalid data", error_message)
-        self.assertIn("Field required", error_message)
+        self.assertIn("Invalid data - Field required", error_message)
+        self.assertIn("application/json", result.headers.get("content-type", ""))
 
-    def test_fastapi_api_post_error_invalidjson(self):
+    def test_fastapi_api_post_error_emptyurlvalue(self):
         result = self.client.post("/api", json={"url": ""})
         result_text = json.loads(result.text)
         # result_text: {'Error': "Invalid data - (1) Expect data in JSON KV Pair Structure {'url': 'http(s)://xxxx'}"}
+        self.assertEqual(result.status_code, 422)
         self.assertIn("Expect data in JSON KV Pair Structure", str(result_text))
 
     def test_fastapi_api_post_error_nulljson(self):
         result = self.client.post("/api", json={})
         result_text = json.loads(result.text)
         # result_text: {'Error': "Invalid data - (2) Expect data in JSON KV Pair Structure {'url': 'http(s)://xxxx'}"}
+        self.assertEqual(result.status_code, 422)
         self.assertIn("Expect data in JSON KV Pair Structure", str(result_text))
 
     # FastAPI Test Client on Health Router
