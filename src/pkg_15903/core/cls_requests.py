@@ -34,8 +34,8 @@ class ClsRequests:
         except HTTPError as err:
             status = err.response.status_code
             logger.error(f'url: {safe_url}, status: {status}')
-            content = f'{{"Error_Type": "HTTPError", "Status_Code": {status}}}'
-            raise HTTPException(status_code=status, detail=content)
+            # content = f'{{"Error_Type": "HTTPError", "Status_Code": {status}}}'
+            raise HTTPException(status_code=status, detail="Error_Type - HTTPError")
 
         except ConnectionError as err:
             status = 500
