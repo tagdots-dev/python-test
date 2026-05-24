@@ -20,13 +20,13 @@ classifiers = [
   "Topic :: Software Development :: Build Tools",
 ]
 dependencies = [
-  "click==8.3.3",
+  "click==8.4.0",
   "fastapi[standard]==0.136.1",
   "fastapi-health==0.4.0",
   "pkg-19544==1.4.1",
   "psutil==7.2.2",
   "pydantic==2.13.4",
-  "requests==2.34.1",
+  "requests==2.34.2",
 ]
 optional-dependencies.local = [
   "commitizen",
