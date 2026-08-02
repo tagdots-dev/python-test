@@ -272,6 +272,7 @@ cython_debug/
 
 
 # --------------- Miscellaneous ------------------- #
+.secrets
 **/codeql-results
 *.log.*
 *.key
