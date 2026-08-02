@@ -37,15 +37,11 @@ jobs:
     if: always()
     needs: labeler
     runs-on: ubuntu-latest
-
     steps:
       - name: Slack message on PR activities
         uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
         with:
           method: chat.postMessage
-          token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
+          token: ${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}
           payload: |
-            {
-              "channel": "${{ secrets.SECRET_SLACK_CHANNEL_PR }}",
-              "text": ":fire: *Pull Request (re)opened or updated.*\n```\nRepo  : \${{ github.repository }}\nBranch: \({{ github.event.pull_request.head.ref }}\nPR URL:\){{ github.event.pull_request.html_url }}\n```"
-            }
+            {"channel": "${{ secrets.SECRET_SLACK_CHANNEL_PR }}", "text": ":fire: *Pull Request (re)opened or updated.*\nRepo: ${{ github.repository }}\nBranch: ${{ github.event.pull_request.head.ref }}\nPR URL: ${{ github.event.pull_request.html_url }}"}
