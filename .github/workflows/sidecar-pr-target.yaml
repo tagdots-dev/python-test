@@ -45,11 +45,7 @@ jobs:
           method: chat.postMessage
           token: "${{ secrets.SECRET_SLACK_APP_GITHUB_BOT }}"
           payload: |
-            channel: "${{ secrets.SECRET_SLACK_CHANNEL_PR }}"
-            text: "
-              :fire: *Pull Request (re)opened or updated.*
-              ```
-              Repo  : ${{ github.repository }}\n
-              Branch: ${{ github.event.pull_request.head.ref }}\n
-              PR URL: ${{ github.event.pull_request.html_url }}
-              ```"
+            {
+              "channel": "${{ secrets.SECRET_SLACK_CHANNEL_PR }}",
+              "text": ":fire: *Pull Request (re)opened or updated.*\n```\nRepo  : \${{ github.repository }}\nBranch: \({{ github.event.pull_request.head.ref }}\nPR URL:\){{ github.event.pull_request.html_url }}\n```"
+            }
