@@ -1,7 +1,5 @@
 ---
-# NOTE: this file is managed by terraform
 
-# trigger job run on event pull_request_target
 name: sidecar-pr-target
 
 on:  # yamllint disable-line rule:truthy
