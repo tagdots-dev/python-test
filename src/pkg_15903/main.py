@@ -16,24 +16,20 @@ from pkg_15903.routers import (
     versions,
 )
 
-
 app = FastAPI()
 router = APIRouter()
 
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    content = {"Error": f"Invalid data - {exc.errors()[0]['msg']}"},
+    content = ({"Error": f"Invalid data - {exc.errors()[0]['msg']}"},)
 
-    return JSONResponse(
-        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
-        content=content[0]
-    )
+    return JSONResponse(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, content=content[0])
 
 
 @app.get("/")
 def home():
-    return RedirectResponse(url='/health')
+    return RedirectResponse(url="/health")
 
 
 app.include_router(health.router)
@@ -42,13 +38,13 @@ app.include_router(versions.router)
 app.include_router(api.router)
 
 
-if __name__ == '__main__':  # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
         port=8000,
         workers=4,
-        forwarded_allow_ips='*',
+        forwarded_allow_ips="*",
         log_level="debug",
-        log_config=LOGGING_CONFIG
+        log_config=LOGGING_CONFIG,
     )
