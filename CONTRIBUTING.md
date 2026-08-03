@@ -1,4 +1,5 @@
 <!-- NOTE: Terraform-managed template -->
+
 # Contributing
 
 Hi there! We're thrilled that you'd like to contribute to this project. Your contribution is encouraging to us all here at **tagdots-dev**.
@@ -8,12 +9,12 @@ Please note that this project is released with a [Contributor Code of Conduct][c
 ## 🔔 Issues and PRs
 
 Your contributions can be:
+
 - report a bug or issue at [issues].
 - make a request for change, feature, or suggestion at [issues].
 - open a pull request.
 - engage in some positive technical discussions at [discussions].
 - provide feedback in email (developers@tagdots.com)
-
 
 ## 💻 Submitting a pull request
 
@@ -29,7 +30,6 @@ We appreciate your time and effort and recommend the following:
 1. Create/update corresponding automated tests and documentation.
 1. Push to your fork and submit a pull request.
 1. Your pull request will be reviewed and merged.
-
 
 ## 📚 Resources
 
