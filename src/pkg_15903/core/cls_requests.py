@@ -2,8 +2,8 @@ from logging import config, getLogger
 
 import pkg_19544
 import requests
-from fastapi.routing import HTTPException
 from requests import ConnectionError, HTTPError, RequestException
+from starlette.exceptions import HTTPException
 
 from pkg_15903.configs.constants import HEADER_DEFAULT, LOG_LEVEL, REQUESTS_TIMEOUT
 from pkg_15903.configs.logger import LOGGING_CONFIG
@@ -31,9 +31,8 @@ class ClsRequests:
             return {"url": f"{safe_url}", "status": f"{status}"}
 
         except HTTPError as err:
-            status = err.response.status_code
+            status = err.response.status_code if err.response is not None else 0
             logger.error(f"url: {safe_url}, status: {status}")
-            # content = f'{{"Error_Type": "HTTPError", "Status_Code": {status}}}'
             raise HTTPException(status_code=status, detail="Error_Type - HTTPError")
 
         except ConnectionError as err:
