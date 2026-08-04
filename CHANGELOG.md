@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 0.2.1 (2026-08-04)
+
+### Feat
+
+- run FastAPI Server App
+
+### Fix
+
+- update pre-commit-config and pyproject.toml accordingly
+- update github url
+- update python matrix
+- remove click-option-group from dep
+- wrong link to cron-task
+
 ## 0.1.100 (2025-11-04)
 
 ### Fix
