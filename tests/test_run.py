@@ -23,30 +23,30 @@ class TestCLI(unittest.TestCase):
         self.runner = CliRunner()
 
     def test_cli_main_success(self):
-        result = self.runner.invoke(main, ['--url', 'https://example.com'])
+        result = self.runner.invoke(main, ["--url", "https://example.com"])
         self.assertEqual(result.exit_code, 0)
         self.assertIsNone(result.exception)
 
     def test_cli_main_validate_error(self):
-        result = self.runner.invoke(main, ['--url', 'https://iamnotarobotdot.ai'])
+        result = self.runner.invoke(main, ["--url", "https://iamnotarobotdot.ai"])
         self.assertNotEqual(result.exit_code, 0)
 
     def test_cli_main_http_error(self):
-        result = self.runner.invoke(main, ['--url', 'https://example.com/thepathdoesnotexist'])
+        result = self.runner.invoke(main, ["--url", "https://example.com/thepathdoesnotexist"])
         self.assertIn("HTTPError", str(result.exception))
         self.assertNotEqual(result.exit_code, 0)
 
-    @patch('pkg_15903.core.cls_requests.requests.get')
+    @patch("pkg_15903.core.cls_requests.requests.get")
     def test_cli_main_connection_error(self, mock_get):
         mock_get.side_effect = requests.exceptions.ConnectionError()
-        result = self.runner.invoke(main, ['--url', 'https://example.com'])
+        result = self.runner.invoke(main, ["--url", "https://example.com"])
         self.assertIn("500: Error_Type - ConnectionError", str(result.exception))
         self.assertNotEqual(result.exit_code, 0)
 
-    @patch('pkg_15903.core.cls_requests.requests.get')
+    @patch("pkg_15903.core.cls_requests.requests.get")
     def test_cli_main_requests_error(self, mock_get):
         mock_get.side_effect = requests.exceptions.RequestException()
-        result = self.runner.invoke(main, ['--url', 'https://example.com'])
+        result = self.runner.invoke(main, ["--url", "https://example.com"])
         self.assertIn("400: Error_Type - RequestException", str(result.exception))
         self.assertNotEqual(result.exit_code, 0)
 
@@ -108,7 +108,7 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(result.status_code, 200)
         self.assertEqual(result_text.get("status"), "healthy")
 
-    @patch('psutil.cpu_percent')
+    @patch("psutil.cpu_percent")
     def test_fastapi_info_warning(self, mock_cpu):
         mock_cpu.return_value = 96.0
         result = self.client.get("/info")

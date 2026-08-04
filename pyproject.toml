@@ -1,6 +1,6 @@
 [build-system]
-build-backend = "setuptools.build_meta"
-requires = [ "setuptools" ]
+build-backend = "hatchling.build"
+requires = [ "hatchling" ]
 
 [project]
 name = "pkg-15903"
@@ -38,6 +38,7 @@ optional-dependencies.test = [
   "flake8",
   "isort",
   "pysentry-rs",
+  "pytest",
   "twine",
 ]
 urls.Changelog = "https://www.notavailable.com/changelog"
@@ -50,9 +51,16 @@ test = [
   "coverage[toml]",
 ]
 
-[tool.setuptools]
-packages.find.where = [ "src" ]
-dynamic.version = { attr = "src.pkg_15903.__init__" }
+[tool.hatch]
+version.path = "src/pkg_15903/__init__.py"
+metadata.directory = "src"
+build.targets.wheel.packages = [ "src/pkg_15903" ]
+
+[tool.black]
+line-length = 125
+
+[tool.isort]
+profile = "black"
 
 [tool.pyproject-fmt]
 column_width = 125
@@ -61,13 +69,11 @@ keep_full_version = true
 
 [tool.coverage]
 run.branch = true
-run.command_line = "-m unittest discover -vs tests/"
-run.include = [ "src/pkg_15903/*" ]
+run.command_line = "-m pytest -vs tests/"
 run.omit = [ "tests/*" ]
+run.source = [ "src/pkg_15903" ]
 report.fail_under = 80
-report.include = [ "src/pkg_15903/*" ]
 report.show_missing = false
-source = [ "." ]
 
 [tool.commitizen]
 name = "cz_conventional_commits"

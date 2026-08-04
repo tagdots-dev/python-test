@@ -1,4 +1,4 @@
-FROM python:3.14.0-slim-trixie@sha256:538a18f1db92b4210a0b71aca2d14c156a96dedbe8867465c8ff4dce04d2ec39
+FROM python:3.14-slim-trixie@sha256:cea0e6040540fb2b965b6e7fb5ffa00871e632eef63719f0ea54bca189ce14a6
 
 ENV PATH="/app/venv/bin:$PATH"
 WORKDIR /app
