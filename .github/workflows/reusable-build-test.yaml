@@ -43,12 +43,12 @@ jobs:
       - name: Make build
         run: make build
 
-      - name: Set Build Version
+      - name: Set build version
         id: set-build-version
         run: |
           echo "BUILD_VERSION=$(python src/*/cli.py --version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
 
-      - name: Get Build Version
+      - name: Get build version
         id: get-build-version
         run: |
           echo "Build Version: ${{ steps.set-build-version.outputs.BUILD_VERSION }}"
@@ -101,7 +101,7 @@ jobs:
       - name: Install dependencies
         run: make test-install
 
-      - name: Make Test
+      - name: Make test
         run: make test
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

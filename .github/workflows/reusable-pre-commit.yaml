@@ -62,7 +62,7 @@ jobs:
       - name: Checkout source code # https://github.com/marketplace/actions/checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Run Checkov Github Action # https://github.com/marketplace/actions/checkov-github-action
+      - name: Run checkov # https://github.com/marketplace/actions/checkov-github-action
         id: checkov
         uses: bridgecrewio/checkov-action@7b972723c44fb3d256283fac96fae5d7c1894bb7 # v12.3114.0
         with:

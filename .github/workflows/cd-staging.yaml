@@ -127,7 +127,7 @@ jobs:
       TAG_NAME: ${{ steps.get-previous-jobs-results.outputs.TAG_NAME }}
 
     steps:
-      - name: Get Overall Jobs Results
+      - name: Get overall jobs results
         id: get-overall-jobs-results
         shell: bash
         run: |

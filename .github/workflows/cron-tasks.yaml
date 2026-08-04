@@ -80,7 +80,7 @@ jobs:
           label: "Code Coverage"
           message: "${{ needs.pre-badge-coverage.outputs.COV_PER }}"
 
-  badge-language: # https://github.com/tagdots/setup-badge-action
+  badge-language:
     runs-on: ubuntu-latest
 
     permissions:
@@ -96,7 +96,7 @@ jobs:
           message: Python
           message-color: FFA500
 
-  badge-license: # https://github.com/tagdots/setup-badge-action
+  badge-license:
     runs-on: ubuntu-latest
 
     permissions:
