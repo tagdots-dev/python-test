@@ -69,7 +69,7 @@ jobs:
           echo "Uploaded Artifact ID        : ${{ needs.build-test.outputs.ARTIFACT_ID }}"
 
       - name: Download distributions # https://github.com/marketplace/actions/download-a-build-artifact
-        if: ${{ github.event.repository.language == 'Python' }}
+        if: ${{ github.event.repository.language == 'Python' && !env.ACT }}
         id: artifact-download
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c #v8.0.1
         with:
@@ -78,10 +78,10 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: dist/
 
-      - name: Check artifacts located inside dist/artifact/
+      - name: Check artifact download
         if: ${{ github.event.repository.language == 'Python' }}
         shell: bash
-        run: ls -l dist/artifact/
+        run: tree .
 
       # --- release validation starts from here --- #
       # https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
@@ -122,11 +122,10 @@ jobs:
       WORKFLOW_RESULT: ${{ steps.get-previous-jobs-results.outputs.WORKFLOW_RESULT }}
 
     steps:
-      - name: Get Overall Jobs Results
+      - name: Get overall jobs results
         id: get-overall-jobs-results
         shell: bash
         run: |
-          # get overall result from all of the previous jobs
           if "${{ needs.pre-commit.result == 'success' && needs.build-test.result == 'success' && contains(fromJSON('["success", "skipped"]'), needs.dependency.result) && contains(fromJSON('["success", "skipped"]'), needs.validate-release.result) }}"; then
             echo "WORKFLOW_RESULT=:white_check_mark:" >> "$GITHUB_OUTPUT"
           else

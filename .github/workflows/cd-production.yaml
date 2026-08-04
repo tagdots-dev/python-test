@@ -77,7 +77,7 @@ jobs:
       WORKFLOW_RESULT: ${{ steps.get-previous-jobs-results.outputs.WORKFLOW_RESULT }}
 
     steps:
-      - name: Get Overall Jobs Results
+      - name: Get overall jobs results
         id: get-overall-jobs-results
         shell: bash
         run: |
