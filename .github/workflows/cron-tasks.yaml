@@ -72,7 +72,7 @@ jobs:
 
     steps:
       - name: Run setup-badge-action # https://github.com/tagdots/setup-badge-action
-        id: coverage-badge
+        id: badge-coverage
         uses: tagdots/setup-badge-action@294661aa1f149b59dfe1cd187539eca7f8f0fabf # 1.0.18
         with:
           badge-name: coverage
@@ -88,7 +88,7 @@ jobs:
 
     steps:
       - name: badge-language # https://github.com/tagdots/setup-badge-action
-        id: language-badge
+        id: badge-language
         uses: tagdots/setup-badge-action@294661aa1f149b59dfe1cd187539eca7f8f0fabf # 1.0.18
         with:
           badge-name: language
