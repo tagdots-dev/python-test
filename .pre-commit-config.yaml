@@ -58,20 +58,31 @@ repos:
       - name: Python black - format codes
         id: black
         args:
-          - --config=./pyproject.toml
           - -t
           - py312
           - -t
           - py313
           - -t
           - py314
+          - --line-length
+          - "125"
   - repo: https://github.com/pycqa/isort
     rev: 8.0.1
     hooks:
       - name: Python isort - sorts & groups standard library, third-party, and local
         id: isort
         args:
-          - --settings-path pyproject.toml
+          - --profile
+          - black
+          - --combine-as
+          - --float-to-top
+          - --trailing-comma
+          - --multi-line
+          - "3"
+          - --force-grid-wrap
+          - "4"
+          - --skip
+          - "__init__.py"
   - repo: https://github.com/pycqa/flake8
     rev: 7.3.0
     hooks:
