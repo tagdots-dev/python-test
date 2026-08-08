@@ -1,5 +1,4 @@
-from fastapi import APIRouter
-from fastapi import __version__ as fastapi_version
+from fastapi import APIRouter, __version__ as fastapi_version
 
 from pkg_15903 import __version__ as app_version
 

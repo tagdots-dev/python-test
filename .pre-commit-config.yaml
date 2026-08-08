@@ -50,24 +50,39 @@ repos:
   - repo: https://github.com/tox-dev/pyproject-fmt
     rev: v2.27.0
     hooks:
-      - name: Python format pyproject.toml
+      - name: Python pyproject.toml format - standard configuration file for Python projects
         id: pyproject-fmt
   - repo: https://github.com/psf/black-pre-commit-mirror
     rev: 26.5.1
     hooks:
-      - name: Python black
+      - name: Python black - format codes
         id: black
-        args: [-t, py312, -t, py313, -t, py314]
+        args:
+          - --config=./pyproject.toml
+          - -t
+          - py312
+          - -t
+          - py313
+          - -t
+          - py314
   - repo: https://github.com/pycqa/isort
     rev: 8.0.1
     hooks:
-      - name: Python isort
+      - name: Python isort - sorts & groups standard library, third-party, and local
         id: isort
+        args:
+          - --settings-path pyproject.toml
   - repo: https://github.com/pycqa/flake8
     rev: 7.3.0
     hooks:
-      - name: Python flake8
+      - name: Python flake8 - flag syntax errors, style violations
         id: flake8
+        additional_dependencies: [flake8-pyproject]
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.411
+    hooks:
+      - name: Python pyright - type checking
+        id: pyright
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: v1.108.1
     hooks:
