@@ -41,7 +41,7 @@ app.include_router(api.router)
 if __name__ == "__main__":  # pragma: no cover
     uvicorn.run(
         "main:app",
-        host="0.0.0.0",
+        host="localhost",
         port=8000,
         workers=4,
         forwarded_allow_ips="*",

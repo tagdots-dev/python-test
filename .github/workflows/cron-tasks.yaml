@@ -9,6 +9,7 @@ on:
 
 env:
   PYTHON_VERSION: "3.14.x"
+  UV_VERSION: "0.12.0"
 
 permissions:
   actions: read
@@ -36,11 +37,19 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Install package dependencies
-        run: make test-install
+      - name: Setup UV # https://github.com/marketplace/actions/astral-sh-setup-uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: "true"
+
+      - name: Install test dependency-group
+        shell: bash
+        run: make test-only
 
       - name: Run coverage
         id: run-coverage
+        shell: bash
         run: make test
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -48,6 +57,7 @@ jobs:
 
       - name: Get coverage results
         id: get-coverage-results
+        shell: bash
         run: |
           echo "COV_RUN=${{ steps.run-coverage.outcome }}"                  >> "$GITHUB_OUTPUT"
           echo "COV_PER=$(coverage report | grep TOTAL | awk '{print $6}')" >> "$GITHUB_OUTPUT"
