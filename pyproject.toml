@@ -20,35 +20,29 @@ classifiers = [
   "Topic :: Software Development :: Build Tools",
 ]
 dependencies = [
-  "click==8.4.2",
-  "fastapi[standard]==0.141.1",
-  "fastapi-health==0.4.0",
-  "pkg-19544==1.4.1",
-  "psutil==7.2.2",
-  "pydantic==2.13.4",
-  "requests==2.34.2",
+  "click~=8.4.0",
+  "fastapi[standard]~=0.141.0",
+  "fastapi-health~=0.4.0",
+  "pkg-19544~=1.4.0",
+  "psutil~=7.2.0",
+  "pydantic~=2.13.0",
+  "requests~=2.34.0",
+  "starlette[full]~=1.4.0"
 ]
-optional-dependencies.local = [
-  "commitizen",
-  "pre-commit",
-]
-optional-dependencies.test = [
-  "build",
-  "coverage",
-  "flake8",
-  "isort",
-  "pysentry-rs",
-  "pytest",
-  "twine",
-]
-urls.Changelog = "https://www.notavailable.com/changelog"
-urls.Documentation = "https://www.notavailable.com/doc"
-urls.Homepage = "https://www.notavailable.com"
 scripts.pkg-15903 = "pkg_15903.cli:main"
 
 [dependency-groups]
+dev = [
+  "commitizen",
+]
 test = [
-  "coverage[toml]",
+  "coverage",
+  "pre-commit",
+  "pytest",
+]
+security = [
+  "bandit",
+  "pysentry-rs",
 ]
 
 [tool.hatch]
@@ -61,15 +55,29 @@ line-length = 125
 
 [tool.isort]
 profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 4
+combine_as_imports = true
+float_to_top = true
+skip = [ "__init__.py" ]
+
+[tool.flake8]
+max-line-length = 125
+max-complexity = 15
+per-file-ignores = [ "src/pkg_15903/configs/constants.py:E501", "src/pkg_15903/routers/api.py:E501" ]
 
 [tool.pyproject-fmt]
 column_width = 125
 indent = 2
 keep_full_version = true
 
+[tool.pyright]
+venv = ".venv"
+venvPath = "."
+
 [tool.coverage]
 run.branch = true
-run.command_line = "-m pytest -vs tests/"
 run.omit = [ "tests/*" ]
 run.source = [ "src/pkg_15903" ]
 report.fail_under = 80
