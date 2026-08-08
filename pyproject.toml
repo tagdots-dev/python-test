@@ -4,7 +4,7 @@ requires = [ "hatchling" ]
 
 [project]
 name = "pkg-15903"
-version = "0.2.1"
+version = "0.3.0"
 readme = "README.md"
 license-files = [ "LICENSE" ]
 authors = [
@@ -34,10 +34,10 @@ scripts.pkg-15903 = "pkg_15903.cli:main"
 [dependency-groups]
 dev = [
   "commitizen",
+  "pre-commit",
 ]
 test = [
   "coverage",
-  "pre-commit",
   "pytest",
 ]
 security = [
