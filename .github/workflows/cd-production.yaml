@@ -81,7 +81,7 @@ jobs:
           INDEX_URL: "https://pypi.org/simple/"
         run: |
           uv run pip install ${{ env.PROJECT_NAME }}==${{ github.ref_name }}
-          ${{ env.PACKAGE_NAME }} --version
+          ${{ env.PROJECT_NAME }} --version
 
   notify-slack:
     if: always()
