@@ -29,6 +29,11 @@ dependencies = [
   "requests~=2.34.2",
   "starlette[full]~=1.6.0"
 ]
+urls.Changelog = "https://github.com/tagdots-dev/pkg-15903/blob/main/CHANGELOG.md"
+urls.Documentation = "https://github.com/tagdots-dev/pkg-15903/blob/main/README.md"
+urls.Homepage = "https://github.com/tagdots-dev"
+urls.Issues = "https://github.com/tagdots-dev/pkg-15903/issues"
+urls.Repository = "https://github.com/tagdots-dev/pkg-15903"
 scripts.pkg-15903 = "pkg_15903.cli:main"
 
 [dependency-groups]
