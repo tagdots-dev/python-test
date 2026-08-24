@@ -92,7 +92,7 @@ report.fail_under = 80
 report.show_missing = false
 
 [tool.commitizen]
-name = "cz_conventional_commits"
+name = "cz_customize"
 version_scheme = "pep440"
 version_provider = "pep621"
 version_files = [
