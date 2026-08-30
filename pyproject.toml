@@ -20,7 +20,7 @@ classifiers = [
   "Topic :: Software Development :: Build Tools",
 ]
 dependencies = [
-  "click~=8.4.2",
+  "click>=8.4.2,<8.6.0",
   "fastapi[standard]~=0.141.1",
   "fastapi-health~=0.4.0",
   "pkg-19544>=1.4.1,<1.6.0",
