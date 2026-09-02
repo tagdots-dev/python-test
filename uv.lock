@@ -899,13 +899,13 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "click", specifier = ">=8.4.2,<8.6.0" },
-    { name = "fastapi", extras = ["standard"], specifier = "~=0.141.1" },
-    { name = "fastapi-health", specifier = "~=0.4.0" },
-    { name = "pkg-19544", specifier = ">=1.4.1,<1.6.0" },
-    { name = "psutil", specifier = "~=7.2.2" },
-    { name = "pydantic", specifier = "~=2.13.4" },
-    { name = "requests", specifier = "~=2.34.2" },
+    { name = "click", specifier = "~=8.5.0" },
+    { name = "fastapi", extras = ["standard"], specifier = ">=0.141.0" },
+    { name = "fastapi-health", specifier = ">=0.4.0" },
+    { name = "pkg-19544", specifier = "~=1.4.1" },
+    { name = "psutil", specifier = "~=7.2.0" },
+    { name = "pydantic", specifier = "~=2.13.0" },
+    { name = "requests", specifier = "~=2.34.0" },
     { name = "starlette", extras = ["full"], specifier = "~=1.6.0" },
 ]
 
@@ -925,11 +925,11 @@ test = [
 
 [[package]]
 name = "pkg-19544"
-version = "1.5.5"
+version = "1.4.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/7d/3e/7d1f9266c45723936713175fb0f12afc2e4c7597940090e6af19895dd60c/pkg_19544-1.5.5.tar.gz", hash = "sha256:c221196035932b31519e04584a4621a2102d59689c74e2c0c5375bd1e70d30cf", size = 115220, upload-time = "2026-08-13T15:42:44.101Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a8/e6/af53ee0253d52d6d34683505802cb1c8e9aa92978f176ade92cfe2fedb6e/pkg_19544-1.4.1.tar.gz", hash = "sha256:21e60cad135dd65bd46019241f8395976ad5cf6ade4984b1c001f34f6a8d74fb", size = 19633, upload-time = "2026-05-13T04:30:51.426Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c3/12/5685c85950352b9e0b933fcee004a3899d018c0d9cdeaeb367007a6f30ac/pkg_19544-1.5.5-py3-none-any.whl", hash = "sha256:6788cd05f498bfbdeb73f87b7ceccc81f7b2190591c7ea1da68ee3c2d2e8d170", size = 16732, upload-time = "2026-08-13T15:42:43.056Z" },
+    { url = "https://files.pythonhosted.org/packages/c2/70/5077001fe6b3f04fdcd87101c2dda4fb8b585f8f7740cd62cfbd9e51386c/pkg_19544-1.4.1-py3-none-any.whl", hash = "sha256:d8e151d9e58066e4f59f4b73bad51f80bd3993671535e4f819b5246be5c60142", size = 17205, upload-time = "2026-05-13T04:30:50.454Z" },
 ]
 
 [[package]]
