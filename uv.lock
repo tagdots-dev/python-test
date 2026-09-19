@@ -909,14 +909,14 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "click", specifier = "~=8.5.0" },
+    { name = "click", specifier = ">=8.5.0" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.141.0" },
     { name = "fastapi-health", specifier = ">=0.4.0" },
-    { name = "pkg-19544", specifier = ">=1.4.1,<1.6.0" },
-    { name = "psutil", specifier = "~=7.2.0" },
-    { name = "pydantic", specifier = "~=2.13.0" },
-    { name = "requests", specifier = "~=2.34.0" },
-    { name = "starlette", extras = ["full"], specifier = "~=1.6.0" },
+    { name = "pkg-19544", specifier = ">=1.4.1" },
+    { name = "psutil", specifier = ">=7.2.0" },
+    { name = "pydantic", specifier = ">=2.13.0" },
+    { name = "requests", specifier = ">=2.34.0" },
+    { name = "starlette", extras = ["full"], specifier = ">=1.6.0" },
 ]
 
 [package.metadata.requires-dev]
